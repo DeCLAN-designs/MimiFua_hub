@@ -1,0 +1,76 @@
+:root {
+  --primary-color: #48AECC;   /* color1 - Bright cyan/sky */
+  --accent-color: #8FCF68;    /* color2 - Fresh green */
+  --dark-green: #00370F;      /* color3 - Deep green (great for titles or backgrounds) */
+  --neutral-light: #A7BAAC;   /* color4 - Soft neutral (good for background/secondary text) */
+  --deep-blue: #2c3e50;       /* color5 - Strong for base text or nav/footer */
+}
+
+/* Reset default browser styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Global font and color settings */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #ffffff;
+  color: #00370F; /* Primary text color - color3 */
+  line-height: 1.6;
+}
+
+/* Consistent spacing for all page routes */
+main {
+  padding: 2rem 1.5rem;
+  min-height: calc(100vh - 160px); /* Adjust height to account for Navbar + Footer */
+}
+
+/* Remove link underline and inherit color */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Smooth transitions on interactive elements */
+button, a {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Utility buttons */
+.button-login {
+  background-color: #48AECC; /* color1 */
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.button-signup {
+  background-color: #8FCF68; /* color2 */
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Hover effects for buttons */
+.button-login:hover {
+  background-color: #3698b4;
+}
+
+.button-signup:hover {
+  background-color: #76b650;
+}
+
+/* Optional: Styling for consistent footer spacing */
+footer {
+  padding: 1.5rem;
+  background-color: #A7BAAC; /* color4 */
+  text-align: center;
+  font-size: 0.9rem;
+  color: #00370F;
+}

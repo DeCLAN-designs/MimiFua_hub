@@ -1,0 +1,27 @@
+.services {
+    background-color: #F8F8F8;
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+  
+  .services-title {
+    font-size: 2rem;
+    color: #00370F; /* color3 */
+    margin-bottom: 2rem;
+  }
+  
+  .services-grid {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+  }
+  
+  .service-card {
+    background-color: #8FCF68; /* color2 */
+    color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    font-weight: bold;
+    width: 200px;
+  }
+  

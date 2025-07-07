@@ -1,0 +1,221 @@
+/* AboutUs.css - Complete Styling */
+
+/* Base Styles */
+.about-page {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Section Headings */
+.about-page h1,
+.about-page h2,
+.about-page h3 {
+  color: #2c3e50;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.about-page h1 {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.about-page h1::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: #3498db;
+  border-radius: 2px;
+}
+
+.about-page h2 {
+  font-size: 2rem;
+  text-align: center;
+  margin: 2.5rem 0 1.5rem;
+}
+
+.about-page h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.8rem;
+}
+
+/* Why Us Section */
+.why-us-section {
+  padding: 3rem 0;
+  text-align: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+  border-radius: 10px;
+  margin: 2rem 0;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.why-us-section p {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  color: #4a5568;
+  padding: 0 20px;
+}
+
+/* Core Values Section */
+.core-values-section {
+  padding: 3rem 0;
+  background: #ffffff;
+  margin: 2rem 0;
+}
+
+.values-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.value-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.03);
+}
+
+.value-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.value-emoji-container {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.value-card:hover .value-emoji-container {
+  transform: scale(1.2);
+}
+
+.value-content p {
+  color: #4a5568;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* Vision & Mission Sections */
+.vision-section,
+.mission-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 3rem 0;
+  gap: 2rem;
+}
+
+.vision-text,
+.mission-text {
+  flex: 1;
+  min-width: 300px;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.vision-image,
+.mission-image {
+  flex: 1;
+  min-width: 300px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.vision-image img,
+.mission-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.vision-image:hover img,
+.mission-image:hover img {
+  transform: scale(1.03);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .about-page h1 {
+    font-size: 2rem;
+  }
+  
+  .about-page h2 {
+    font-size: 1.7rem;
+  }
+  
+  .vision-section,
+  .mission-section {
+    flex-direction: column;
+  }
+  
+  .mission-section {
+    flex-direction: column-reverse;
+  }
+  
+  .values-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Animation Effects */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.why-us-section,
+.core-values-section,
+.vision-section,
+.mission-section {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.core-values-section { animation-delay: 0.2s; }
+.vision-section { animation-delay: 0.4s; }
+.mission-section { animation-delay: 0.6s; }
+
+/* Emoji Specific Styling */
+.value-emoji-container {
+  background: linear-gradient(135deg, #f6f9fc 0%, #e3e9f2 100%);
+  width: 80px;
+  height: 80px;
+  line-height: 80px;
+  border-radius: 50%;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* New Core Value Specific Styling */
+.value-card:nth-child(5) .value-emoji-container { /* Sustainability */
+  background: linear-gradient(135deg, #e6f7ee 0%, #b5ead7 100%);
+}
+
+.value-card:nth-child(6) .value-emoji-container { /* Customer Focus */
+  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+}
