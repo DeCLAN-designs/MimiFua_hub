@@ -18,7 +18,7 @@ const isAuthenticated = () => {
 
     return true;
 
-    //eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line 
   } catch (err) {
     // Invalid token structure
     return false;

@@ -1,0 +1,79 @@
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f5f8fa;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .header-left h1 {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    margin: 0;
+  }
+  
+  .header-left .user-role {
+    font-size: 0.95rem;
+    color: #8fcf68;
+    margin-top: 0.25rem;
+  }
+  
+  .header-right {
+    position: relative;
+  }
+  
+  .user-menu {
+    position: relative;
+  }
+  
+  .user-toggle {
+    background: transparent;
+    border: none;
+    color: #2c3e50;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .user-toggle svg {
+    font-size: 1.2rem;
+  }
+  
+  .user-dropdown {
+    position: absolute;
+    top: 2.8rem;
+    right: 0;
+    background: #fff;
+    border: 1px solid #d0d7de;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 0.5rem;
+    min-width: 180px;
+    z-index: 100;
+  }
+  
+  .user-dropdown ul {
+    list-style: none;
+    padding: 0.5rem 0;
+    margin: 0;
+  }
+  
+  .user-dropdown li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  .user-dropdown li:hover {
+    background-color: #f0f4f8;
+  }
+  
+  .user-dropdown li svg {
+    color: #48aecc;
+  }
+  

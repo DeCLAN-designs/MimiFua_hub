@@ -1,0 +1,45 @@
+/* Pages/Dashboard/Sidebar.css */
+
+.sidebar {
+    width: 250px;
+    background-color: #00370f; /* color3 */
+    color: #fff;
+    padding: 2rem 1rem;
+    height: 50vh;
+    position: sticky;
+    top: 0;
+    border-radius: 32px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sidebar h2 {
+    font-size: 1.6rem;
+    margin-bottom: 2rem;
+    color: #8fcf68; /* color2 */
+    text-align: center;
+  }
+  
+  .sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebar nav ul li {
+    margin: 1rem 0;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .sidebar nav ul li:hover {
+    background-color: #2c3e50; /* color5 */
+  }
+  
+  .logout-btn {
+    color: #f55;
+    font-weight: bold;
+  }
+  

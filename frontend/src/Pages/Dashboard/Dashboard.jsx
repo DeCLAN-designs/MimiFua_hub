@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "./Sidebar";
+import DashboardHeader from "./DashboardHeader";
+import Manager from "./Manager";
+import Employee from "./Employee";
 import "./Dashboard.css";
 
 const Dashboard = () => {
@@ -52,70 +56,19 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <aside className="sidebar">
-        <h2>MiMi Fua Hub</h2>
-        <nav>
-          <ul>
-            <li>📊 Dashboard</li>
-            {user.role === "manager" && (
-              <>
-                <li>👥 Manage Employees</li>
-                <li>📈 View All Sales</li>
-                <li>🧾 Reports</li>
-              </>
-            )}
-            {user.role === "employee" && (
-              <>
-                <li>🛒 My Sales</li>
-                <li>📦 Restock Inventory</li>
-              </>
-            )}
-            <li onClick={handleLogout} className="logout-btn">
-              🚪 Logout
-            </li>
-          </ul>
-        </nav>
-      </aside>
-
+      <Sidebar user={user} onLogout={handleLogout} />
       <main className="dashboard-main">
-        <header>
-          <h1>Welcome, {user.name}</h1>
-          <p>Role: {user.role?.toUpperCase()}</p>
-        </header>
-
+        <DashboardHeader
+  name={user.first_name || user.name}
+  role={user.role}
+  
+/>
         <section className="dashboard-content">
-          {user.role === "manager" ? (
-            <ManagerDashboard />
-          ) : (
-            <EmployeeDashboard />
-          )}
+          {user.role === "manager" ? <Manager /> : <Employee />}
         </section>
       </main>
     </div>
   );
 };
-
-const ManagerDashboard = () => (
-  <div className="card-grid">
-    <StatCard title="Total Sales" value="KES 456,000" />
-    <StatCard title="Active Employees" value="14" />
-    <StatCard title="Pending Reports" value="3" />
-  </div>
-);
-
-const EmployeeDashboard = () => (
-  <div className="card-grid">
-    <StatCard title="My Sales Today" value="KES 12,400" />
-    <StatCard title="Restock Requests" value="2" />
-    <StatCard title="My Targets" value="KES 50,000" />
-  </div>
-);
-
-const StatCard = ({ title, value }) => (
-  <div className="stat-card">
-    <h4>{title}</h4>
-    <p>{value}</p>
-  </div>
-);
 
 export default Dashboard;

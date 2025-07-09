@@ -10,6 +10,8 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+  namedPlaceholders: true, // 👈 optional: support for named query params
+  timezone: "Z", // store/retrieve all timestamps in UTC
 });
 
 // Optional: test connection immediately

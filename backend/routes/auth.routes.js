@@ -1,89 +1,152 @@
-// routes/auth.routes.js
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const db = require("../config/db");
 
 const router = express.Router();
 
-// Register Route
-router.post("/register", async (req, res) => {
-  const { name, email, password } = req.body;
+// Middleware to verify JWT
+const verifyToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader?.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Access denied: No token provided" });
+  }
 
-  if (!name || !email || !password)
-    return res.status(400).json({ error: "All fields are required" });
+  const token = authHeader.split(" ")[1];
 
   try {
-    const [existing] = await db.query("SELECT id FROM users WHERE email = ?", [
-      email,
-    ]);
-    if (existing.length > 0) {
-      return res.status(400).json({ error: "Email already registered" });
-    }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    return res.status(403).json({ error: "Invalid or expired token" });
+  }
+};
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    await db.query(
-      "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
-      [name, email, hashedPassword]
+// =====================================
+// ✅ REGISTER - Supports email or phone
+// =====================================
+router.post("/register", async (req, res) => {
+  const {
+    first_name,
+    last_name,
+    email = null,
+    phone = null,
+    password,
+    role = "employee",
+  } = req.body;
+
+  if (!first_name || !last_name || (!email && !phone) || !password) {
+    return res.status(400).json({
+      error:
+        "First name, last name, password, and email or phone are required.",
+    });
+  }
+
+  try {
+    // Check if email or phone already exists
+    const [existing] = await db.query(
+      "SELECT id FROM users WHERE email = ? OR phone = ?",
+      [email, phone]
     );
 
-    res.status(201).json({ message: "Registration successful" });
+    if (existing.length > 0) {
+      return res.status(409).json({
+        error: "An account with that email or phone already exists.",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    await db.query(
+      `INSERT INTO users (first_name, last_name, email, phone, password, role)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [first_name, last_name, email, phone, hashedPassword, role]
+    );
+
+    res.status(201).json({ message: "✅ Registration successful" });
   } catch (err) {
-    console.error("Register error:", err);
+    console.error("❌ Registration error:", err);
     res.status(500).json({ error: "Server error" });
   }
 });
 
-// Login Route
+// ==========================
+// ✅ LOGIN - email or phone
+// ==========================
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  const { identifier, password } = req.body;
 
-  if (!email || !password)
-    return res.status(400).json({ error: "Email and password are required" });
+  if (!identifier || !password) {
+    return res
+      .status(400)
+      .json({ error: "Email or phone and password are required" });
+  }
 
   try {
-    const [users] = await db.query("SELECT * FROM users WHERE email = ?", [
-      email,
-    ]);router.post("/register", async (req, res) => {
-        try {
-          console.log("BODY:", req.body);
-      
-          if (!req.body.name || !req.body.email || !req.body.password) {
-            return res.status(400).json({ error: "Missing fields" });
-          }
-      
-          // Try a basic insert
-          const { name, email, password } = req.body;
-          const hashed = await bcrypt.hash(password, 10);
-      
-          await db.query("INSERT INTO users (name, email, password) VALUES (?, ?, ?)", [
-            name,
-            email,
-            hashed,
-          ]);
-      
-          res.status(201).json({ message: "Registered" });
-        } catch (err) {
-          console.error("REGISTER FAIL:", err.message);
-          res.status(500).json({ error: err.message }); // <-- TEMP: return actual error to frontend
-        }
-      });
-      
+    const [users] = await db.query(
+      `SELECT * FROM users WHERE email = ? OR phone = ?`,
+      [identifier, identifier]
+    );
+
     const user = users[0];
 
-    if (!user)
-      return res.status(401).json({ error: "Invalid email or password" });
+    if (!user) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch)
-      return res.status(401).json({ error: "Invalid email or password" });
+    if (!isMatch) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
 
-    // ✅ Login success
+    const token = jwt.sign(
+      { id: user.id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "2h" }
+    );
+
     res.status(200).json({
-      message: "Login successful",
-      user: { id: user.id, name: user.name, email: user.email },
+      message: "✅ Login successful",
+      token,
+      user: {
+        id: user.id,
+        name: `${user.first_name} ${user.last_name}`,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+      },
     });
   } catch (err) {
-    console.error("Login error:", err);
+    console.error("❌ Login error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// ========================
+// ✅ PROFILE (protected)
+// ========================
+router.get("/profile", verifyToken, async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT id, first_name, last_name, email, phone, role FROM users WHERE id = ?`,
+      [req.user.id]
+    );
+
+    const user = rows[0];
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    res.status(200).json({
+      user: {
+        id: user.id,
+        name: `${user.first_name} ${user.last_name}`,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+      },
+    });
+  } catch (err) {
+    console.error("❌ Profile fetch error:", err);
     res.status(500).json({ error: "Server error" });
   }
 });

@@ -1,13 +1,15 @@
-// Import necessary modules from React and React Router
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 
-// Import layout components
 import Navbar from "./Components/NavBar/NavBar";
 import Footer from "./Components/Footer/Footer";
-import PrivateRoute from "./Components/PrivateRoute/PrivateRoute"; // Make sure this is imported
+import PrivateRoute from "./Components/PrivateRoute/PrivateRoute";
 
-// Import all page components
 import HomePage from "./Pages/HomePage/HomePage";
 import Solutions from "./Pages/Solutions/Solutions";
 import AboutUs from "./Pages/AboutUs/AboutUs";
@@ -17,19 +19,27 @@ import ContactUs from "./Pages/ContactUs/ContactUs";
 import Login from "./Pages/Auth/Login/Login";
 import SignUp from "./Pages/Auth/SignUp/SignUp";
 import NotFound from "./Pages/NotFound/NotFound";
-import Dashboard from "./Pages/Dashboard/Dashboard"; // Make sure this is imported
+import Dashboard from "./Pages/Dashboard/Dashboard";
+
+const Layout = ({ children }) => {
+  const location = useLocation();
+  const hideLayoutOn = ["/login", "/register", "/dashboard"];
+  const shouldHideLayout = hideLayoutOn.includes(location.pathname);
+
+  return (
+    <>
+      {!shouldHideLayout && <Navbar />}
+      <main>{children}</main>
+      {!shouldHideLayout && <Footer />}
+    </>
+  );
+};
 
 const App = () => {
   return (
-    // Router wraps the entire app to enable routing
     <Router>
-      {/* Navbar component appears on all pages */}
-      <Navbar />
-
-      {/* Main content of each route */}
-      <main>
+      <Layout>
         <Routes>
-          {/* Routes for each page */}
           <Route path="/" element={<HomePage />} />
           <Route path="/solutions" element={<Solutions />} />
           <Route path="/about-us" element={<AboutUs />} />
@@ -46,7 +56,6 @@ const App = () => {
               </PrivateRoute>
             }
           />
-          // TODO
           <Route path="/forgot-password" element={<div>Forgot Password</div>} />
           <Route
             path="/reset-password/:token"
@@ -58,10 +67,7 @@ const App = () => {
           />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </main>
-
-      {/* Footer component appears on all pages */}
-      <Footer />
+      </Layout>
     </Router>
   );
 };

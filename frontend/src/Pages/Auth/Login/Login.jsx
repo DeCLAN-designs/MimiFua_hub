@@ -6,7 +6,7 @@ import { FaFacebook } from "react-icons/fa";
 import "./Login.css";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState(""); // email or phone
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
@@ -15,9 +15,12 @@ const Login = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!email) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Invalid email";
-    if (!password) newErrors.password = "Password is required";
+    if (!identifier.trim()) {
+      newErrors.identifier = "Email or phone is required";
+    }
+    if (!password.trim()) {
+      newErrors.password = "Password is required";
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -33,7 +36,7 @@ const Login = () => {
       const response = await fetch("http://localhost:5000/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ identifier, password }),
       });
 
       const data = await response.json();
@@ -43,11 +46,11 @@ const Login = () => {
         return;
       }
 
-      // ✅ Success - redirect to dashboard
-      console.log("✅ Login passed, redirecting...");
-      navigate("/dashboard");
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
 
-      //eslint-disable-next-line no-unused-vars
+      navigate("/dashboard");
+// eslint-disable-next-line
     } catch (error) {
       setErrors({ general: "⚠️ Network error. Please try again." });
     } finally {
@@ -66,17 +69,17 @@ const Login = () => {
             <div className="error-message">{errors.general}</div>
           )}
 
-          <div className={`input-group ${errors.email ? "error" : ""}`}>
+          <div className={`input-group ${errors.identifier ? "error" : ""}`}>
             <FiMail className="input-icon" />
             <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
+              type="text"
+              placeholder="Email or Phone"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
+              autoComplete="username"
             />
-            {errors.email && (
-              <span className="error-message">{errors.email}</span>
+            {errors.identifier && (
+              <span className="error-message">{errors.identifier}</span>
             )}
           </div>
 

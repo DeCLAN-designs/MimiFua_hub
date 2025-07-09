@@ -68,14 +68,17 @@
 .password-toggle {
   position: absolute;
   right: 12px;
-  top: 50%;
+  top: 50%; /* center vertically */
   transform: translateY(-50%);
   background: none;
   border: none;
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: var(--color5);
   cursor: pointer;
+  padding: 0;
+  z-index: 1; /* ensures it sits above input field */
 }
+
 
 .auth-options {
   display: flex;
