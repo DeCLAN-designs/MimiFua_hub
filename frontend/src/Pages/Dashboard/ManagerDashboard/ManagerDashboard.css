@@ -1,0 +1,53 @@
+.manager-dashboard-view,
+.manage-employees-view,
+.all-sales-view,
+.reports-view {
+  padding: 1rem;
+}
+
+.stat-cards {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.stat-card {
+  flex: 1;
+  background: #f4f4f4;
+  padding: 1rem;
+  border-radius: 6px;
+  text-align: center;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card h4 {
+  margin-bottom: 0.5rem;
+  color: #00370F;
+}
+
+.manager-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.manager-table th,
+.manager-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
+}
+
+.btn-download {
+  padding: 0.75rem 1.25rem;
+  background-color: #8FCF68;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.btn-download:hover {
+  background-color: #2c3e50;
+}

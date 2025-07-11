@@ -1,33 +1,86 @@
-// Pages/Dashboard/Sidebar.jsx
-import React from "react";
+import React, { useState } from "react";
+import { FiMenu, FiX } from "react-icons/fi";
 import "./Sidebar.css";
 
-const Sidebar = ({ user, onLogout }) => {
+const Sidebar = ({ user, onLogout, onNavigate, activeView }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleNavigate = (view) => {
+    onNavigate(view);
+    setIsOpen(false); // close sidebar on mobile
+  };
+
   return (
-    <aside className="sidebar">
-      <h2>MiMi Fua Hub</h2>
-      <nav>
-        <ul>
-          <li>📊 Dashboard</li>
-          {user.role === "manager" && (
+    <>
+      {/* Mobile Hamburger Button */}
+      <button
+        className="hamburger"
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle sidebar"
+      >
+        {isOpen ? <FiX /> : <FiMenu />}
+      </button>
+
+      {/* Sidebar Navigation */}
+      <aside className={`sidebar ${isOpen ? "open" : ""}`}>
+        <h2 className="sidebar-title">MiMi Fua Hub</h2>
+        <ul className="sidebar-menu">
+          <li
+            className={activeView === "dashboard" ? "active" : ""}
+            onClick={() => handleNavigate("dashboard")}
+          >
+            📊 Dashboard
+          </li>
+
+          {user?.role === "manager" && (
             <>
-              <li>👥 Manage Employees</li>
-              <li>📈 View All Sales</li>
-              <li>🧾 Reports</li>
+              <li
+                className={activeView === "manage-employees" ? "active" : ""}
+                onClick={() => handleNavigate("manage-employees")}
+              >
+                👥 Manage Employees
+              </li>
+              <li
+                className={activeView === "all-sales" ? "active" : ""}
+                onClick={() => handleNavigate("all-sales")}
+              >
+                📈 View All Sales
+              </li>
+              <li
+                className={activeView === "reports" ? "active" : ""}
+                onClick={() => handleNavigate("reports")}
+              >
+                🧾 Reports
+              </li>
             </>
           )}
-          {user.role === "employee" && (
+
+          {user?.role === "employee" && (
             <>
-              <li>🛒 My Sales</li>
-              <li>📦 Restock Inventory</li>
+              <li
+                className={activeView === "my-sales" ? "active" : ""}
+                onClick={() => handleNavigate("my-sales")}
+              >
+                🛒 My Sales
+              </li>
+              <li
+                className={activeView === "restock" ? "active" : ""}
+                onClick={() => handleNavigate("restock")}
+              >
+                📦 Restock Inventory
+              </li>
             </>
           )}
-          <li onClick={onLogout} className="logout-btn">
+
+          <li className="logout-btn" onClick={onLogout}>
             🚪 Logout
           </li>
         </ul>
-      </nav>
-    </aside>
+      </aside>
+
+      {/* Mobile Overlay */}
+      {isOpen && <div className="overlay" onClick={() => setIsOpen(false)} />}
+    </>
   );
 };
 

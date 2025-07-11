@@ -1,72 +1,87 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+// Pages/Dashboard/Dashboard.jsx
+import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import DashboardHeader from "./DashboardHeader";
-import Manager from "./Manager";
-import Employee from "./Employee";
+
+// Manager Views
+import ManagerDashboard from "./ManagerDashboard/ManagerDashboard";
+import ManageEmployees from "./ManagerDashboard/ManageEmployees";
+import AllSales from "./ManagerDashboard/AllSales";
+import Reports from "./ManagerDashboard/Reports";
+
+// Employee Views
+import EmployeeDashboard from "./EmployeeDashboard/EmployeeDashboard";
+import MySales from "./EmployeeDashboard/MySales";
+import RestockInventory from "./EmployeeDashboard/RestockInventory";
+
 import "./Dashboard.css";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [activeView, setActiveView] = useState("dashboard");
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        navigate("/login");
-        return;
-      }
-
-      try {
-        const res = await fetch("http://localhost:5000/api/profile", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (res.status === 401 || res.status === 403) {
-          localStorage.removeItem("token");
-          navigate("/login");
-          return;
-        }
-
-        const data = await res.json();
-        setUser(data.user);
-      } catch (err) {
-        console.error("Failed to fetch user:", err);
-        navigate("/login");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUser();
-  }, [navigate]);
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (!storedUser) {
+      window.location.href = "/login";
+    } else {
+      setUser(storedUser);
+    }
+  }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+    localStorage.removeItem("user");
+    window.location.href = "/login";
   };
 
-  if (loading) return <div className="loading">Loading...</div>;
-  if (!user) return null;
+  const renderView = () => {
+    if (!user) return null;
+
+    const { role } = user;
+
+    if (role === "manager") {
+      switch (activeView) {
+        case "dashboard":
+          return <ManagerDashboard />;
+        case "manage-employees":
+          return <ManageEmployees />;
+        case "all-sales":
+          return <AllSales />;
+        case "reports":
+          return <Reports />;
+        default:
+          return <ManagerDashboard />;
+      }
+    }
+
+    if (role === "employee") {
+      switch (activeView) {
+        case "dashboard":
+          return <EmployeeDashboard />;
+        case "my-sales":
+          return <MySales />;
+        case "restock":
+          return <RestockInventory />;
+        default:
+          return <EmployeeDashboard />;
+      }
+    }
+
+    return <div>Access Denied</div>;
+  };
 
   return (
     <div className="dashboard-container">
-      <Sidebar user={user} onLogout={handleLogout} />
-      <main className="dashboard-main">
-        <DashboardHeader
-  name={user.first_name || user.name}
-  role={user.role}
-  
-/>
-        <section className="dashboard-content">
-          {user.role === "manager" ? <Manager /> : <Employee />}
-        </section>
-      </main>
+      <Sidebar
+        user={user}
+        onLogout={handleLogout}
+        onNavigate={setActiveView}
+        activeView={activeView}
+      />
+      <div className="dashboard-content">
+        <DashboardHeader name={user?.name} role={user?.role} />
+        <main className="dashboard-main">{renderView()}</main>
+      </div>
     </div>
   );
 };
