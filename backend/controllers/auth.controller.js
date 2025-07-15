@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const db = require("../config/db");
 
 const JWT_SECRET = process.env.JWT_SECRET || "dev-fallback-secret"; // 🔐 Use strong secret in prod
-const TOKEN_EXPIRES_IN = "1d";
+const TOKEN_EXPIRES_IN = "12h";
 
 // 🔐 Generate JWT token payload
 const generateToken = (user) =>

@@ -111,13 +111,14 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .dashboard-header {
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: flex-start;
     padding: 1rem;
   }
 
   .header-right {
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
     gap: 0.5rem;
     margin-top: 0.5rem;
