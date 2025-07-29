@@ -11,8 +11,9 @@ import Reports from "./ManagerDashboard/Reports";
 
 // Employee Views
 import EmployeeDashboard from "./EmployeeDashboard/EmployeeDashboard";
-import MySales from "./EmployeeDashboard/MySales";
-import RestockInventory from "./EmployeeDashboard/RestockInventory";
+import MySales from "./EmployeeDashboard/Tabs/Sales";
+import RestockInventory from "./EmployeeDashboard/Tabs/RestockInventory";
+
 
 import "./Dashboard.css";
 

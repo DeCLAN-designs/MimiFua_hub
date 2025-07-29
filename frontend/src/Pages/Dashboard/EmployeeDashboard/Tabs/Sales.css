@@ -1,0 +1,36 @@
+.sales-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sales-tabs button {
+  padding: 0.5rem 1rem;
+  background-color: #e5e7eb;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.sales-tabs button.active {
+  background-color: #2563eb;
+  color: white;
+}
+
+.sales-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.sales-table th,
+.sales-table td {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+}
+
+.sales-title {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
