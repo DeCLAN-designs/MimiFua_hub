@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import DashboardHeader from "./DashboardHeader";
+import "./Dashboard.css";
 
 // Manager Views
 import ManagerDashboard from "./ManagerDashboard/ManagerDashboard";
@@ -13,9 +14,11 @@ import Reports from "./ManagerDashboard/Reports";
 import EmployeeDashboard from "./EmployeeDashboard/EmployeeDashboard";
 import MySales from "./EmployeeDashboard/Tabs/Sales";
 import RestockInventory from "./EmployeeDashboard/Tabs/RestockInventory";
+import Summary from "./EmployeeDashboard/Tabs/Summary";
+import LeaveRequest from "./EmployeeDashboard/Tabs/LeaveRequest"
 
 
-import "./Dashboard.css";
+
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -40,6 +43,8 @@ const Dashboard = () => {
 
     const { role } = user;
 
+//After adding the menu items
+
     if (role === "manager") {
       switch (activeView) {
         case "dashboard":
@@ -63,6 +68,10 @@ const Dashboard = () => {
           return <MySales />;
         case "restock":
           return <RestockInventory />;
+        case "summary":
+          return <Summary />;
+        case "leave":
+          return <LeaveRequest />;
         default:
           return <EmployeeDashboard />;
       }
