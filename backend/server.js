@@ -1,59 +1,58 @@
+// server.js
+
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const helmet = require("helmet");
 const morgan = require("morgan");
-const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
+
+// Middleware
+const {
+  authenticateToken, // verifies JWT and attaches `req.user`
+} = require("./middleware/auth");
+
+// Routes
 const authRoutes = require("./routes/auth.routes");
+const salesRoutes = require("./routes/sales");
+const restockRoutes = require("./routes/restocks");
+const leaveRequestRoutes = require("./routes/leaves");
 
 const app = express();
 
-// -----------------------------
-// 🔐 Security & Middleware
-// -----------------------------
-
-// CORS: Allow only trusted origins (tighten in prod)
-app.use(
-  cors({
-    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
-    credentials: true,
-  })
-);
-
-// Helmet: Secures headers
+// === Global Middleware ===
+app.use(cors());
 app.use(helmet());
-
-// JSON Body Parser
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan("dev"));
 
-// Logger (dev only)
-if (process.env.NODE_ENV !== "production") {
-  app.use(morgan("dev"));
-}
-
-// Rate Limiting (protects login/register)
-const limiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: { error: "Too many requests, please try again later." },
-});
-app.use("/api", limiter);
-
-// -----------------------------
-// 📦 Routes
-// -----------------------------
-app.use("/api", authRoutes);
-app.use("/api/sales", require("./routes/sales"));
-app.use("/api/restocks", require("./routes/restocks"));
-
-app.get("/api/test", (req, res) => {
-  res.json({ message: "✅ Backend connected!" });
+// === Health Check ===
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "UP", time: new Date().toISOString() });
 });
 
-// -----------------------------
-// 🚀 Start Server
-// -----------------------------
+// === Public Routes ===
+app.use("/api", authRoutes); // /api/login, /api/register, etc.
+app.use("/api/sales", salesRoutes); // /api/sales/
+app.use("/api/restocks", restockRoutes); 
+
+// === Protected Routes ===
+// Routes under this layer require a valid JWT (req.user is available)
+app.use("/api/leaves", authenticateToken, leaveRequestRoutes);
+
+// === 404 Handler ===
+app.use((req, res) => {
+  res.status(404).json({ error: "Route not found" });
+});
+
+// === Centralized Error Handler ===
+app.use((err, req, res, next) => {
+  console.error("Unhandled Error:", err);
+  res.status(500).json({ error: "Internal Server Error" });
+});
+
+// === Start Server ===
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Backend running at http://localhost:${PORT}`);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });

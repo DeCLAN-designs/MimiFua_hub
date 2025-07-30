@@ -27,4 +27,43 @@ const authenticateToken = (req, res, next) => {
   }
 };
 
-module.exports = authenticateToken;
+/**
+ * Middleware to ensure a user is present (used after authenticateToken).
+ */
+const verify = (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  next();
+};
+
+/**
+ * Middleware to restrict route access to only managers.
+ */
+const requireManager = (req, res, next) => {
+  if (req.user.role !== "manager") {
+    return res
+      .status(403)
+      .json({ error: "Access restricted to managers only." });
+  }
+  next();
+};
+
+/**
+ * Middleware to restrict route access to only employees.
+ */
+const requireEmployee = (req, res, next) => {
+  if (req.user.role !== "employee") {
+    return res
+      .status(403)
+      .json({ error: "Access restricted to employees only." });
+  }
+  next();
+};
+
+module.exports = {
+  authenticateToken,
+  verify,
+  requireManager,
+  requireEmployee,
+};

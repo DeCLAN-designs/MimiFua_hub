@@ -96,12 +96,13 @@
 }
 
 .employee-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.95rem;
-  color: #00370F;
-  background-color: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    color: #00370F;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    counter-reset: row-number; /* Initialize counter */
 }
 
 .employee-table th,

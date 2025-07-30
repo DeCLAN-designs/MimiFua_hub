@@ -95,7 +95,7 @@ const RestockInventory = () => {
         <table className="employee-table">
           <thead>
             <tr>
-              <th>ID</th>
+              {/* <th>ID</th> */}
               <th>Item</th>
               <th>Quantity</th>
               <th>Status</th>
@@ -106,7 +106,7 @@ const RestockInventory = () => {
             {restocks.length > 0 ? (
               restocks.map((restock) => (
                 <tr key={restock.id}>
-                  <td>{restock.id}</td>
+                  {/* <td>{restock.id}</td> */}
                   <td>{restock.item}</td>
                   <td>{restock.quantity}</td>
                   <td>{restock.status}</td>

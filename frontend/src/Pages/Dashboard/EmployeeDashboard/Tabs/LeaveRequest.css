@@ -1,0 +1,77 @@
+.leave-request-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fefefe;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.leave-request-container h2 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+}
+
+.leave-request-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.leave-request-form label {
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+
+.leave-request-form select,
+.leave-request-form input[type="text"],
+.leave-request-form input[type="number"] {
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  background-color: #fff;
+  transition: border-color 0.2s;
+}
+
+.leave-request-form select:focus,
+.leave-request-form input:focus {
+  outline: none;
+  border-color: #48a9e6;
+}
+
+.leave-request-form button {
+  padding: 0.75rem;
+  font-size: 1rem;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.leave-request-form button:hover:not(:disabled) {
+  background-color: #005fa3;
+}
+
+.leave-request-form button:disabled {
+  background-color: #a0a0a0;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #d93025;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.success-message {
+  color: #188038;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 0.5rem;
+}
