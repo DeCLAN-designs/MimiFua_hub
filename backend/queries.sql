@@ -12,7 +12,7 @@ CREATE TABLE users (
   UNIQUE KEY unique_phone (phone)
 );
 
-CREATE TABLE IF NOT EXISTS sales (
+CREATE TABLE  sales (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
   item VARCHAR(255) NOT NULL,

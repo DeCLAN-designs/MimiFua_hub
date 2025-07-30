@@ -41,6 +41,8 @@ app.use("/api", limiter);
 // 📦 Routes
 // -----------------------------
 app.use("/api", authRoutes);
+app.use("/api/sales", require("./routes/sales"));
+
 
 app.get("/api/test", (req, res) => {
   res.json({ message: "✅ Backend connected!" });

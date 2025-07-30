@@ -1,9 +1,12 @@
 // src/Pages/Dashboard/Views/SalesView.jsx
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import axios from "axios";
+import moment from "moment";
 import "./Sales.css";
 
 const Sales = () => {
   const [view, setView] = useState("form");
+  const [user, setUser] = useState(null);
   const [inventory, setInventory] = useState([]);
   const [sale, setSale] = useState({ item: "", amount: "" });
   const [sales, setSales] = useState([]);
@@ -15,38 +18,48 @@ const Sales = () => {
   });
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (!storedUser || storedUser.role !== "employee") {
+    const stored = JSON.parse(localStorage.getItem("user"));
+    if (!stored || stored.role !== "employee") {
       window.location.href = "/login";
       return;
     }
+    setUser(stored);
+    fetchInventory();
+    fetchSales(stored.id);
+  }, []);
 
-    const mockSales = [
-      { id: 1, item: "Airtime", amount: 100, date: "2025-07-09" },
-      { id: 2, item: "Data", amount: 250, date: "2025-07-08" },
-      { id: 3, item: "Bundle", amount: 150, date: "2025-07-07" },
-      { id: 4, item: "Sim Card", amount: 200, date: "2025-07-03" },
-      { id: 5, item: "SMS Pack", amount: 80, date: "2025-06-15" },
-      { id: 6, item: "Minutes", amount: 300, date: "2025-05-22" },
-    ];
-
+  const fetchInventory = () => {
     setInventory([
       { item: "Airtime", quantity: 100 },
       { item: "Bundles", quantity: 50 },
     ]);
+  };
 
-    setSales(mockSales);
-    groupSalesByTime(mockSales);
+  const fetchSales = useCallback(async (userId) => {
+    setStatus((s) => ({ ...s, loading: true }));
+    try {
+      const res = await axios.get("http://localhost:5000/api/sales", {
+        params: { userId },
+      });
+      const backendSales = res.data.sales || [];
+      setSales(backendSales);
+      groupSalesByTime(backendSales);
+    } catch (err) {
+      console.error("Sales fetch error:", err);
+      setStatus((s) => ({
+        ...s,
+        error: "❌ Failed to fetch sales. Try again.",
+      }));
+    } finally {
+      setStatus((s) => ({ ...s, loading: false }));
+    }
   }, []);
 
   const groupSalesByTime = (sales) => {
     const now = new Date();
     const todayStr = now.toISOString().split("T")[0];
-    const yesterday = new Date(now);
-    yesterday.setDate(now.getDate() - 1);
-    const yesterdayStr = yesterday.toISOString().split("T")[0];
-    const startOfWeek = new Date(now);
-    startOfWeek.setDate(now.getDate() - now.getDay());
+    const yesterdayStr = moment(now).subtract(1, "day").format("YYYY-MM-DD");
+    const startOfWeek = moment().startOf("week");
 
     const grouped = {
       "📅 Today": [],
@@ -55,67 +68,64 @@ const Sales = () => {
       "📦 Older": [],
     };
 
-    sales.forEach((sale) => {
-      const saleDate = new Date(sale.date);
+    sales.forEach((s) => {
+      const saleDate = moment(s.date);
+      const formatted = saleDate.format("YYYY-MM-DD");
 
-      if (sale.date === todayStr) {
-        grouped["📅 Today"].push(sale);
-      } else if (sale.date === yesterdayStr) {
-        grouped["📆 Yesterday"].push(sale);
-      } else if (saleDate >= startOfWeek && saleDate < new Date(todayStr)) {
-        grouped["📊 This Week"].push(sale);
-      } else if (
-        saleDate.getMonth() === now.getMonth() &&
-        saleDate.getFullYear() === now.getFullYear()
-      ) {
-        grouped["📦 Older"].push(sale);
+      if (formatted === todayStr) {
+        grouped["📅 Today"].push(s);
+      } else if (formatted === yesterdayStr) {
+        grouped["📆 Yesterday"].push(s);
+      } else if (saleDate.isAfter(startOfWeek)) {
+        grouped["📊 This Week"].push(s);
       } else {
-        const monthYear = saleDate.toLocaleString("default", {
-          month: "long",
-          year: "numeric",
-        });
-        if (!grouped[monthYear]) grouped[monthYear] = [];
-        grouped[monthYear].push(sale);
+        const label = saleDate.format("MMMM YYYY");
+        if (!grouped[label]) grouped[label] = [];
+        grouped[label].push(s);
       }
     });
 
     setGroupedSales(grouped);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const trimmedItem = sale.item.trim();
     const amount = parseFloat(sale.amount);
     if (!trimmedItem || isNaN(amount) || amount <= 0) {
       setStatus({
         loading: false,
-        error: "Invalid item or amount.",
+        error: "❌ Invalid item or amount.",
         success: "",
       });
       return;
     }
 
     const newSale = {
-      id: sales.length + 1,
       item: trimmedItem,
       amount,
-      date: new Date().toISOString().split("T")[0],
+      user_id: user.id,
     };
 
     setStatus({ loading: true, error: "", success: "" });
 
-    // Simulate API delay
-    setTimeout(() => {
-      const updated = [newSale, ...sales];
-      setSales(updated);
-      groupSalesByTime(updated);
+    try {
+      const res = await axios.post("http://localhost:5000/api/sales", newSale);
+      const recorded = res.data.sale;
+
+      const updatedSales = [recorded, ...sales];
+      setSales(updatedSales);
+      groupSalesByTime(updatedSales);
       setSale({ item: "", amount: "" });
+      setStatus({ loading: false, error: "", success: "✅ Sale recorded." });
+    } catch (err) {
+      console.error("Submit error:", err);
       setStatus({
         loading: false,
-        error: "",
-        success: "✅ Sale recorded successfully.",
+        error: "❌ Failed to record sale.",
+        success: "",
       });
-    }, 500);
+    }
   };
 
   return (
@@ -175,9 +185,9 @@ const Sales = () => {
       ) : (
         <>
           <h2 className="sales-title">💰 My Sales</h2>
-          {Object.entries(groupedSales).map(([section, sales]) => (
-            <div key={section} className="sales-section">
-              <h3 className="section-header">{section}</h3>
+          {Object.entries(groupedSales).map(([label, records]) => (
+            <div key={label} className="sales-section">
+              <h3 className="section-header">{label}</h3>
               <table className="sales-table">
                 <thead>
                   <tr>
@@ -187,11 +197,11 @@ const Sales = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {sales.map((sale) => (
-                    <tr key={sale.id}>
-                      <td>{sale.date}</td>
-                      <td>{sale.item}</td>
-                      <td>{sale.amount}</td>
+                  {records.map((s, i) => (
+                    <tr key={i}>
+                      <td>{moment(s.date).format("YYYY-MM-DD")}</td>
+                      <td>{s.item}</td>
+                      <td>{s.amount}</td>
                     </tr>
                   ))}
                 </tbody>
