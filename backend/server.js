@@ -13,10 +13,12 @@ const app = express();
 // -----------------------------
 
 // CORS: Allow only trusted origins (tighten in prod)
-app.use(cors({
-  origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 // Helmet: Secures headers
 app.use(helmet());
@@ -42,7 +44,7 @@ app.use("/api", limiter);
 // -----------------------------
 app.use("/api", authRoutes);
 app.use("/api/sales", require("./routes/sales"));
-
+app.use("/api/restocks", require("./routes/restocks"));
 
 app.get("/api/test", (req, res) => {
   res.json({ message: "✅ Backend connected!" });

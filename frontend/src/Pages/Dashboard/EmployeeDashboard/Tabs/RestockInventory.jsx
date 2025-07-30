@@ -1,96 +1,126 @@
+// Pages/Dashboard/EmployeeDashboard/RestockInventory.jsx
 import React, { useState, useEffect } from "react";
-// import axios from "axios"; // Uncomment when backend is ready
+import axios from "axios";
+import "./RestockInventory.css";
 
-const RestockInventory = ({ user }) => { // eslint-disable-line no-unused-vars
+const RestockInventory = () => {
+  const [restockItem, setRestockItem] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [restocks, setRestocks] = useState([]);
-  const [form, setForm] = useState({ item: "", quantity: "" });
-  const [status, setStatus] = useState({
-    loading: false,
-    error: "",
-    success: "",
-  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const user = JSON.parse(localStorage.getItem("user")); // auth should validate before access
 
   useEffect(() => {
-    // Placeholder - Replace with real backend call
-    setRestocks([
-      { item: "Airtime", quantity: 50, date: "2025-07-10" },
-      { item: "Data", quantity: 20, date: "2025-07-08" },
-    ]);
-
-    // Future:
-    // fetchRestocks(user.token, user.id);
+    fetchRestocks();
   }, []);
+
+  const fetchRestocks = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/api/restocks/${user.id}`
+      );
+      setRestocks(res.data);
+    } catch (err) {
+      console.error("Fetch error:", err);
+      setError("Failed to load restocks");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const trimmedItem = form.item.trim();
-    const quantity = parseInt(form.quantity, 10);
+    setLoading(true);
+    setError("");
+    setSuccess("");
 
-    if (!trimmedItem || isNaN(quantity) || quantity <= 0) {
-      setStatus({ ...status, error: "Invalid restock entry." });
+    if (!restockItem.trim() || !quantity.trim()) {
+      setError("All fields are required.");
+      setLoading(false);
       return;
     }
 
-    const newRestock = {
-      item: trimmedItem,
-      quantity,
-      date: new Date().toISOString().split("T")[0],
-    };
-
     try {
-      setStatus({ loading: true, error: "", success: "" });
+      const res = await axios.post("http://localhost:5000/api/restocks", {
+        item: restockItem.trim(),
+        quantity: parseInt(quantity),
+        user_id: user.id,
+      });
 
-      // Future: backend API integration
-      // await axios.post("/api/restocks", {
-      //   user_id: user.id,
-      //   ...newRestock,
-      // }, {
-      //   headers: { Authorization: `Bearer ${user.token}` },
-      // });
-
-      setRestocks([newRestock, ...restocks]);
-      setForm({ item: "", quantity: "" });
-      setStatus({ loading: false, success: "✅ Restock submitted." });
+      if (res.status === 201) {
+        setSuccess("Restock request submitted.");
+        setRestockItem("");
+        setQuantity("");
+        fetchRestocks();
+      } else {
+        setError("Submission failed.");
+      }
     } catch (err) {
-      console.error(err);
-      setStatus({ loading: false, error: "❌ Failed to submit restock." });
+      console.error("Submit error:", err);
+      setError("An error occurred.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="employee-restock-view">
-      <h2>🔄 Restock Inventory</h2>
-      <form onSubmit={handleSubmit} className="employee-form">
+    <div className="employee-view">
+      <h2 className="employee-heading">🔄 Restock Inventory</h2>
+
+      <form className="employee-form_restocks" onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Item to restock"
-          value={form.item}
-          onChange={(e) => setForm({ ...form, item: e.target.value })}
-          required
+          placeholder="Item to Restock"
+          value={restockItem}
+          onChange={(e) => setRestockItem(e.target.value)}
         />
         <input
           type="number"
           placeholder="Quantity"
-          value={form.quantity}
-          onChange={(e) => setForm({ ...form, quantity: e.target.value })}
-          required
+          value={quantity}
+          onChange={(e) => setQuantity(e.target.value)}
         />
-        <button type="submit" disabled={status.loading}>
-          {status.loading ? "Submitting..." : "Submit Request"}
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Submitting..." : "Submit Restock"}
         </button>
+
+        {error && <p className="error-text">{error}</p>}
+        {success && <p className="success-text">{success}</p>}
       </form>
 
-      {status.error && <p className="error-message">{status.error}</p>}
-      {status.success && <p className="success-message">{status.success}</p>}
-
-      <h3>📋 Restock History</h3>
-      <ul className="sales-list">
-        {restocks.map((r, i) => (
-          <li key={i}>
-            {r.date} - {r.item} - Qty: {r.quantity}
-          </li>
-        ))}
-      </ul>
+      <h3 className="employee-subheading">Your Restock Requests</h3>
+      <div className="employee-table-wrapper">
+        <table className="employee-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Item</th>
+              <th>Quantity</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {restocks.length > 0 ? (
+              restocks.map((restock) => (
+                <tr key={restock.id}>
+                  <td>{restock.id}</td>
+                  <td>{restock.item}</td>
+                  <td>{restock.quantity}</td>
+                  <td>{restock.status}</td>
+                  <td>{new Date(restock.created_at).toLocaleString()}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5">No restock requests found.</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
