@@ -1,100 +1,101 @@
-/* LeaveRequestForm.css */
-
 .leave-request-container {
-  padding: 2rem;
-  background-color: #f9f9f9;
-  border-radius: 12px;
   max-width: 600px;
   margin: 2rem auto;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-.leave-request-container h2 {
-  margin-bottom: 1.5rem;
-  color: #2c3e50;
-  font-size: 1.5rem;
-  text-align: center;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .leave-request-form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
-.leave-request-form label {
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
   font-weight: 600;
-  margin-bottom: 0.5rem;
   color: #333;
 }
 
-.leave-request-form input[type="date"],
-.leave-request-form select,
-.leave-request-form textarea {
-  width: 100%;
+.form-group select,
+.form-group input,
+.form-group textarea {
   padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
   font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #fff;
-  transition: border-color 0.2s ease-in-out;
+  width: 100%;
 }
 
-.leave-request-form input:focus,
-.leave-request-form select:focus,
-.leave-request-form textarea:focus {
-  border-color: #48aecc;
-  outline: none;
-}
-
-.leave-request-form textarea {
-  min-height: 100px;
+.form-group textarea {
+  min-height: 80px;
   resize: vertical;
 }
 
-.leave-request-form button {
-  padding: 0.75rem;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #fff;
-  background-color: #48aecc;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+.date-range {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
 }
 
-.leave-request-form button:disabled {
-  background-color: #a7baac;
+.date-range .form-group {
+  flex: 1;
+}
+
+/* Error message styling */
+.error-message {
+  background: #ffebee;
+  color: #d32f2f;
+  padding: 0.75rem;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -1rem; /* Adjust spacing */
+  margin-bottom: 0.5rem;
+}
+
+.success-message {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 0.75rem;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+}
+
+.submit-btn {
+  padding: 0.75rem;
+  background: #4a6cf7;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.submit-btn:hover {
+  background: #3a5af5;
+}
+
+.submit-btn:disabled {
+  background: #cccccc;
   cursor: not-allowed;
 }
 
-.leave-request-form button:hover:not(:disabled) {
-  background-color: #3793b3;
-}
-
-.status-message {
-  text-align: center;
-  font-size: 0.95rem;
-  padding-top: 0.5rem;
-}
-
-.status-message.success {
-  color: #8fcf68;
-}
-
-.status-message.error {
-  color: #d63031;
-}
-
-/* Mobile responsiveness */
-@media (max-width: 480px) {
-  .leave-request-container {
-    padding: 1rem;
-    border-radius: 8px;
-  }
-
-  .leave-request-form {
-    gap: 1rem;
-  }
+.close-btn {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 0 0.5rem;
 }
