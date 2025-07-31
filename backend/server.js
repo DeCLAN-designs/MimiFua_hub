@@ -15,7 +15,7 @@ const {
 const authRoutes = require("./routes/auth.routes");
 const salesRoutes = require("./routes/sales");
 const restockRoutes = require("./routes/restocks");
-const leaveRequestRoutes = require("./routes/leaves");
+const leaveRoutes = require("./routes/leaves");
 
 const app = express();
 
@@ -35,10 +35,11 @@ app.get("/api/health", (req, res) => {
 app.use("/api", authRoutes); // /api/login, /api/register, etc.
 app.use("/api/sales", salesRoutes); // /api/sales/
 app.use("/api/restocks", restockRoutes); 
+app.use("/api/leaves", leaveRoutes);
 
 // === Protected Routes ===
 // Routes under this layer require a valid JWT (req.user is available)
-app.use("/api/leaves", authenticateToken, leaveRequestRoutes);
+// app.use("/api/leaves", authenticateToken, leaveRequestRoutes);
 
 // === 404 Handler ===
 app.use((req, res) => {

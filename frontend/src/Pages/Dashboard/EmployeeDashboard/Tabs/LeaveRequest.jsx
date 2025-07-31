@@ -1,158 +1,99 @@
+// src/Pages/Dashboard/Employee/LeaveRequestForm.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import "./LeaveRequest.css";
 
-const leaveReasons = [
-  "Sick Leave",
-  "Vacation",
-  "Emergency",
-  "Family Obligation",
-  "Medical Appointment",
-  "Mental Health",
-  "Personal Development",
-  "Bereavement",
-  "Jury Duty",
-  "Other",
-];
-
-const LeaveRequest = ({ user }) => {
+const LeaveRequest= () => {
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const [leaveType, setLeaveType] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [reason, setReason] = useState("");
-  const [customReason, setCustomReason] = useState("");
-  const [days, setDays] = useState("");
+  const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [feedback, setFeedback] = useState({ error: "", success: "" });
 
-  const resetForm = () => {
-    setReason("");
-    setCustomReason("");
-    setDays("");
-  };
-
-  const validateInput = () => {
-    const parsedDays = parseInt(days.trim(), 10);
-    const finalReason =
-      reason === "Other" ? customReason.trim() : reason.trim();
-
-    if (!finalReason || isNaN(parsedDays) || parsedDays <= 0) {
-      return {
-        valid: false,
-        error: "⚠️ Provide a valid reason and a positive number of leave days.",
-      };
-    }
-
-    return {
-      valid: true,
-      data: { reason: finalReason, days: parsedDays },
-    };
-  };
+  const isValid = () =>
+    leaveType && startDate && endDate && reason && storedUser?.id;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isValid()) return setStatus("❌ Please fill in all required fields.");
 
-    const validation = validateInput();
-    if (!validation.valid) {
-      setFeedback({ error: validation.error, success: "" });
-      return;
-    }
+    setLoading(true);
+    setStatus(null);
 
     try {
-      setLoading(true);
-      setFeedback({ error: "", success: "" });
-
       const payload = {
-        user_id: user.id,
-        reason: validation.data.reason,
-        days: validation.data.days,
+        user_id: storedUser.id,
+        leave_type: leaveType,
+        start_date: startDate,
+        end_date: endDate,
+        reason: reason.trim(),
       };
 
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          "Content-Type": "application/json",
-        },
-      };
-
-      const response = await axios.post("/api/leaves", payload, config);
-
-      if (response.status !== 201 && response.status !== 200) {
-        throw new Error("Unexpected response from server.");
+      const response = await axios.post(
+        "http://localhost:5000/api/leaves",
+        payload
+      );
+      if (response.status === 201) {
+        setStatus("✅ Leave request submitted successfully.");
+        setLeaveType("");
+        setStartDate("");
+        setEndDate("");
+        setReason("");
       }
-
-      setFeedback({ success: "✅ Leave request submitted.", error: "" });
-      resetForm();
     } catch (err) {
-      console.error("Leave request error:", err.response?.data || err.message);
-      setFeedback({
-        error: "❌ Failed to submit request. Please try again later.",
-        success: "",
-      });
+      console.error("Leave request error:", err);
+      setStatus("❌ Failed to submit request. Please try again later.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="leave-request-container">
-      <h2>📅 Submit Leave Request</h2>
-
-      <form
-        onSubmit={handleSubmit}
-        className="leave-request-form"
-        autoComplete="on"
-      >
-        <label htmlFor="reason">Leave Reason:</label>
+    <div className="employee-form">
+      <h2>Leave Request</h2>
+      <form onSubmit={handleSubmit}>
+        <label>Leave Type</label>
         <select
-          id="reason"
-          name="reason"
+          value={leaveType}
+          onChange={(e) => setLeaveType(e.target.value)}
+          required
+        >
+          <option value="">Select</option>
+          <option value="Sick">Sick</option>
+          <option value="Vacation">Vacation</option>
+          <option value="Emergency">Emergency</option>
+        </select>
+
+        <label>Start Date</label>
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          required
+        />
+
+        <label>End Date</label>
+        <input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+          required
+        />
+
+        <label>Reason</label>
+        <textarea
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           required
-        >
-          <option value="">-- Select Reason --</option>
-          {leaveReasons.map((r) => (
-            <option key={r} value={r}>
-              {r}
-            </option>
-          ))}
-        </select>
-
-        {reason === "Other" && (
-          <>
-            <label htmlFor="customReason">Custom Reason:</label>
-            <input
-              type="text"
-              id="customReason"
-              name="customReason"
-              placeholder="Enter custom reason"
-              value={customReason}
-              onChange={(e) => setCustomReason(e.target.value)}
-              required
-              autoComplete="off"
-            />
-          </>
-        )}
-
-        <label htmlFor="days">Number of Days:</label>
-        <input
-          type="number"
-          id="days"
-          name="days"
-          placeholder="Number of leave days"
-          value={days}
-          onChange={(e) => setDays(e.target.value)}
-          min="1"
-          required
-          autoComplete="off"
         />
 
         <button type="submit" disabled={loading}>
           {loading ? "Submitting..." : "Submit Request"}
         </button>
 
-        {feedback.error && <p className="error-message">{feedback.error}</p>}
-        {feedback.success && (
-          <p className="success-message">{feedback.success}</p>
-        )}
+        {status && <p className="status-message">{status}</p>}
       </form>
     </div>
   );
