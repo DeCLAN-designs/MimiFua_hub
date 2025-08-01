@@ -7,7 +7,6 @@ import "./Sales.css";
 const Sales = () => {
   const [view, setView] = useState("form");
   const [user, setUser] = useState(null);
-  const [inventory, setInventory] = useState([]);
   const [sale, setSale] = useState({ item: "", amount: "" });
   const [sales, setSales] = useState([]);
   const [groupedSales, setGroupedSales] = useState({});
@@ -24,16 +23,8 @@ const Sales = () => {
       return;
     }
     setUser(stored);
-    fetchInventory();
     fetchSales(stored.id);
   }, []);
-
-  const fetchInventory = () => {
-    setInventory([
-      { item: "Airtime", quantity: 100 },
-      { item: "Bundles", quantity: 50 },
-    ]);
-  };
 
   const fetchSales = useCallback(async (userId) => {
     setStatus((s) => ({ ...s, loading: true }));
@@ -147,17 +138,8 @@ const Sales = () => {
 
       {view === "form" ? (
         <>
-          <h2>📦 Remaining Inventory</h2>
-          <ul className="inventory-list">
-            {inventory.map((inv, i) => (
-              <li key={i}>
-                <strong>{inv.item}</strong>: {inv.quantity}
-              </li>
-            ))}
-          </ul>
-
-          <h3>➕ Add a New Sale</h3>
           <form onSubmit={handleSubmit} className="employee-form">
+            <h3>➕ Add a New Sale</h3>
             <input
               type="text"
               placeholder="Item Sold"
@@ -185,29 +167,39 @@ const Sales = () => {
       ) : (
         <>
           <h2 className="sales-title">💰 My Sales</h2>
-          {Object.entries(groupedSales).map(([label, records]) => (
-            <div key={label} className="sales-section">
-              <h3 className="section-header">{label}</h3>
-              <table className="sales-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Item</th>
-                    <th>Amount (KES)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {records.map((s, i) => (
-                    <tr key={i}>
-                      <td>{moment(s.date).format("YYYY-MM-DD")}</td>
-                      <td>{s.item}</td>
-                      <td>{s.amount}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ))}
+          {sales.length === 0 ? (
+            <p className="no-sales-global">
+              🚫 You have not recorded any sales yet.
+            </p>
+          ) : (
+            Object.entries(groupedSales).map(([label, records]) => (
+              <div key={label} className="sales-section">
+                <h3 className="section-header">{label}</h3>
+                {records.length === 0 ? (
+                  <p className="no-sales-entry">🚫 No entries found.</p>
+                ) : (
+                  <table className="sales-table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Item</th>
+                        <th>Amount (KES)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {records.map((s, i) => (
+                        <tr key={i}>
+                          <td>{moment(s.date).format("YYYY-MM-DD")}</td>
+                          <td>{s.item}</td>
+                          <td>{s.amount}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            ))
+          )}
         </>
       )}
     </div>
