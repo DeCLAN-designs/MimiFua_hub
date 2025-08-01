@@ -1,75 +1,125 @@
-import React, { useState, useEffect } from "react";
+// frontend/src/Pages/Dashboard/EmployeeDashboard/EmployeeDashboard.jsx
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./EmployeeDashboard.css";
 
 const EmployeeDashboard = () => {
-  const [inventory, setInventory] = useState([]);
-  const [sales, setSales] = useState([]);
-  const [status, setStatus] = useState({
-    loading: false,
-    error: "",
-    success: "",
-  });
+  const [summary, setSummary] = useState(null);
+  const [recentSales, setRecentSales] = useState([]);
+  const [recentRestocks, setRecentRestocks] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (!storedUser || storedUser.role !== "employee") {
-      window.location.href = "/login";
-      return;
-    }
+    const fetchDashboardData = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/api/dashboard?userId=${user.id}`
+        );
+        setSummary(res.data.summary);
+        setRecentSales(res.data.recentSales);
+        setRecentRestocks(res.data.recentRestocks);
+      } catch (error) {
+        console.error("Failed to fetch dashboard data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    fetchInventory(storedUser.token);
-    fetchSales(storedUser.token, storedUser.id);
-  }, []);
+    if (user?.id) fetchDashboardData();
+  }, [user?.id]);
 
-  const fetchInventory = async (token) => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/restocks", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setInventory(res.data);
-    } catch (err) {
-      console.error("Failed to fetch inventory", err);
-      setStatus((prev) => ({ ...prev, error: "❌ Could not load inventory." }));
-    }
-  };
-
-  const fetchSales = async (token, userId) => {
-    try {
-      const res = await axios.get(`http://localhost:5000/api/sales/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setSales(res.data);
-    } catch (err) {
-      console.error("Failed to fetch sales", err);
-      setStatus((prev) => ({ ...prev, error: "❌ Could not load sales." }));
-    }
-  };
-
+  if (loading) {
+    return <div className="dashboard-loading">Loading dashboard...</div>;
+  }
 
   return (
-    <div className="employee-dashboard-view">
-      <h2>📦 Remaining Inventory</h2>
-      <ul className="inventory-list">
-        {inventory.map((inv, i) => (
-          <li key={i}>
-            <strong>{inv.item}</strong>: {inv.quantity}
-          </li>
-        ))}
-      </ul>
+    <div className="dashboard-layout">
+      {/* Sidebar would be rendered by parent component */}
 
+      <div className="dashboard-content">
+        {/* Summary Cards */}
+        <div className="summary-grid">
+          <div className="summary-card">
+            <div className="summary-title">Total Revenue</div>
+            <div className="summary-value">
+              KES {summary?.totalSalesAmount?.toLocaleString() ?? "0"}
+            </div>
+          </div>
 
-      {status.error && <p className="error-message">{status.error}</p>}
-      {status.success && <p className="success-message">{status.success}</p>}
+          <div className="summary-card">
+            <div className="summary-title">Total Sales</div>
+            <div className="summary-value">{summary?.salesCount ?? 0}</div>
+          </div>
 
-      <h3>🧾 Recent Sales</h3>
-      <ul className="sales-list">
-        {sales.map((s, i) => (
-          <li key={i}>
-            {s.date} - {s.item} - KES {s.amount}
-          </li>
-        ))}
-      </ul>
+          <div className="summary-card">
+            <div className="summary-title">Pending Leave Requests</div>
+            <div className="summary-value">
+              {summary?.pendingLeaveCount ?? 0}
+            </div>
+          </div>
+        </div>
+
+        {/* Tables Section */}
+        <div className="tables-grid">
+          <div className="table-card">
+            <h3>Recent Sales</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentSales.length > 0 ? (
+                  recentSales.map((sale, idx) => (
+                    <tr key={idx}>
+                      <td>{sale.item}</td>
+                      <td>KES {sale.amount}</td>
+                      <td>{new Date(sale.date).toLocaleDateString()}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3">No sales found</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="table-card">
+            <h3>Recent Restocks</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Quantity</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentRestocks.length > 0 ? (
+                  recentRestocks.map((restock, idx) => (
+                    <tr key={idx}>
+                      <td>{restock.item}</td>
+                      <td>{restock.quantity}</td>
+                      <td>{new Date(restock.date).toLocaleDateString()}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3">No restocks found</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
