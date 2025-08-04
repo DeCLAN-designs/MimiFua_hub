@@ -6,9 +6,10 @@ import "./Dashboard.css";
 
 // Manager Views
 import ManagerDashboard from "./ManagerDashboard/ManagerDashboard";
-import ManageEmployees from "./ManagerDashboard/ManageEmployees";
-import AllSales from "./ManagerDashboard/AllSales";
-import Reports from "./ManagerDashboard/Reports";
+import Employees from "./ManagerDashboard/Tabs/Employees";
+import Sales from "./ManagerDashboard/Tabs/Sales";
+import Inventory from "./ManagerDashboard/Tabs/Inventory";
+import Leave from "./ManagerDashboard/Tabs/Leave"
 
 // Employee Views
 import EmployeeDashboard from "./EmployeeDashboard/EmployeeDashboard";
@@ -49,12 +50,14 @@ const Dashboard = () => {
       switch (activeView) {
         case "dashboard":
           return <ManagerDashboard />;
-        case "manage-employees":
-          return <ManageEmployees />;
-        case "all-sales":
-          return <AllSales />;
-        case "reports":
-          return <Reports />;
+        case "employees":
+          return <Employees />;
+        case "sales":
+          return <Sales />;
+        case "inventory":
+          return <Inventory />;
+        case "leave":
+          return <Leave/>
         default:
           return <ManagerDashboard />;
       }

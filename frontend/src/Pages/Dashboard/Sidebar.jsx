@@ -14,9 +14,10 @@ const EMPLOYEE_NAV = [
 
 const MANAGER_NAV = [
   { key: "dashboard", label: "📊 Dashboard" },
-  { key: "manage-employees", label: "👥 Manage Employees" },
-  { key: "all-sales", label: "📈 View All Sales" },
-  { key: "reports", label: "🧾 Reports" },
+  { key: "employees", label: "👥 Employees" },
+  { key: "sales", label: "📈 Sales" },
+  { key: "inventory", label: "🧾 Inventory" },
+  { key: "leave", label: "📜 Leave" },
 ];
 
 const Sidebar = ({ user, onLogout, onNavigate, activeView }) => {
