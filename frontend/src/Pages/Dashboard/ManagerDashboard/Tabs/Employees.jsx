@@ -19,6 +19,8 @@ const Employees = () => {
   const [formData, setFormData] = useState(defaultForm);
   const [showPassword, setShowPassword] = useState(false);
   const [formErrors, setFormErrors] = useState({});
+  const [editMode, setEditMode] = useState(false);
+  const [editId, setEditId] = useState(null);
 
   useEffect(() => {
     fetchEmployees();
@@ -27,7 +29,8 @@ const Employees = () => {
   const fetchEmployees = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/employees");
-      setEmployees(res.data);
+      const employeeOnly = res.data.filter((emp) => emp.role === "employee");
+      setEmployees(employeeOnly);
     } catch (err) {
       console.error("Failed to fetch employees:", err);
     }
@@ -41,6 +44,8 @@ const Employees = () => {
       setFormData(defaultForm);
       setFormErrors({});
       setShowPassword(false);
+      setEditMode(false);
+      setEditId(null);
     }
   };
 
@@ -56,7 +61,8 @@ const Employees = () => {
     if (!formData.last_name.trim()) errors.last_name = "Last name is required";
     if (!formData.email.trim()) errors.email = "Email is required";
     if (!formData.phone.trim()) errors.phone = "Phone is required";
-    if (!formData.password.trim()) errors.password = "Password is required";
+    if (!editMode && !formData.password.trim())
+      errors.password = "Password is required";
     return errors;
   };
 
@@ -69,16 +75,42 @@ const Employees = () => {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/employees", formData);
+      if (editMode) {
+        const payload = { ...formData };
+        if (!payload.password.trim()) delete payload.password;
+        await axios.put(
+          `http://localhost:5000/api/employees/${editId}`,
+          payload
+        );
+      } else {
+        const payload = { ...formData, role: "employee" };
+        await axios.post("http://localhost:5000/api/employees", payload);
+      }
       fetchEmployees();
       toggleModal();
     } catch (err) {
-      console.error("Error adding employee:", err);
-      if (err.response?.data?.message) {
-        setFormErrors({ api: err.response.data.message });
-      } else {
-        setFormErrors({ api: "Unexpected error occurred." });
-      }
+      console.error("Error saving employee:", err);
+      setFormErrors({
+        api: err.response?.data?.message || "Unexpected error occurred.",
+      });
+    }
+  };
+
+  const handleEdit = (employee) => {
+    setFormData({ ...employee, password: "" });
+    setEditMode(true);
+    setEditId(employee.id);
+    setShowModal(true);
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this employee?"))
+      return;
+    try {
+      await axios.delete(`http://localhost:5000/api/employees/${id}`);
+      fetchEmployees();
+    } catch (err) {
+      console.error("Error deleting employee:", err);
     }
   };
 
@@ -93,7 +125,8 @@ const Employees = () => {
         >
           🛠️ Manage Employees
         </button>
-        <button          className={tab === "roles" ? "active" : ""}
+        <button
+          className={tab === "roles" ? "active" : ""}
           onClick={() => handleTabChange("roles")}
         >
           🧑‍💼 Assign Roles
@@ -113,10 +146,10 @@ const Employees = () => {
             <thead>
               <tr>
                 <th>#</th>
-                <th> Full Name</th>
-                <th> Email</th>
-                <th> Phone</th>
-                <th> Role</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Role</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -128,6 +161,20 @@ const Employees = () => {
                   <td>{emp.email}</td>
                   <td>{emp.phone}</td>
                   <td>{emp.role}</td>
+                  <td>
+                    <button
+                      className="edit-btn"
+                      onClick={() => handleEdit(emp)}
+                    >
+                      ✏️
+                    </button>
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(emp.id)}
+                    >
+                      🗑️
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -144,7 +191,7 @@ const Employees = () => {
       {showModal && (
         <EmployeeModal closeModal={toggleModal}>
           <div className="employee-form-wrapper">
-            <h3>➕ Add New Employee</h3>
+            <h3>{editMode ? "✏️ Edit Employee" : "➕ Add New Employee"}</h3>
             {formErrors.api && <p className="error">{formErrors.api}</p>}
 
             <form className="employee-form" onSubmit={handleSubmit}>
@@ -201,7 +248,11 @@ const Employees = () => {
                   <input
                     type={showPassword ? "text" : "password"}
                     name="password"
-                    placeholder="Password"
+                    placeholder={
+                      editMode
+                        ? "Leave blank to keep current password"
+                        : "Password"
+                    }
                     value={formData.password}
                     onChange={handleChange}
                   />
@@ -213,7 +264,7 @@ const Employees = () => {
                     {showPassword ? "🙈 Hide" : "👁️ Show"}
                   </button>
                 </div>
-                {formErrors.password && (
+                {!editMode && formErrors.password && (
                   <span className="error">{formErrors.password}</span>
                 )}
               </div>
@@ -222,14 +273,13 @@ const Employees = () => {
                   name="role"
                   value={formData.role}
                   onChange={handleChange}
+                  disabled
                 >
                   <option value="employee">👷 Employee</option>
-                  <option value="manager">🧑‍💼 Manager</option>
                 </select>
               </div>
-
               <div className="form-actions">
-                <button type="submit">Create</button>
+                <button type="submit">{editMode ? "Update" : "Create"}</button>
                 <button
                   type="button"
                   onClick={toggleModal}

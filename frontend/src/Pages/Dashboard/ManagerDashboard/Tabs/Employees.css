@@ -1,100 +1,167 @@
 /* Employees.css */
+
+/* Base Styles */
 .employees-container {
-   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f9f9f9;
-  min-height: 100vh;
+  padding: 20px;
+  max-width: 1642px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #2c3e50;
 }
 
 h2, h3 {
-  color: #2C3E50; /* Deep Navy for headings */
+  color: #00370F;
   margin-bottom: 20px;
 }
 
-/* Tabs */
+/* Tabs Styles */
 .employee-tabs {
   display: flex;
-  margin-bottom: 25px;
-  border-bottom: 1px solid #A7BAAC; /* Muted Sage border */
+  margin-bottom: 30px;
+  border-bottom: 1px solid #A7BAAC;
 }
 
 .employee-tabs button {
   padding: 10px 20px;
-  background: none;
+  margin-right: 10px;
   border: none;
+  background: none;
   cursor: pointer;
+  font-size: 16px;
   font-weight: 600;
-  color: #2C3E50; /* Deep Navy text */
-  transition: all 0.3s;
+  color: #2c3e50;
+  border-radius: 5px 5px 0 0;
+  transition: all 0.3s ease;
+}
+
+.employee-tabs button:hover {
+  background-color: #A7BAAC;
+  color: #00370F;
 }
 
 .employee-tabs button.active {
-  color: #00370F; /* Dark Forest Green */
-  border-bottom: 3px solid #8FCF68; /* Soft Green accent */
+  background-color: #8FCF68;
+  color: #00370F;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Table */
+/* Employee List Styles */
+.manage-employees {
+  animation: fadeIn 0.5s ease;
+  border: 1px solid rgba(44, 62, 80, 0.4); /* Using RGBA for the #2c3e5069 color */
+  padding: 20px;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 55, 15, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.manage-employees::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #48AECC, #8FCF68);
+}
+
+.manage-employees:hover {
+  box-shadow: 0 6px 16px rgba(0, 55, 15, 0.12);
+  transform: translateY(-2px);
+}
+
 .employees-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.add-btn {
+  background-color: #48AECC;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.add-btn:hover {
+  background-color: #3a8ca5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .employees-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  animation: slideUp 0.5s ease;
+}
+
+.employees-table th, 
+.employees-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #A7BAAC;
 }
 
 .employees-table th {
-  background-color: #2C3E50; /* Deep Navy header */
-  color: white;
-  padding: 12px;
-  text-align: left;
+  background-color: #8FCF68;
+  color: #00370F;
+  font-weight: 600;
 }
 
-.employees-table td {
-  padding: 12px;
-  border-bottom: 1px solid #A7BAAC; /* Muted Sage borders */
-  color: #333;
+.employees-table tr:nth-child(even) {
+  background-color: #f8f9fa;
 }
 
 .employees-table tr:hover {
-  background-color: rgba(72, 174, 204, 0.05); /* Sky Blue subtle hover */
+  background-color: #e9f5e6;
 }
 
-/* Buttons */
-.add-btn, .form-actions button[type="submit"] {
-  background-color: #8FCF68; /* Soft Green */
-  color: white;
+.edit-btn, .delete-btn {
+  padding: 5px 10px;
+  margin-right: 5px;
   border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
+  border-radius: 3px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.2s ease;
 }
 
-.add-btn:hover, .form-actions button[type="submit"]:hover {
-  background-color: #00370F; /* Dark Forest Green on hover */
+.edit-btn {
+  background-color: #48AECC;
+  color: white;
 }
 
-.cancel-btn {
-  background-color: #A7BAAC; /* Muted Sage */
-  margin-left: 10px;
+.edit-btn:hover {
+  background-color: #3a8ca5;
 }
 
-.cancel-btn:hover {
-  background-color: #2C3E50; /* Deep Navy on hover */
+.delete-btn {
+  background-color: #e74c3c;
+  color: white;
 }
 
-/* Modal Form */
+.delete-btn:hover {
+  background-color: #c0392b;
+}
+
+/* Modal Styles */
 .employee-form-wrapper {
-  background-color: white;
-  padding: 25px;
-  border-radius: 8px;
-  max-width: 500px;
-  margin: 0 auto;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 800px;
+  width: 90%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  animation: modalFadeIn 0.3s ease;
 }
 
 .employee-form {
@@ -109,15 +176,18 @@ h2, h3 {
   gap: 5px;
 }
 
-.form-row input, .form-row select {
-  padding: 10px;
-  border: 1px solid #A7BAAC; /* Muted Sage border */
-  border-radius: 4px;
-  font-size: 14px;
+input, select {
+  padding: 10px 15px;
+  border: 1px solid #A7BAAC;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: all 0.3s ease;
 }
 
-.form-row input:focus {
-  outline: 2px solid #48AECC; /* Sky Blue focus */
+input:focus, select:focus {
+  outline: none;
+  border-color: #8FCF68;
+  box-shadow: 0 0 0 2px rgba(143, 207, 104, 0.2);
 }
 
 .password-input {
@@ -125,25 +195,165 @@ h2, h3 {
   align-items: center;
 }
 
+.password-input input {
+  flex: 1;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
 .toggle-password {
-  margin-left: 10px;
-  background: none;
-  border: none;
-  color: #48AECC; /* Sky Blue */
+  padding: 10px;
+  background-color: #A7BAAC;
+  border: 1px solid #A7BAAC;
+  border-left: none;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
   cursor: pointer;
-  font-size: 12px;
+  transition: all 0.2s ease;
 }
 
-/* Error Messages */
+.toggle-password:hover {
+  background-color: #8FCF68;
+  color: white;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.form-actions button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-actions button[type="submit"] {
+  background-color: #8FCF68;
+  color: #00370F;
+  order: 2; /* Move to right */
+}
+
+.form-actions button[type="submit"]:hover {
+  background-color: #7bbf55;
+  transform: translateY(-2px);
+}
+
+.form-actions .cancel-btn {
+  background-color: #A7BAAC;
+  color: #2c3e50;
+  order: 1; /* Move to left */
+}
+
+.form-actions .cancel-btn:hover {
+  background-color: #95a9a0;
+}
+
 .error {
-  color: #d9534f;
-  font-size: 12px;
-  margin-top: 3px;
+  color: #e74c3c;
+  font-size: 14px;
+  margin-top: -5px;
 }
 
-/* Responsive */
+/* Coming Soon Section */
+.assign-roles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  animation: fadeIn 0.5s ease;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalFadeIn {
+  from { 
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive Styles */
 @media (max-width: 768px) {
   .employees-table {
+    display: block;
+    overflow-x: auto;
+  }
+  
+  .employees-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .employee-tabs {
+    flex-direction: column;
+    border-bottom: none;
+  }
+  
+  .employee-tabs button {
+    margin-right: 0;
+    margin-bottom: 5px;
+    border-radius: 5px;
+  }
+  
+  .employee-tabs button.active {
+    border-radius: 5px;
+  }
+  
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+  
+  .form-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .employees-container {
+    padding: 10px;
+  }
+  
+  .employee-form-wrapper {
+    padding: 20px;
+  }
+  
+  .employees-table th, 
+  .employees-table td {
+    padding: 8px 10px;
     font-size: 14px;
+  }
+  
+  .edit-btn, .delete-btn {
+    padding: 3px 6px;
+    font-size: 12px;
   }
 }
