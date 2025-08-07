@@ -13,10 +13,17 @@ const {
 
 // Routes
 const authRoutes = require("./routes/auth.routes");
+
+// === Employee Dashboard ===
 const salesRoutes = require("./routes/sales");
 const restockRoutes = require("./routes/restocks");
 const leaveRoutes = require("./routes/leaves");
 const employeeDashboardRoutes = require("./routes/dashboard");
+
+// === Manager Dashboard ===
+const employeeRoutes = require("./routes/employees.routes");
+
+
 
 const app = express();
 
@@ -34,10 +41,18 @@ app.get("/api/health", (req, res) => {
 
 // === Public Routes ===
 app.use("/api", authRoutes); // /api/login, /api/register, etc.
+
+// Employee Dashboard Routes
+
 app.use("/api/sales", salesRoutes); // /api/sales/
-app.use("/api/restocks", restockRoutes); 
+app.use("/api/restocks", restockRoutes);
 app.use("/api/leaves", leaveRoutes);
 app.use("/api/dashboard", employeeDashboardRoutes);
+
+// Manager Dashboard Routes
+
+app.use("/api/employees", employeeRoutes);
+
 
 // === Protected Routes ===
 // Routes under this layer require a valid JWT (req.user is available)

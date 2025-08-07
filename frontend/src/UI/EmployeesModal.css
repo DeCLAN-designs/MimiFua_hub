@@ -1,0 +1,39 @@
+/* src/UI/EmployeesModal.css */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(44, 62, 80, 0.75); /* from your palette #2c3e50 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-box {
+  background-color: #ffffff;
+  padding: 30px;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.close-button {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #2c3e50;
+}
+
+.modal-content {
+  margin-top: 20px;
+}

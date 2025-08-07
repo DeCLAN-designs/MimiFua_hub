@@ -1,0 +1,149 @@
+/* Employees.css */
+.employees-container {
+   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+h2, h3 {
+  color: #2C3E50; /* Deep Navy for headings */
+  margin-bottom: 20px;
+}
+
+/* Tabs */
+.employee-tabs {
+  display: flex;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #A7BAAC; /* Muted Sage border */
+}
+
+.employee-tabs button {
+  padding: 10px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  color: #2C3E50; /* Deep Navy text */
+  transition: all 0.3s;
+}
+
+.employee-tabs button.active {
+  color: #00370F; /* Dark Forest Green */
+  border-bottom: 3px solid #8FCF68; /* Soft Green accent */
+}
+
+/* Table */
+.employees-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.employees-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.employees-table th {
+  background-color: #2C3E50; /* Deep Navy header */
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+.employees-table td {
+  padding: 12px;
+  border-bottom: 1px solid #A7BAAC; /* Muted Sage borders */
+  color: #333;
+}
+
+.employees-table tr:hover {
+  background-color: rgba(72, 174, 204, 0.05); /* Sky Blue subtle hover */
+}
+
+/* Buttons */
+.add-btn, .form-actions button[type="submit"] {
+  background-color: #8FCF68; /* Soft Green */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-btn:hover, .form-actions button[type="submit"]:hover {
+  background-color: #00370F; /* Dark Forest Green on hover */
+}
+
+.cancel-btn {
+  background-color: #A7BAAC; /* Muted Sage */
+  margin-left: 10px;
+}
+
+.cancel-btn:hover {
+  background-color: #2C3E50; /* Deep Navy on hover */
+}
+
+/* Modal Form */
+.employee-form-wrapper {
+  background-color: white;
+  padding: 25px;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.employee-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-row input, .form-row select {
+  padding: 10px;
+  border: 1px solid #A7BAAC; /* Muted Sage border */
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-row input:focus {
+  outline: 2px solid #48AECC; /* Sky Blue focus */
+}
+
+.password-input {
+  display: flex;
+  align-items: center;
+}
+
+.toggle-password {
+  margin-left: 10px;
+  background: none;
+  border: none;
+  color: #48AECC; /* Sky Blue */
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/* Error Messages */
+.error {
+  color: #d9534f;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .employees-table {
+    font-size: 14px;
+  }
+}
