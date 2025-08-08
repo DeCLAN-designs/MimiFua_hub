@@ -261,7 +261,7 @@ const Employees = () => {
                     className="toggle-password"
                     onClick={() => setShowPassword((prev) => !prev)}
                   >
-                    {showPassword ? "🙈 Hide" : "👁️ Show"}
+                    {showPassword ? "🙈 " : "👁️ "}
                   </button>
                 </div>
                 {!editMode && formErrors.password && (

@@ -1,31 +1,23 @@
-const {
-  getEmployees,
-  insertEmployee,
-  modifyEmployee,
-  removeEmployee,
-} = require("../services/employees.service");
-const { validationResult } = require("express-validator");
+// controllers/employees.controller.js
 const bcrypt = require("bcrypt");
-
-exports.getAllEmployees = async (req, res) => {
-  try {
-    const data = await getEmployees();
-    res.json(data);
-  } catch (err) {
-    res.status(500).json({ message: "Server error fetching employees." });
-  }
-};
+const { validationResult } = require("express-validator");
+const employeeService = require("../services/employees.service");
 
 exports.createEmployee = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty())
-    return res.status(400).json({ message: errors.array()[0].msg });
-
-  const { first_name, last_name, email, phone, password, role } = req.body;
-
   try {
-    const hashedPassword = await bcrypt.hash(password, 12);
-    await insertEmployee({
+    // Validate inputs
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { first_name, last_name, email, phone, password, role } = req.body;
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create employee via service
+    const newEmployeeId = await employeeService.createEmployee({
       first_name,
       last_name,
       email,
@@ -33,27 +25,48 @@ exports.createEmployee = async (req, res) => {
       password: hashedPassword,
       role,
     });
-    res.status(201).json({ message: "Employee created" });
+
+    return res
+      .status(201)
+      .json({ message: "Employee created", id: newEmployeeId });
   } catch (err) {
-    res.status(500).json({ message: "Error creating employee" });
+    console.error("Error creating employee:", err);
+    return res
+      .status(500)
+      .json({ error: "Internal Server Error", detail: err.message });
+  }
+};
+
+exports.getAllEmployees = async (req, res) => {
+  try {
+    const employees = await employeeService.getAllEmployees();
+    return res.status(200).json(employees);
+  } catch (err) {
+    console.error("Error fetching employees:", err);
+    return res
+      .status(500)
+      .json({ error: "Internal Server Error", detail: err.message });
   }
 };
 
 exports.updateEmployee = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty())
-    return res.status(400).json({ message: errors.array()[0].msg });
-
-  const { id } = req.params;
-  const { first_name, last_name, email, phone, password, role } = req.body;
-
   try {
-    let hashedPassword = null;
+    const { id } = req.params;
+    const {
+      first_name,
+      last_name,
+      email,
+      phone,
+      password, // may be undefined if not updating
+      role,
+    } = req.body;
+
+    let hashedPassword = undefined;
     if (password) {
-      hashedPassword = await bcrypt.hash(password, 12);
+      hashedPassword = await bcrypt.hash(password, 10);
     }
 
-    await modifyEmployee(id, {
+    const updated = await employeeService.updateEmployee(id, {
       first_name,
       last_name,
       email,
@@ -61,18 +74,34 @@ exports.updateEmployee = async (req, res) => {
       password: hashedPassword,
       role,
     });
-    res.status(200).json({ message: "Employee updated" });
+
+    if (!updated) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+
+    return res.status(200).json({ message: "Employee updated" });
   } catch (err) {
-    res.status(500).json({ message: "Error updating employee" });
+    console.error("Error updating employee:", err);
+    return res
+      .status(500)
+      .json({ error: "Internal Server Error", detail: err.message });
   }
 };
 
 exports.deleteEmployee = async (req, res) => {
-  const { id } = req.params;
   try {
-    await removeEmployee(id);
-    res.status(200).json({ message: "Employee deleted" });
+    const { id } = req.params;
+
+    const deleted = await employeeService.deleteEmployee(id);
+    if (!deleted) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+
+    return res.status(200).json({ message: "Employee deleted" });
   } catch (err) {
-    res.status(500).json({ message: "Error deleting employee" });
+    console.error("Error deleting employee:", err);
+    return res
+      .status(500)
+      .json({ error: "Internal Server Error", detail: err.message });
   }
 };

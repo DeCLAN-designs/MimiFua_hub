@@ -1,13 +1,7 @@
+// services/employees.service.js
 const db = require("../config/db");
 
-exports.getEmployees = async () => {
-  const [rows] = await db.execute(
-    "SELECT id, first_name, last_name, email, phone, role FROM users"
-  );
-  return rows;
-};
-
-exports.insertEmployee = async ({
+exports.createEmployee = async ({
   first_name,
   last_name,
   email,
@@ -15,32 +9,67 @@ exports.insertEmployee = async ({
   password,
   role,
 }) => {
-  await db.execute(
-    "INSERT INTO users (first_name, last_name, email, phone, password, role) VALUES (?, ?, ?, ?, ?, ?)",
-    [first_name, last_name, email, phone, password, role]
-  );
+  const sql = `
+    INSERT INTO users (first_name, last_name, email, phone, password, role)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+
+  const params = [first_name, last_name, email, phone, password, role];
+
+  const [result] = await db.query(sql, params);
+  return result.insertId;
 };
 
-exports.modifyEmployee = async (
+exports.getAllEmployees = async () => {
+  const [rows] = await db.query(
+    `SELECT id, first_name, last_name, email, phone, role FROM users`
+  );
+  return rows;
+};
+
+exports.updateEmployee = async (
   id,
   { first_name, last_name, email, phone, password, role }
 ) => {
   const fields = [];
   const values = [];
 
-  if (first_name) fields.push("first_name = ?"), values.push(first_name);
-  if (last_name) fields.push("last_name = ?"), values.push(last_name);
-  if (email) fields.push("email = ?"), values.push(email);
-  if (phone) fields.push("phone = ?"), values.push(phone);
-  if (password) fields.push("password = ?"), values.push(password);
-  if (role) fields.push("role = ?"), values.push(role);
+  if (first_name !== undefined) {
+    fields.push("first_name = ?");
+    values.push(first_name);
+  }
+  if (last_name !== undefined) {
+    fields.push("last_name = ?");
+    values.push(last_name);
+  }
+  if (email !== undefined) {
+    fields.push("email = ?");
+    values.push(email);
+  }
+  if (phone !== undefined) {
+    fields.push("phone = ?");
+    values.push(phone);
+  }
+  if (password !== undefined) {
+    fields.push("password = ?");
+    values.push(password);
+  }
+  if (role !== undefined) {
+    fields.push("role = ?");
+    values.push(role);
+  }
+
+  if (fields.length === 0) return false;
 
   values.push(id);
 
   const sql = `UPDATE users SET ${fields.join(", ")} WHERE id = ?`;
-  await db.execute(sql, values);
+  const [result] = await db.query(sql, values);
+
+  return result.affectedRows > 0;
 };
 
-exports.removeEmployee = async (id) => {
-  await db.execute("DELETE FROM users WHERE id = ?", [id]);
+exports.deleteEmployee = async (id) => {
+  const [result] = await db.query(`DELETE FROM users WHERE id = ?`, [id]);
+  return result.affectedRows > 0;
 };
