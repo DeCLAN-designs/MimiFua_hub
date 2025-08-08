@@ -1,0 +1,53 @@
+/* Leave View Mode Buttons Styles */
+.leave-view-mode-section {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+  background-color: #f8fffe;
+  border-radius: 10px;
+  padding: 4px;
+  border: 1px solid #e0e6ed;
+  box-shadow: 0 2px 4px rgba(0, 55, 15, 0.05);
+}
+
+.leave-view-mode-button {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  background-color: transparent;
+  color: #00370F;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+}
+
+.leave-view-mode-button:hover {
+  background-color: rgba(72, 174, 204, 0.1);
+  color: #48AECC;
+}
+
+.leave-view-mode-button.active {
+  background-color: #48AECC;
+  color: white;
+  box-shadow: 0 2px 8px rgba(72, 174, 204, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .leave-view-mode-section {
+    padding: 3px;
+  }
+
+  .leave-view-mode-button {
+    padding: 10px 16px;
+    font-size: 12px;
+    gap: 6px;
+  }
+}

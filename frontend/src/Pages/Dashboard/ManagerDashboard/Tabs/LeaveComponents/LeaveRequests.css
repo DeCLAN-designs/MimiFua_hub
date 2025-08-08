@@ -1,0 +1,255 @@
+/* Leave Requests Styles */
+.leave-requests-container {
+  margin: 20px 0;
+}
+
+.leave-title {
+  margin: 0 0 20px 0;
+  color: #00370F;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  padding: 15px;
+  background: linear-gradient(135deg, #f8fffe 0%, #ffffff 100%);
+  border-radius: 10px;
+  border: 1px solid #A7BAAC;
+  box-shadow: 0 2px 8px rgba(0, 55, 15, 0.05);
+}
+
+.leave-loading {
+  text-align: center;
+  color: #00370F;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 40px;
+  background: #f8fffe;
+  border-radius: 8px;
+  border: 1px solid #e0e6ed;
+}
+
+.no-leave-data {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 40px;
+  background-color: #f8fffe;
+  border-radius: 8px;
+  border: 1px solid #e0e6ed;
+  margin: 20px 0;
+  font-size: 16px;
+}
+
+/* Table Styles */
+.leave-table-container {
+  overflow-x: auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 55, 15, 0.05);
+  background: white;
+  border: 1px solid #e0e6ed;
+}
+
+.leave-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  margin: 0;
+  min-width: 1000px;
+}
+
+.leave-table-header {
+  background-color: #48AECC;
+}
+
+.leave-header-cell {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #A7BAAC;
+  font-weight: 600;
+  color: white;
+  background-color: #48AECC;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.leave-table-row {
+  border-bottom: 1px solid #e0e6ed;
+  transition: background-color 0.2s ease;
+}
+
+.leave-table-row:hover {
+  background-color: #f8fffe;
+}
+
+.leave-table-row:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.leave-table-row:nth-child(even):hover {
+  background-color: #f8fffe;
+}
+
+.leave-table-cell {
+  padding: 12px;
+  border: 1px solid #e0e6ed;
+  color: #00370F;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.reason-cell {
+  max-width: 200px;
+}
+
+.reason-text {
+  cursor: help;
+  line-height: 1.4;
+}
+
+.date-cell {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+}
+
+.duration-cell {
+  font-weight: 600;
+  color: #8FCF68;
+  text-align: center;
+}
+
+/* Status Badge Styles */
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.status-badge.pending {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+
+.status-badge.approved {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #8FCF68;
+}
+
+.status-badge.rejected {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #dc3545;
+}
+
+/* Action Buttons */
+.actions-cell {
+  text-align: center;
+  min-width: 150px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.approve-btn,
+.reject-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.approve-btn {
+  background-color: #8FCF68;
+  color: white;
+}
+
+.approve-btn:hover {
+  background-color: #7AB84F;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(139, 207, 104, 0.3);
+}
+
+.reject-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.reject-btn:hover {
+  background-color: #c82333;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .leave-title {
+    font-size: 18px;
+    padding: 12px;
+  }
+
+  .leave-table-container {
+    border-radius: 8px;
+  }
+
+  .leave-table {
+    font-size: 12px;
+    min-width: 800px;
+  }
+
+  .leave-header-cell,
+  .leave-table-cell {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .reason-cell {
+    max-width: 150px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .approve-btn,
+  .reject-btn {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .leave-header-cell,
+  .leave-table-cell {
+    padding: 6px;
+    font-size: 11px;
+  }
+
+  .reason-cell {
+    max-width: 120px;
+  }
+
+  .no-leave-data {
+    padding: 30px 20px;
+    font-size: 14px;
+  }
+}

@@ -406,7 +406,7 @@ router.get(
   async (req, res) => {
     try {
       const [leaves] = await db.execute(
-        `SELECT l.id, l.user_id, u.full_name, l.leave_type, l.start_date, l.end_date, 
+        `SELECT l.id, l.user_id, u.first_name, u.last_name, u.email, l.leave_type, l.start_date, l.end_date, 
               l.reason, l.status, l.created_at, l.updated_at
        FROM leaves l
        JOIN users u ON l.user_id = u.id
