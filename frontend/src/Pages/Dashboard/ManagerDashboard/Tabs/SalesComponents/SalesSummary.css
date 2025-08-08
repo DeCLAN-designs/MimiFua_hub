@@ -1,0 +1,106 @@
+/* Sales Summary Styles */
+.summary-section {
+  margin: 20px 0;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8fffe 0%, #ffffff 100%);
+  border-radius: 12px;
+  border: 1px solid #A7BAAC;
+  box-shadow: 0 2px 8px rgba(0, 55, 15, 0.05);
+}
+
+.summary-title {
+  margin: 0 0 20px 0;
+  color: #00370F;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.metric-card {
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #48AECC;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(72, 174, 204, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(72, 174, 204, 0.2);
+}
+
+.metric-value {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.metric-value.positive {
+  color: #8FCF68;
+}
+
+.metric-value.negative {
+  color: #dc3545;
+}
+
+.metric-label {
+  display: block;
+  font-size: 12px;
+  color: #48AECC;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-item {
+  margin: 5px 0;
+  color: #2c3e50;
+  text-align: center;
+  font-size: 14px;
+}
+
+.summary-label {
+  font-weight: bold;
+  color: #00370F;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .summary-section {
+    padding: 15px;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .metric-card {
+    padding: 12px;
+  }
+
+  .metric-value {
+    font-size: 20px;
+  }
+
+  .metric-label {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}

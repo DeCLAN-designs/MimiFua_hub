@@ -1,0 +1,184 @@
+/* Sales Table Styles */
+.table-container {
+  overflow-x: auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 55, 15, 0.05);
+  background: white;
+  border: 1px solid #e0e6ed;
+}
+
+.sales-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  margin: 0;
+}
+
+.table-header {
+  background-color: #48AECC;
+}
+
+.table-header-cell {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #A7BAAC;
+  font-weight: 600;
+  color: white;
+  background-color: #48AECC;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table-row {
+  border-bottom: 1px solid #e0e6ed;
+  transition: background-color 0.2s ease;
+}
+
+.table-row:hover {
+  background-color: #f8fffe;
+}
+
+.table-row:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.table-row:nth-child(even):hover {
+  background-color: #f8fffe;
+}
+
+.table-cell {
+  padding: 12px;
+  border: 1px solid #e0e6ed;
+  color: #00370F;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.amount-cell {
+  font-weight: 600;
+  color: #8FCF68;
+  text-align: right;
+}
+
+.date-cell {
+  font-size: 12px;
+  color: #666;
+}
+
+.no-data-message {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 40px;
+  background-color: #f8fffe;
+  border-radius: 8px;
+  border: 1px solid #e0e6ed;
+  margin: 20px 0;
+}
+
+/* Pagination Styles */
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8fffe;
+  border-radius: 8px;
+  border: 1px solid #A7BAAC;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #00370F;
+  font-weight: 500;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.pagination-btn {
+  padding: 8px 12px;
+  border: 1px solid #48AECC;
+  background-color: white;
+  color: #00370F;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  min-width: 40px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: #48AECC;
+  color: white;
+}
+
+.pagination-btn.active {
+  background-color: #00370F;
+  color: white;
+  border-color: #00370F;
+}
+
+.pagination-btn:disabled {
+  background-color: #f5f5f5;
+  color: #ccc;
+  border-color: #ddd;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .table-container {
+    border-radius: 8px;
+  }
+
+  .sales-table {
+    font-size: 12px;
+  }
+
+  .table-header-cell,
+  .table-cell {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .pagination-container {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .pagination-controls {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .pagination-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+    min-width: 35px;
+  }
+
+  .pagination-info {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .table-header-cell,
+  .table-cell {
+    padding: 6px;
+    font-size: 11px;
+  }
+
+  .no-data-message {
+    padding: 30px 20px;
+    font-size: 14px;
+  }
+}

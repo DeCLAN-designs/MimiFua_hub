@@ -1,0 +1,215 @@
+/* Sales Reports Styles */
+.reports-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin: 20px 0;
+}
+
+.reports-title {
+  margin: 0 0 20px 0;
+  color: #00370F;
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  padding: 15px;
+  background: linear-gradient(135deg, #f8fffe 0%, #ffffff 100%);
+  border-radius: 10px;
+  border: 1px solid #A7BAAC;
+  box-shadow: 0 2px 8px rgba(0, 55, 15, 0.05);
+}
+
+/* Employee Performance Section */
+.employee-performance {
+  background: linear-gradient(135deg, #f8fffe 0%, #ffffff 100%);
+  padding: 25px;
+  border-radius: 12px;
+  border: 1px solid #A7BAAC;
+  box-shadow: 0 4px 12px rgba(0, 55, 15, 0.08);
+}
+
+.performance-title {
+  margin: 0 0 20px 0;
+  color: #00370F;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  border-bottom: 2px solid #48AECC;
+  padding-bottom: 10px;
+}
+
+.performance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 15px;
+}
+
+.employee-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #e0e6ed;
+  box-shadow: 0 2px 8px rgba(0, 55, 15, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.employee-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #48AECC, #8FCF68);
+  transition: width 0.3s ease;
+}
+
+.employee-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 55, 15, 0.1);
+}
+
+.employee-card:hover::before {
+  width: 8px;
+}
+
+.employee-name {
+  margin: 0 0 8px 0;
+  color: #00370F;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.employee-email {
+  margin: 0 0 15px 0;
+  color: #666;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.employee-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-item {
+  text-align: center;
+  flex: 1;
+}
+
+.stat-value {
+  display: block;
+  font-size: 18px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 4px;
+}
+
+.stat-value.revenue {
+  color: #8FCF68;
+}
+
+.stat-value.sales {
+  color: #48AECC;
+}
+
+.stat-label {
+  display: block;
+  font-size: 10px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.no-employee-data {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 40px;
+  background: #f8fffe;
+  border-radius: 8px;
+  border: 1px solid #e0e6ed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .reports-container {
+    gap: 20px;
+  }
+
+  .reports-title {
+    font-size: 20px;
+    padding: 12px;
+  }
+
+  .employee-performance {
+    padding: 20px;
+  }
+
+  .performance-title {
+    font-size: 16px;
+  }
+
+  .performance-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .employee-card {
+    padding: 15px;
+  }
+
+  .employee-name {
+    font-size: 15px;
+  }
+
+  .employee-email {
+    font-size: 11px;
+  }
+
+  .stat-value {
+    font-size: 16px;
+  }
+
+  .stat-label {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 480px) {
+  .employee-performance {
+    padding: 15px;
+  }
+
+  .employee-card {
+    padding: 12px;
+  }
+
+  .employee-stats {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 8px;
+    background: #f8fffe;
+    border-radius: 6px;
+  }
+
+  .stat-value,
+  .stat-label {
+    display: inline;
+  }
+
+  .stat-label {
+    font-size: 10px;
+  }
+}

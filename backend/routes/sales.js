@@ -49,6 +49,24 @@ router.post(
   }
 );
 
+// GET /api/sales/all - Fetch all sales for manager dashboard
+router.get("/all", async (req, res) => {
+  try {
+    const [rows] = await db.execute(
+      `SELECT s.id, s.item, s.amount, s.created_at as date, 
+              u.first_name, u.last_name, u.email
+       FROM sales s 
+       JOIN users u ON s.user_id = u.id 
+       ORDER BY s.created_at DESC`
+    );
+
+    res.json({ sales: rows });
+  } catch (err) {
+    console.error("DB Fetch Error:", err);
+    res.status(500).json({ error: "Could not fetch all sales" });
+  }
+});
+
 // GET /api/sales?userId=#
 router.get(
   "/",
@@ -59,7 +77,7 @@ router.get(
 
     try {
       const [rows] = await db.execute(
-        `SELECT id, item, amount, date FROM sales WHERE user_id = ? ORDER BY date DESC`,
+        `SELECT id, item, amount, created_at as date FROM sales WHERE user_id = ? ORDER BY created_at DESC`,
         [userId]
       );
 
