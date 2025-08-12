@@ -1,0 +1,141 @@
+/* Employee Filters Component Styles */
+:root {
+  --color1: #48AECC;
+  --color2: #8FCF68;
+  --color3: #00370F;
+  --color4: #A7BAAC;
+  --color5: #2c3e50;
+}
+
+.header-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(72, 174, 204, 0.1), rgba(167, 186, 172, 0.1));
+  border-radius: 8px;
+  border: 1px solid var(--color4);
+}
+
+.search-filters {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 300px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 2px solid var(--color4);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--color1);
+  box-shadow: 0 0 0 3px rgba(72, 174, 204, 0.2);
+}
+
+.search-input::placeholder {
+  color: var(--color4);
+}
+
+.status-filter {
+  padding: 0.75rem;
+  border: 2px solid var(--color4);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  min-width: 140px;
+  background: white;
+  color: var(--color5);
+  transition: all 0.3s ease;
+}
+
+.status-filter:focus {
+  outline: none;
+  border-color: var(--color1);
+  box-shadow: 0 0 0 3px rgba(72, 174, 204, 0.2);
+}
+
+.view-controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.view-btn {
+  padding: 0.75rem;
+  border: 2px solid var(--color4);
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  color: var(--color5);
+  min-width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view-btn:hover {
+  background: var(--color4);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.view-btn.active {
+  background: var(--color1);
+  color: white;
+  border-color: var(--color1);
+  box-shadow: 0 2px 4px rgba(72, 174, 204, 0.3);
+}
+
+.add-btn {
+  background: linear-gradient(135deg, var(--color2), var(--color3));
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.add-btn:hover {
+  background: linear-gradient(135deg, var(--color3), var(--color2));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.add-btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .header-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-filters {
+    min-width: auto;
+    flex-direction: column;
+  }
+  
+  .view-controls {
+    justify-content: center;
+  }
+  
+  .add-btn {
+    align-self: center;
+    min-width: 200px;
+  }
+}

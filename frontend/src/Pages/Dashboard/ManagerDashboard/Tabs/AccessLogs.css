@@ -1,0 +1,485 @@
+/* AccessLogs.css */
+
+.access-logs-container {
+  padding: 1.5rem;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* Header */
+.access-logs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-title h2 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-title p {
+  color: #6c757d;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.refresh-btn {
+  background: #48AECC;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.refresh-btn:hover {
+  background: #3a9bb8;
+  transform: translateY(-1px);
+}
+
+.refresh-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.refresh-btn .spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Summary Cards */
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.summary-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-2px);
+}
+
+.card-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.card-icon.users {
+  background: linear-gradient(135deg, #48AECC, #3a9bb8);
+}
+
+.card-icon.active {
+  background: linear-gradient(135deg, #8FCF68, #7bb854);
+}
+
+.card-icon.today {
+  background: linear-gradient(135deg, #A7BAAC, #95a599);
+}
+
+.card-icon.duration {
+  background: linear-gradient(135deg, #2c3e50, #1a252f);
+}
+
+.card-content h3 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+  color: #2c3e50;
+}
+
+.card-content p {
+  color: #6c757d;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Active Users Section */
+.active-users-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.active-users-section h3 {
+  color: #2c3e50;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.active-users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.no-active-users {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+}
+
+.no-active-users svg {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.active-user-card {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid #e9ecef;
+  transition: all 0.2s ease;
+}
+
+.active-user-card:hover {
+  background: #e9ecef;
+  transform: translateY(-1px);
+}
+
+.user-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #48AECC;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.user-info h4 {
+  margin: 0 0 0.25rem 0;
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+.user-info p {
+  margin: 0 0 0.5rem 0;
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+.user-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.online-duration {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status-badge.online {
+  background: rgba(143, 207, 104, 0.1);
+  color: #8FCF68;
+  border: 1px solid rgba(143, 207, 104, 0.3);
+}
+
+.status-badge.away {
+  background: rgba(255, 193, 7, 0.1);
+  color: #ffc107;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.status-badge.offline,
+.status-badge.inactive {
+  background: rgba(108, 117, 125, 0.1);
+  color: #6c757d;
+  border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+.status-badge.active {
+  background: rgba(72, 174, 204, 0.1);
+  color: #48AECC;
+  border: 1px solid rgba(72, 174, 204, 0.3);
+}
+
+/* Filters Section */
+.filters-section {
+  background: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.filter-group svg {
+  color: #48AECC;
+}
+
+.filter-group label {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.filter-select {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  color: #2c3e50;
+  cursor: pointer;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #48AECC;
+  box-shadow: 0 0 0 2px rgba(72, 174, 204, 0.2);
+}
+
+/* Access Logs Table */
+.access-logs-table-section {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.access-logs-table-section h3 {
+  color: #2c3e50;
+  margin: 0;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.access-logs-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.access-logs-table th {
+  background: #f8f9fa;
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #2c3e50;
+  border-bottom: 1px solid #e9ecef;
+  white-space: nowrap;
+}
+
+.access-logs-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #f8f9fa;
+  vertical-align: middle;
+}
+
+.access-logs-table tr:hover {
+  background: #f8f9fa;
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-avatar-small {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #48AECC;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.role-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.role-badge.manager {
+  background: rgba(143, 207, 104, 0.1);
+  color: #8FCF68;
+  border: 1px solid rgba(143, 207, 104, 0.3);
+}
+
+.role-badge.employee {
+  background: rgba(72, 174, 204, 0.1);
+  color: #48AECC;
+  border: 1px solid rgba(72, 174, 204, 0.3);
+}
+
+.ip-address {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.no-data {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Loading and Error States */
+.loading-state,
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.loading-spinner {
+  font-size: 2rem;
+  color: #48AECC;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+.retry-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  transition: background 0.2s ease;
+}
+
+.retry-btn:hover {
+  background: #c82333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .access-logs-container {
+    padding: 1rem;
+  }
+
+  .access-logs-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .summary-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .active-users-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .access-logs-table {
+    font-size: 0.85rem;
+  }
+
+  .access-logs-table th,
+  .access-logs-table td {
+    padding: 0.75rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-cell {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .active-user-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .user-status {
+    justify-content: center;
+  }
+}

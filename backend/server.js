@@ -22,6 +22,7 @@ const employeeDashboardRoutes = require("./routes/dashboard");
 
 // === Manager Dashboard ===
 const employeeRoutes = require("./routes/employees.routes");
+const accessLogsRoutes = require("./routes/accessLogs");
 
 
 
@@ -52,6 +53,7 @@ app.use("/api/dashboard", employeeDashboardRoutes);
 // Manager Dashboard Routes
 
 app.use("/api/employees", employeeRoutes);
+app.use("/api/access-logs", accessLogsRoutes);
 
 
 // === Protected Routes ===

@@ -1,32 +1,89 @@
 /* DashboardHeader.css */
 
 .dashboard-header {
-  background-color: #ffffff;
-  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 2px solid #e9ecef;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Welcome Section */
+.welcome-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .welcome-message h1 {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   color: #2c3e50;
   margin: 0;
+  font-weight: 600;
 }
 
+.welcome-message p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+/* Quick Stats */
+.quick-stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.25rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #495057;
+  background: rgba(72, 174, 204, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+}
+
+.stat-icon {
+  color: #48AECC;
+  font-size: 1rem;
+}
+
+
+
+/* Header Right Section */
 .header-right {
   display: flex;
   align-items: center;
-  gap: 1.2rem;
+  gap: 1.5rem;
 }
 
-.user-role {
-  font-weight: bold;
-  color: #00370f;
+/* Role Badge */
+.role-badge {
+  background: rgba(72, 174, 204, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: 1px solid #48AECC;
+}
+
+.role-indicator {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.role-indicator.manager {
+  color: #8FCF68;
+}
+
+.role-indicator.employee {
+  color: #48AECC;
 }
 
 .profile-section {
@@ -63,28 +120,142 @@
   top: 48px;
   right: 0;
   background-color: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  min-width: 280px;
+  overflow: hidden;
+}
+
+/* Menu Header */
+.menu-header {
+  background: linear-gradient(135deg, #48AECC 0%, #8FCF68 100%);
+  padding: 1rem;
+  color: white;
+}
+
+/* Dropdown Notifications */
+.dropdown-notifications {
+  padding: 1rem;
+  border-bottom: 1px solid #e9ecef;
+  background: #f8f9fa;
+}
+
+.notifications-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.notifications-header .bell-icon {
+  color: #48AECC;
+  font-size: 1rem;
+}
+
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dropdown-notifications .notification-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
   border-radius: 6px;
-  padding: 0.5rem 0;
-  width: 200px;
-  z-index: 100;
+  font-size: 0.8rem;
+  max-width: none;
+}
+
+.dropdown-notifications .notification-item.warning {
+  background: rgba(255, 193, 7, 0.1);
+  color: #856404;
+  border-left: 3px solid #ffc107;
+}
+
+.dropdown-notifications .notification-item.danger {
+  background: rgba(220, 53, 69, 0.1);
+  color: #721c24;
+  border-left: 3px solid #dc3545;
+}
+
+.dropdown-notifications .notification-item.info {
+  background: rgba(13, 202, 240, 0.1);
+  color: #055160;
+  border-left: 3px solid #0dcaf0;
+}
+
+.dropdown-notifications .notification-icon {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.dropdown-notifications .notification-text {
+  flex: 1;
+  line-height: 1.3;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar-large {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-weight: bold;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 1.2rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.user-role-text {
+  font-size: 0.8rem;
+  opacity: 0.9;
 }
 
 .dropdown-menu button.dropdown-close-btn {
   position: absolute;
-  top: 6px;
-  right: 6px;
-  background: transparent;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.2);
   border: none;
   font-size: 1.1rem;
-  color: #999;
+  color: white;
   cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.dropdown-menu button.dropdown-close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .dropdown-menu ul {
   list-style: none;
   padding: 0;
-  margin: 1rem 0 0 0;
+  margin: 0;
 }
 
 .dropdown-menu li {
@@ -93,11 +264,110 @@
   align-items: center;
   gap: 0.75rem;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #f8f9fa;
 }
 
 .dropdown-menu li:hover {
-  background-color: #f5f5f5;
+  background-color: #f8f9fa;
+  padding-left: 1.25rem;
+}
+
+.dropdown-menu li:last-child {
+  border-bottom: none;
+}
+
+.dropdown-menu li.logout {
+  color: #dc3545;
+  border-top: 1px solid #e9ecef;
+}
+
+.dropdown-menu li.logout:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.dropdown-menu .icon {
+  font-size: 1rem;
+  width: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard-header {
+    padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .welcome-section {
+    order: 1;
+    flex: 1;
+  }
+
+  .welcome-message h1 {
+    font-size: 1.3rem;
+  }
+
+  .quick-stats {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .notifications-section {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+
+  .notifications-preview {
+    flex-direction: row;
+    gap: 0.5rem;
+    overflow-x: auto;
+  }
+
+  .notification-item {
+    min-width: 200px;
+    flex-shrink: 0;
+  }
+
+  .header-right {
+    order: 2;
+    gap: 1rem;
+  }
+
+  .role-badge {
+    padding: 0.25rem 0.75rem;
+  }
+
+  .dropdown-menu {
+    min-width: 250px;
+    right: -20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-header {
+    padding: 0.5rem;
+  }
+
+  .welcome-message h1 {
+    font-size: 1.1rem;
+  }
+
+  .stat-item {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .notifications-section {
+    display: none; /* Hide notifications on very small screens */
+  }
+
+  .dropdown-menu {
+    min-width: calc(100vw - 40px);
+    right: -10px;
+  }
 }
 
 .dropdown-menu li.logout {

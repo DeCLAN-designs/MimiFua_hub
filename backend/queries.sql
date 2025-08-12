@@ -42,3 +42,21 @@ CREATE TABLE leaves (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+-- Access logs table for tracking user login activity
+CREATE TABLE IF NOT EXISTS access_logs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  logout_time TIMESTAMP NULL,
+  ip_address VARCHAR(45),
+  user_agent TEXT,
+  status ENUM('active', 'inactive') DEFAULT 'active',
+  session_duration INT DEFAULT 0, -- in minutes
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  INDEX idx_user_login (user_id, login_time),
+  INDEX idx_status (status),
+  INDEX idx_login_time (login_time)
+);

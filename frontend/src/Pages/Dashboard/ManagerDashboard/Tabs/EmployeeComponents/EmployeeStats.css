@@ -1,0 +1,56 @@
+/* Employee Stats Component Styles */
+:root {
+  --color1: #48AECC;
+  --color2: #8FCF68;
+  --color3: #00370F;
+  --color4: #A7BAAC;
+  --color5: #2c3e50;
+}
+
+.employee-stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.employee-stats .stat {
+  background: linear-gradient(135deg, var(--color1), var(--color4));
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: none;
+}
+
+.employee-stats .stat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.employee-stats .stat:nth-child(1) {
+  background: linear-gradient(135deg, var(--color5), var(--color1));
+}
+
+.employee-stats .stat:nth-child(2) {
+  background: linear-gradient(135deg, var(--color2), var(--color4));
+  color: var(--color3);
+}
+
+.employee-stats .stat:nth-child(3) {
+  background: linear-gradient(135deg, var(--color3), var(--color4));
+}
+
+@media (max-width: 768px) {
+  .employee-stats {
+    justify-content: center;
+  }
+  
+  .employee-stats .stat {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+  }
+}

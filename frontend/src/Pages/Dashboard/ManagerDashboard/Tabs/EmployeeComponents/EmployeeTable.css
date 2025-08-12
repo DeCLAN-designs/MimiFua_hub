@@ -1,0 +1,196 @@
+/* Employee Table Component Styles */
+:root {
+  --color1: #48AECC;
+  --color2: #8FCF68;
+  --color3: #00370F;
+  --color4: #A7BAAC;
+  --color5: #2c3e50;
+}
+
+.table-container {
+  overflow-x: auto;
+  margin: 1rem 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.employees-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.employees-table th {
+  background: linear-gradient(135deg, var(--color5), var(--color1));
+  color: white;
+  padding: 1.25rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none;
+}
+
+.employees-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.employees-table th.sortable:hover {
+  background: linear-gradient(135deg, var(--color1), var(--color5));
+  transform: translateY(-1px);
+}
+
+.employees-table td {
+  padding: 1.25rem;
+  border-bottom: 1px solid rgba(167, 186, 172, 0.3);
+  transition: background-color 0.2s ease;
+}
+
+.employees-table tr:hover td {
+  background-color: rgba(72, 174, 204, 0.05);
+}
+
+.employee-name {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.name-with-avatar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color1), var(--color2));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 2px solid white;
+}
+
+.role-badge {
+  background: linear-gradient(135deg, var(--color4), var(--color1));
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.status-toggle {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.status-toggle.active {
+  background: linear-gradient(135deg, var(--color2), var(--color3));
+  color: white;
+}
+
+.status-toggle.inactive {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+  color: white;
+}
+
+.status-toggle:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-btn, .delete-btn {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-btn {
+  background: linear-gradient(135deg, var(--color2), var(--color4));
+  color: white;
+}
+
+.edit-btn:hover {
+  background: linear-gradient(135deg, var(--color4), var(--color2));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.delete-btn {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+  color: white;
+}
+
+.delete-btn:hover {
+  background: linear-gradient(135deg, #ee5a52, #ff6b6b);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.no-data {
+  text-align: center;
+  padding: 3rem;
+  color: var(--color4);
+  font-style: italic;
+  font-size: 1.1rem;
+  background: linear-gradient(135deg, rgba(72, 174, 204, 0.05), rgba(167, 186, 172, 0.05));
+}
+
+@media (max-width: 768px) {
+  .employees-table th,
+  .employees-table td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+  
+  .actions {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .edit-btn, .delete-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+}

@@ -6,7 +6,7 @@ const SalesAnalytics = ({
   topItems, 
   formatAmount, 
   showAnalytics, 
-  onToggleAnalytics 
+  // onToggleAnalytics // Removed unused parameter
 }) => {
   if (!showAnalytics) return null;
 

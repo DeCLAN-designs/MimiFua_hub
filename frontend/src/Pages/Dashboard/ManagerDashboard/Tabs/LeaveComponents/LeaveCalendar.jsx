@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import './LeaveCalendar.css';
+import React, { useState } from "react";
+import "./LeaveCalendar.css";
 
 const LeaveCalendar = ({ leaveData, loading }) => {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [,] = useState(new Date()); // Removed unused currentDate and setCurrentDate
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
@@ -16,7 +16,7 @@ const LeaveCalendar = ({ leaveData, loading }) => {
     const lastDay = new Date(selectedYear, selectedMonth + 1, 0);
     const startDate = new Date(firstDay);
     startDate.setDate(startDate.getDate() - firstDay.getDay());
-    
+
     const endDate = new Date(lastDay);
     endDate.setDate(endDate.getDate() + (6 - lastDay.getDay()));
 
@@ -34,14 +34,14 @@ const LeaveCalendar = ({ leaveData, loading }) => {
   // Get leaves for a specific date
   const getLeavesForDate = (date) => {
     if (!leaveData) return [];
-    
-    const dateStr = date.toISOString().split('T')[0];
-    return leaveData.filter(leave => {
-      if (leave.status !== 'approved') return false;
-      
-      const startDate = new Date(leave.start_date).toISOString().split('T')[0];
-      const endDate = new Date(leave.end_date).toISOString().split('T')[0];
-      
+
+    const dateStr = date.toISOString().split("T")[0];
+    return leaveData.filter((leave) => {
+      if (leave.status !== "approved") return false;
+
+      const startDate = new Date(leave.start_date).toISOString().split("T")[0];
+      const endDate = new Date(leave.end_date).toISOString().split("T")[0];
+
       return dateStr >= startDate && dateStr <= endDate;
     });
   };
@@ -67,30 +67,42 @@ const LeaveCalendar = ({ leaveData, loading }) => {
   // Get month name
   const getMonthName = (month) => {
     const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
     return months[month];
   };
 
   // Get leave statistics for current month
   const getMonthlyStats = () => {
-    if (!leaveData) return { totalLeaves: 0, approvedLeaves: 0, pendingLeaves: 0 };
-    
+    if (!leaveData)
+      return { totalLeaves: 0, approvedLeaves: 0, pendingLeaves: 0 };
+
     const monthStart = new Date(selectedYear, selectedMonth, 1);
     const monthEnd = new Date(selectedYear, selectedMonth + 1, 0);
-    
-    const monthlyLeaves = leaveData.filter(leave => {
+
+    const monthlyLeaves = leaveData.filter((leave) => {
       const leaveStart = new Date(leave.start_date);
       const leaveEnd = new Date(leave.end_date);
-      
-      return (leaveStart <= monthEnd && leaveEnd >= monthStart);
+
+      return leaveStart <= monthEnd && leaveEnd >= monthStart;
     });
 
     return {
       totalLeaves: monthlyLeaves.length,
-      approvedLeaves: monthlyLeaves.filter(l => l.status === 'approved').length,
-      pendingLeaves: monthlyLeaves.filter(l => l.status === 'pending').length
+      approvedLeaves: monthlyLeaves.filter((l) => l.status === "approved")
+        .length,
+      pendingLeaves: monthlyLeaves.filter((l) => l.status === "pending").length,
     };
   };
 
@@ -100,7 +112,7 @@ const LeaveCalendar = ({ leaveData, loading }) => {
   return (
     <div className="leave-calendar-container">
       <h2 className="calendar-title">📅 Leave Calendar</h2>
-      
+
       {/* Monthly Statistics */}
       <div className="monthly-stats">
         <div className="stat-card">
@@ -119,21 +131,17 @@ const LeaveCalendar = ({ leaveData, loading }) => {
 
       {/* Calendar Navigation */}
       <div className="calendar-navigation">
-        <button 
-          className="nav-btn"
-          onClick={() => navigateMonth(-1)}
-        >
+        <button className="nav-btn" onClick={() => navigateMonth(-1)}>
           ← Previous
         </button>
-        
+
         <div className="current-month">
-          <h3>{getMonthName(selectedMonth)} {selectedYear}</h3>
+          <h3>
+            {getMonthName(selectedMonth)} {selectedYear}
+          </h3>
         </div>
-        
-        <button 
-          className="nav-btn"
-          onClick={() => navigateMonth(1)}
-        >
+
+        <button className="nav-btn" onClick={() => navigateMonth(1)}>
           Next →
         </button>
       </div>
@@ -142,8 +150,10 @@ const LeaveCalendar = ({ leaveData, loading }) => {
       <div className="calendar-grid">
         {/* Day Headers */}
         <div className="calendar-header">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-            <div key={day} className="day-header">{day}</div>
+          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+            <div key={day} className="day-header">
+              {day}
+            </div>
           ))}
         </div>
 
@@ -153,27 +163,35 @@ const LeaveCalendar = ({ leaveData, loading }) => {
             const dayLeaves = getLeavesForDate(date);
             const isCurrentMonthDay = isCurrentMonth(date);
             const isTodayDate = isToday(date);
-            
+
             return (
-              <div 
-                key={index} 
-                className={`calendar-day ${!isCurrentMonthDay ? 'other-month' : ''} ${isTodayDate ? 'today' : ''} ${dayLeaves.length > 0 ? 'has-leaves' : ''}`}
+              <div
+                key={index}
+                className={`calendar-day ${
+                  !isCurrentMonthDay ? "other-month" : ""
+                } ${isTodayDate ? "today" : ""} ${
+                  dayLeaves.length > 0 ? "has-leaves" : ""
+                }`}
               >
                 <div className="day-number">{date.getDate()}</div>
-                
+
                 {dayLeaves.length > 0 && (
                   <div className="leave-indicators">
                     {dayLeaves.slice(0, 3).map((leave, idx) => (
-                      <div 
-                        key={idx} 
+                      <div
+                        key={idx}
                         className="leave-indicator"
                         title={`${leave.first_name} ${leave.last_name} - ${leave.reason}`}
                       >
-                        {leave.first_name.charAt(0)}{leave.last_name.charAt(0)}
+                        {leave.first_name.charAt(0)}
+                        {leave.last_name.charAt(0)}
                       </div>
                     ))}
                     {dayLeaves.length > 3 && (
-                      <div className="leave-indicator more" title={`+${dayLeaves.length - 3} more`}>
+                      <div
+                        className="leave-indicator more"
+                        title={`+${dayLeaves.length - 3} more`}
+                      >
                         +{dayLeaves.length - 3}
                       </div>
                     )}
@@ -203,7 +221,7 @@ const LeaveCalendar = ({ leaveData, loading }) => {
 
       {/* Quick Actions */}
       <div className="quick-actions">
-        <button 
+        <button
           className="quick-action-btn"
           onClick={() => {
             const today = new Date();
@@ -213,10 +231,8 @@ const LeaveCalendar = ({ leaveData, loading }) => {
         >
           📅 Go to Today
         </button>
-        
-        <button className="quick-action-btn">
-          📊 Export Calendar
-        </button>
+
+        <button className="quick-action-btn">📊 Export Calendar</button>
       </div>
     </div>
   );
