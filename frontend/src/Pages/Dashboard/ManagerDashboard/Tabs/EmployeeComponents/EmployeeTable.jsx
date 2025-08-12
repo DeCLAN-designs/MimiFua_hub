@@ -1,6 +1,6 @@
-import React from 'react';
-import './EmployeeTable.css';
-import { getSortIcon } from './employeeUtils';
+import React from "react";
+import "./EmployeeTable.css";
+import { getSortIcon } from "./employeeUtils";
 
 const EmployeeTable = ({
   employees,
@@ -10,7 +10,7 @@ const EmployeeTable = ({
   onSort,
   onEdit,
   onDelete,
-  onStatusToggle
+  onStatusToggle,
 }) => {
   const handleSort = (field) => {
     onSort(field);
@@ -22,21 +22,13 @@ const EmployeeTable = ({
         <thead>
           <tr>
             <th>#</th>
-            <th 
-              className="sortable" 
-              onClick={() => handleSort('full_name')}
+            <th
+              className="sortable"
+              onClick={() => handleSort("full_name")}
               title="Click to sort"
             >
-              Full Name {getSortIcon('full_name', sortField, sortDirection)}
+              Employee {getSortIcon("full_name", sortField, sortDirection)}
             </th>
-            <th 
-              className="sortable" 
-              onClick={() => handleSort('email')}
-              title="Click to sort"
-            >
-              Email {getSortIcon('email', sortField, sortDirection)}
-            </th>
-            <th>Phone</th>
             <th>Role</th>
             <th>Status</th>
             <th>Actions</th>
@@ -45,28 +37,29 @@ const EmployeeTable = ({
         <tbody>
           {employees.length > 0 ? (
             employees.map((employee, index) => (
-              <tr key={employee.id}>
+              <tr key={employee.id} className="fade-in-row">
                 <td>{startIndex + index + 1}</td>
-                <td className="employee-name">
-                  <div className="name-with-avatar">
-                    <div className="avatar">
-                      {employee.first_name.charAt(0)}{employee.last_name.charAt(0)}
-                    </div>
-                    <span>{`${employee.first_name} ${employee.last_name}`}</span>
+                <td className="employee-details-cell">
+                  <div className="emp-line">
+                    👤 {employee.first_name} {employee.last_name}
                   </div>
+                  <div className="emp-line">📧 {employee.email}</div>
+                  <div className="emp-line">📞 {employee.phone}</div>
                 </td>
-                <td>{employee.email}</td>
-                <td>{employee.phone}</td>
                 <td>
                   <span className="role-badge">{employee.role}</span>
                 </td>
                 <td>
                   <button
-                    className={`status-toggle ${employee.status || 'active'}`}
-                    onClick={() => onStatusToggle(employee.id, employee.status || 'active')}
-                    title={`Click to ${employee.status === 'active' ? 'deactivate' : 'activate'}`}
+                    className={`status-toggle ${employee.status || "active"}`}
+                    onClick={() =>
+                      onStatusToggle(employee.id, employee.status || "active")
+                    }
+                    title={`Click to ${
+                      employee.status === "active" ? "deactivate" : "activate"
+                    }`}
                   >
-                    {employee.status === 'active' ? '✅ Active' : '❌ Inactive'}
+                    {employee.status === "active" ? "✅ Active" : "❌ Inactive"}
                   </button>
                 </td>
                 <td className="actions">
@@ -89,7 +82,7 @@ const EmployeeTable = ({
             ))
           ) : (
             <tr>
-              <td colSpan="7" className="no-data">
+              <td colSpan="5" className="no-data">
                 📭 No employees found
               </td>
             </tr>

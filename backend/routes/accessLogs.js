@@ -187,6 +187,78 @@ router.get('/user/:userId', authenticateToken, async (req, res) => {
   }
 });
 
+// 📊 GET /api/access-logs/my-activity - Get current user's personal activity (for employees)
+router.get('/my-activity', authenticateToken, async (req, res) => {
+  try {
+    const { id: userId } = req.user;
+    const { limit = 5 } = req.query;
+
+    // Get current active session
+    const [currentSession] = await db.query(`
+      SELECT 
+        login_time,
+        TIMESTAMPDIFF(MINUTE, login_time, NOW()) as session_minutes,
+        ip_address,
+        status
+      FROM access_logs 
+      WHERE user_id = ? AND status = 'active'
+      ORDER BY login_time DESC 
+      LIMIT 1
+    `, [userId]);
+
+    // Get recent login history (last few sessions)
+    const [recentSessions] = await db.query(`
+      SELECT 
+        login_time,
+        logout_time,
+        session_duration,
+        ip_address,
+        status,
+        CASE 
+          WHEN logout_time IS NULL THEN 'Active'
+          ELSE 'Completed'
+        END as session_status
+      FROM access_logs 
+      WHERE user_id = ?
+      ORDER BY login_time DESC 
+      LIMIT ?
+    `, [userId, parseInt(limit)]);
+
+    // Get today's login count
+    const [todayStats] = await db.query(`
+      SELECT 
+        COUNT(*) as today_logins,
+        MIN(login_time) as first_login_today,
+        SUM(CASE WHEN session_duration IS NOT NULL THEN session_duration ELSE 0 END) as total_time_today
+      FROM access_logs 
+      WHERE user_id = ? AND DATE(login_time) = CURDATE()
+    `, [userId]);
+
+    const stats = todayStats[0] || {
+      today_logins: 0,
+      first_login_today: null,
+      total_time_today: 0
+    };
+
+    res.json({
+      success: true,
+      data: {
+        currentSession: currentSession[0] || null,
+        recentSessions,
+        todayStats: {
+          loginCount: stats.today_logins,
+          firstLogin: stats.first_login_today,
+          totalTimeToday: Math.round(stats.total_time_today || 0)
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error('🔴 Personal Activity Error:', error.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // 📊 POST /api/access-logs/logout - Record logout time
 router.post('/logout', authenticateToken, async (req, res) => {
   try {

@@ -14,7 +14,7 @@
 }
 
 .employee-stats .stat {
-  background: linear-gradient(135deg, var(--color1), var(--color4));
+  background: var(--color1);
   color: white;
   padding: 0.75rem 1.25rem;
   border-radius: 8px;
@@ -31,16 +31,16 @@
 }
 
 .employee-stats .stat:nth-child(1) {
-  background: linear-gradient(135deg, var(--color5), var(--color1));
+  background: var(--color5);
 }
 
 .employee-stats .stat:nth-child(2) {
-  background: linear-gradient(135deg, var(--color2), var(--color4));
+  background: var(--color2);
   color: var(--color3);
 }
 
 .employee-stats .stat:nth-child(3) {
-  background: linear-gradient(135deg, var(--color3), var(--color4));
+  background: var(--color3);
 }
 
 @media (max-width: 768px) {

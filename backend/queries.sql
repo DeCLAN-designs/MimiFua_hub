@@ -5,7 +5,7 @@ CREATE TABLE users (
   email VARCHAR(100),
   phone VARCHAR(15),
   password VARCHAR(255) NOT NULL,
-  role ENUM('employee', 'manager') DEFAULT 'employee',
+  role ENUM('employee', 'manager' , 'admin') DEFAULT 'employee',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   UNIQUE KEY unique_email (email),

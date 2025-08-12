@@ -1,75 +1,155 @@
 # MimiFua Hub
 
-A comprehensive management system for MimiFua cleaning services, providing tools for employee management, inventory tracking, sales monitoring, and leave management.
+A comprehensive management system for MimiFua cleaning services, providing tools for employee management, access control, inventory tracking, and business operations management.
 
-![MimiFua Hub Dashboard](https://via.placeholder.com/800x400.png?text=MimiFua+Hub+Dashboard)
+![MimiFua Hub Dashboard](https://via.placeholder.com/1200x600.png?text=MimiFua+Hub+Dashboard+Preview)
 
-## Features
+## ✨ Features
 
-- **Dashboard**: Real-time overview of key metrics and activities
-- **Employee Management**: Add, edit, and manage employee information
-- **Inventory Tracking**: Monitor stock levels and receive alerts
-- **Sales Monitoring**: Track sales performance and growth
-- **Leave Management**: Handle employee leave requests and approvals
-- **Responsive Design**: Works on desktop and mobile devices
+### 📊 Dashboard
+- Real-time activity monitoring and access logs
+- Employee performance metrics
+- Business insights and analytics
 
-## Tech Stack
+### 👥 Employee Management
+- Employee profiles and roles
+- Access control and permissions
+- Real-time user activity tracking
 
-- **Frontend**: React.js, Vite, React Icons
-- **Backend**: Node.js, Express
-- **Database**: MongoDB
-- **Styling**: CSS Modules, Flexbox, Grid
-- **Authentication**: JWT
+### 🔐 Access Control
+- Role-based access control (RBAC)
+- Real-time active user monitoring
+- Login/logout tracking
 
-## Getting Started
+## 🛠 Tech Stack
+
+### Frontend
+- **Framework**: React 18 with Vite
+- **State Management**: React Context API
+- **UI Components**: Custom components with CSS Modules
+- **Icons**: React Icons
+- **Charts**: Recharts
+- **Form Handling**: React Hook Form
+- **Routing**: React Router v6
+
+### Backend
+- **Runtime**: Node.js 18+
+- **Framework**: Express.js
+- **Authentication**: JWT (JSON Web Tokens)
+- **Validation**: Joi
+- **Logging**: Winston
+- **API Documentation**: OpenAPI/Swagger
+
+### Database
+- **Primary Database**: MongoDB with Mongoose ODM
+- **Caching**: Redis (for session management)
+- **File Storage**: Local filesystem (with S3 support ready)
+
+### DevOps
+- **Containerization**: Docker
+- **CI/CD**: GitHub Actions
+- **Linting**: ESLint + Prettier
+- **Testing**: Jest + React Testing Library
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- npm or yarn
-- MongoDB (local or Atlas)
+- Node.js 18 or higher
+- npm 8+ or yarn 1.22+
+- MongoDB 6.0+
+- Redis (for session management)
 
-### Installation
+### 📥 Installation
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/mimifua-hub.git
-   cd mimifua-hub
+   git clone https://github.com/DeCLAN-designs/MimiFua_hub.git
+   cd MimiFua_hub
    ```
 
-2. **Install backend dependencies**
+2. **Install dependencies**
    ```bash
+   # Install backend dependencies
    cd backend
    npm install
-   ```
-
-3. **Install frontend dependencies**
-   ```bash
+   
+   # Install frontend dependencies
    cd ../frontend
    npm install
    ```
 
-4. **Environment Setup**
-   - Create a `.env` file in the backend directory:
-     ```
-     MONGODB_URI=your_mongodb_connection_string
-     JWT_SECRET=your_jwt_secret
-     PORT=5000
-     ```
-   - Create a `.env` file in the frontend directory:
-     ```
-     VITE_API_URL=http://localhost:5000
-     ```
+3. **Environment Setup**
 
-### Running the Application
+   Create a `.env` file in the `backend` directory with the following variables:
+   ```env
+   # Server Configuration
+   PORT=5000
+   NODE_ENV=development
+   
+   # MongoDB
+   MONGODB_URI=mongodb://localhost:27017/mimifua_hub
+   
+   # JWT
+   JWT_SECRET=your_secure_jwt_secret
+   JWT_EXPIRES_IN=30d
+   
+   # Session (Redis)
+   REDIS_URL=redis://localhost:6379
+   SESSION_SECRET=your_session_secret
+   
+   # API Configuration
+   API_PREFIX=/api
+   FRONTEND_URL=http://localhost:5173
+   ```
 
-1. **Start the backend server**
+   Create a `.env` file in the `frontend` directory:
+   ```env
+   VITE_API_URL=http://localhost:5000/api
+   VITE_APP_NAME=MimiFua Hub
+   VITE_APP_VERSION=1.0.0
+   ```
+
+### 🏃‍♂️ Running the Application
+
+1. **Start MongoDB and Redis**
+   Make sure MongoDB and Redis are running locally or update the connection strings accordingly.
+
+2. **Start the backend server**
    ```bash
    cd backend
    npm run dev
    ```
+   The API will be available at `http://localhost:5000`
 
-2. **Start the frontend development server**
+3. **Start the frontend development server**
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+   The application will be available at `http://localhost:5173`
+
+### 🧪 Running Tests
+
+```bash
+# Run backend tests
+cd backend
+npm test
+
+# Run frontend tests
+cd ../frontend
+npm test
+```
+
+### 🐳 Docker Support
+
+```bash
+# Build and start all services
+docker-compose up --build
+
+# Stop all services
+docker-compose down
+```end development server**
    ```bash
    cd ../frontend
    npm run dev

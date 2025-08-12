@@ -23,8 +23,7 @@ body {
 
 /* Consistent spacing for all page routes */
 main {
-  padding: 2rem 1.5rem;
-  min-height: calc(100vh - 160px); /* Adjust height to account for Navbar + Footer */
+   min-height: calc(100vh - 160px); /* Adjust height to account for Navbar + Footer */
 }
 
 /* Remove link underline and inherit color */

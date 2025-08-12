@@ -1,12 +1,39 @@
-/* Employee Table Component Styles */
+/* ==============================
+   Root Variables
+   ============================== */
 :root {
   --color1: #48AECC;
   --color2: #8FCF68;
   --color3: #00370F;
   --color4: #A7BAAC;
   --color5: #2c3e50;
+  --danger1: #ff6b6b;
+  --danger2: #ee5a52;
 }
 
+/* ==============================
+   Animations
+   ============================== */
+@keyframes fadeInRow {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes buttonPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* ==============================
+   Table Container
+   ============================== */
 .table-container {
   overflow-x: auto;
   margin: 1rem 0;
@@ -14,6 +41,9 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* ==============================
+   Table
+   ============================== */
 .employees-table {
   width: 100%;
   border-collapse: collapse;
@@ -22,8 +52,11 @@
   overflow: hidden;
 }
 
+/* ==============================
+   Table Header
+   ============================== */
 .employees-table th {
-  background: linear-gradient(135deg, var(--color5), var(--color1));
+  background: var(--color5);
   color: white;
   padding: 1.25rem;
   text-align: left;
@@ -37,15 +70,17 @@
 .employees-table th.sortable {
   cursor: pointer;
   user-select: none;
-  transition: all 0.3s ease;
-  position: relative;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .employees-table th.sortable:hover {
-  background: linear-gradient(135deg, var(--color1), var(--color5));
+  background: var(--color1);
   transform: translateY(-1px);
 }
 
+/* ==============================
+   Table Body
+   ============================== */
 .employees-table td {
   padding: 1.25rem;
   border-bottom: 1px solid rgba(167, 186, 172, 0.3);
@@ -56,35 +91,24 @@
   background-color: rgba(72, 174, 204, 0.05);
 }
 
-.employee-name {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+.fade-in-row {
+  animation: fadeInRow 0.4s ease-out;
 }
 
-.name-with-avatar {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--color1), var(--color2));
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* ==============================
+   Employee Details
+   ============================== */
+.employee-details-cell .emp-line {
+  margin-bottom: 4px;
   font-size: 0.9rem;
-  font-weight: 700;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border: 2px solid white;
+  color: #333;
 }
 
+/* ==============================
+   Role Badge
+   ============================== */
 .role-badge {
-  background: linear-gradient(135deg, var(--color4), var(--color1));
+  background: var(--color4);
   color: white;
   padding: 0.4rem 0.8rem;
   border-radius: 20px;
@@ -94,6 +118,9 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* ==============================
+   Status Button
+   ============================== */
 .status-toggle {
   padding: 0.5rem 1rem;
   border: none;
@@ -106,20 +133,23 @@
 }
 
 .status-toggle.active {
-  background: linear-gradient(135deg, var(--color2), var(--color3));
+  background: var(--color2);
   color: white;
 }
 
 .status-toggle.inactive {
-  background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+  background: var(--danger1);
   color: white;
 }
 
 .status-toggle:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: buttonPulse 0.4s ease-in-out;
 }
 
+/* ==============================
+   Action Buttons
+   ============================== */
 .actions {
   display: flex;
   gap: 0.5rem;
@@ -140,57 +170,73 @@
 }
 
 .edit-btn {
-  background: linear-gradient(135deg, var(--color2), var(--color4));
+  background: var(--color2);
   color: white;
 }
 
 .edit-btn:hover {
-  background: linear-gradient(135deg, var(--color4), var(--color2));
+  background: var(--color4);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .delete-btn {
-  background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+  background: var(--danger1);
   color: white;
 }
 
 .delete-btn:hover {
-  background: linear-gradient(135deg, #ee5a52, #ff6b6b);
+  background: var(--danger2);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* ==============================
+   Empty State
+   ============================== */
 .no-data {
   text-align: center;
   padding: 3rem;
   color: var(--color4);
   font-style: italic;
   font-size: 1.1rem;
-  background: linear-gradient(135deg, rgba(72, 174, 204, 0.05), rgba(167, 186, 172, 0.05));
+  background: rgba(72, 174, 204, 0.05);
 }
 
+/* ==============================
+   Responsiveness
+   ============================== */
 @media (max-width: 768px) {
   .employees-table th,
   .employees-table td {
     padding: 0.75rem 0.5rem;
     font-size: 0.8rem;
   }
-  
-  .avatar {
-    width: 32px;
-    height: 32px;
-    font-size: 0.8rem;
-  }
-  
+
   .actions {
     flex-direction: column;
     gap: 0.25rem;
   }
-  
+
   .edit-btn, .delete-btn {
     width: 32px;
     height: 32px;
     font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .employee-details-cell .emp-line {
+    font-size: 0.75rem;
+  }
+  
+  .role-badge {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+  }
+  
+  .status-toggle {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
   }
 }

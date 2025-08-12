@@ -32,7 +32,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--color1), var(--color2), var(--color3));
+  background: var(--color1);
 }
 
 .employee-card:hover {
@@ -52,7 +52,7 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color1), var(--color2));
+  background: var(--color1);
   color: white;
   display: flex;
   align-items: center;
@@ -135,12 +135,12 @@
 }
 
 .edit-btn {
-  background: linear-gradient(135deg, var(--color2), var(--color4)) !important;
+  background: var(--color2) !important;
   color: white !important;
 }
 
 .delete-btn {
-  background: linear-gradient(135deg, #ff6b6b, #ee5a52) !important;
+  background: #ff6b6b !important;
   color: white !important;
 }
 
@@ -153,12 +153,12 @@
 }
 
 .status-toggle.active {
-  background: linear-gradient(135deg, var(--color2), var(--color3)) !important;
+  background: var(--color2) !important;
   color: white !important;
 }
 
 .status-toggle.inactive {
-  background: linear-gradient(135deg, #ff6b6b, #ee5a52) !important;
+  background: #ff6b6b !important;
   color: white !important;
 }
 
@@ -169,7 +169,7 @@
   color: var(--color4);
   font-style: italic;
   font-size: 1.1rem;
-  background: linear-gradient(135deg, rgba(72, 174, 204, 0.05), rgba(167, 186, 172, 0.05));
+  background: rgba(72, 174, 204, 0.05);
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(167, 186, 172, 0.2);

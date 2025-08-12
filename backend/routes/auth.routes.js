@@ -100,6 +100,29 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
+    // 📊 Record access log
+    const clientIP = req.ip || req.connection.remoteAddress || req.socket.remoteAddress || 
+                     (req.connection.socket ? req.connection.socket.remoteAddress : null) || 
+                     req.headers['x-forwarded-for'] || 'unknown';
+    const userAgent = req.headers['user-agent'] || 'unknown';
+
+    try {
+      // Set previous sessions to inactive
+      await db.query(
+        "UPDATE access_logs SET status = 'inactive', logout_time = NOW(), session_duration = TIMESTAMPDIFF(MINUTE, login_time, NOW()) WHERE user_id = ? AND status = 'active'",
+        [user.id]
+      );
+
+      // Create new access log entry
+      await db.query(
+        "INSERT INTO access_logs (user_id, login_time, ip_address, user_agent, status) VALUES (?, NOW(), ?, ?, 'active')",
+        [user.id, clientIP, userAgent]
+      );
+    } catch (logError) {
+      console.error("🔴 Access Log Error:", logError.message);
+      // Don't fail login if logging fails
+    }
+
     const token = jwt.sign(
       { id: user.id, role: user.role },
       process.env.JWT_SECRET,

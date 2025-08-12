@@ -13,7 +13,7 @@
   align-items: center;
   margin: 2rem 0;
   padding: 1rem;
-  background: linear-gradient(135deg, rgba(72, 174, 204, 0.05), rgba(167, 186, 172, 0.05));
+  background: rgba(72, 174, 204, 0.05);
   border-radius: 12px;
   border: 1px solid rgba(167, 186, 172, 0.2);
   flex-wrap: wrap;
@@ -68,7 +68,7 @@
 }
 
 .page-btn.active {
-  background: linear-gradient(135deg, var(--color1), var(--color2));
+  background: var(--color1);
   color: white;
   border-color: var(--color1);
   box-shadow: 0 4px 8px rgba(72, 174, 204, 0.3);
@@ -76,34 +76,34 @@
 }
 
 .page-btn.active:hover {
-  background: linear-gradient(135deg, var(--color2), var(--color1));
+  background: var(--color2);
 }
 
 /* Special styling for first/last page buttons */
 .page-btn:first-child,
 .page-btn:last-child {
-  background: linear-gradient(135deg, var(--color5), var(--color4));
+  background: var(--color5);
   color: white;
   border-color: var(--color5);
 }
 
 .page-btn:first-child:hover:not(:disabled),
 .page-btn:last-child:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--color4), var(--color5));
+  background: var(--color4);
   border-color: var(--color4);
 }
 
 /* Previous/Next buttons */
 .page-btn:nth-child(2),
 .page-btn:nth-last-child(2) {
-  background: linear-gradient(135deg, var(--color1), var(--color4));
+  background: var(--color1);
   color: white;
   border-color: var(--color1);
 }
 
 .page-btn:nth-child(2):hover:not(:disabled),
 .page-btn:nth-last-child(2):hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--color4), var(--color1));
+  background: var(--color4);
 }
 
 @media (max-width: 768px) {

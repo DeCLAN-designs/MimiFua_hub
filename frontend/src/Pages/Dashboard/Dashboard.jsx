@@ -17,6 +17,7 @@ import MySales from "./EmployeeDashboard/Tabs/Sales";
 import RestockInventory from "./EmployeeDashboard/Tabs/RestockInventory";
 import Summary from "./EmployeeDashboard/Tabs/Summary";
 import LeaveRequest from "./EmployeeDashboard/Tabs/LeaveRequest"
+import PersonalActivity from "./EmployeeDashboard/Tabs/PersonalActivity"
 
 
 
@@ -75,6 +76,8 @@ const Dashboard = () => {
           return <Summary />;
         case "leave":
           return <LeaveRequest />;
+        case "personal-activity":
+          return <PersonalActivity />;
         default:
           return <EmployeeDashboard />;
       }

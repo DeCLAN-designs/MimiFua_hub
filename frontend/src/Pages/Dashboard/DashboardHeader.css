@@ -1,19 +1,25 @@
-/* DashboardHeader.css */
+:root {
+  --primary-color: #48AECC;
+  --secondary-color: #f4f4f4;
+  --danger-color: #e74c3c;
+  --warning-color: #f39c12;
+  --info-color: #3498db;
+  --text-color: #333;
+  --border-radius: 8px;
+  --transition-speed: 0.3s;
+}
 
+/* ================= HEADER ================= */
 .dashboard-header {
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #e9ecef;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--primary-color);
+  color: white;
+  padding: 1rem 2rem;
+  flex-wrap: wrap;
 }
 
-/* Welcome Section */
 .welcome-section {
   display: flex;
   flex-direction: column;
@@ -21,69 +27,37 @@
 }
 
 .welcome-message h1 {
-  font-size: 1.6rem;
-  color: #2c3e50;
   margin: 0;
-  font-weight: 600;
+  font-size: 1.5rem;
 }
 
-.welcome-message p {
-  margin: 0;
-  color: #6c757d;
-  font-size: 0.9rem;
-}
-
-/* Quick Stats */
 .quick-stats {
   display: flex;
-  gap: 1.5rem;
-  margin-top: 0.25rem;
+  gap: 1rem;
 }
 
 .stat-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  color: #495057;
-  background: rgba(72, 174, 204, 0.1);
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
+  gap: 0.3rem;
 }
 
 .stat-icon {
-  color: #48AECC;
-  font-size: 1rem;
+  font-size: 1.2rem;
 }
 
-
-
-/* Header Right Section */
+/* ================= HEADER RIGHT ================= */
 .header-right {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
-/* Role Badge */
-.role-badge {
-  background: rgba(72, 174, 204, 0.1);
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  border: 1px solid #48AECC;
-}
-
-.role-indicator {
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.role-indicator.manager {
-  color: #8FCF68;
-}
-
-.role-indicator.employee {
-  color: #48AECC;
+.role-badge .role-indicator {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--border-radius);
+  font-weight: bold;
 }
 
 .profile-section {
@@ -93,163 +67,72 @@
 .avatar-dropdown {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
   cursor: pointer;
+  gap: 0.5rem;
 }
 
 .avatar-circle {
-  background-color: #48aecc;
-  color: white;
-  font-weight: bold;
   width: 36px;
   height: 36px;
+  background: white;
+  color: var(--primary-color);
   border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
 }
 
 .dropdown-icon {
-  color: #2c3e50;
   font-size: 1rem;
 }
 
-/* Dropdown menu */
+/* ================= DROPDOWN MENU ================= */
 .dropdown-menu {
   position: absolute;
-  top: 48px;
   right: 0;
-  background-color: #ffffff;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  border-radius: 12px;
-  border: 1px solid #e9ecef;
-  min-width: 280px;
-  overflow: hidden;
+  top: 120%;
+  background: white;
+  color: var(--text-color);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  min-width: 240px;
+  z-index: 100;
+  padding: 0.5rem;
+  animation: fadeIn var(--transition-speed) ease-in-out;
 }
 
-/* Menu Header */
+.dropdown-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-color);
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
 .menu-header {
-  background: linear-gradient(135deg, #48AECC 0%, #8FCF68 100%);
-  padding: 1rem;
-  color: white;
-}
-
-/* Dropdown Notifications */
-.dropdown-notifications {
-  padding: 1rem;
-  border-bottom: 1px solid #e9ecef;
-  background: #f8f9fa;
-}
-
-.notifications-header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 0.75rem;
-  font-size: 0.9rem;
-}
-
-.notifications-header .bell-icon {
-  color: #48AECC;
-  font-size: 1rem;
-}
-
-.notifications-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.dropdown-notifications .notification-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  max-width: none;
-}
-
-.dropdown-notifications .notification-item.warning {
-  background: rgba(255, 193, 7, 0.1);
-  color: #856404;
-  border-left: 3px solid #ffc107;
-}
-
-.dropdown-notifications .notification-item.danger {
-  background: rgba(220, 53, 69, 0.1);
-  color: #721c24;
-  border-left: 3px solid #dc3545;
-}
-
-.dropdown-notifications .notification-item.info {
-  background: rgba(13, 202, 240, 0.1);
-  color: #055160;
-  border-left: 3px solid #0dcaf0;
-}
-
-.dropdown-notifications .notification-icon {
-  font-size: 0.9rem;
-  flex-shrink: 0;
-}
-
-.dropdown-notifications .notification-text {
-  flex: 1;
-  line-height: 1.3;
+  padding: 1rem 0.5rem;
+  border-bottom: 1px solid #ddd;
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .avatar-large {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: white;
-  font-weight: bold;
   width: 48px;
   height: 48px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 1.2rem;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-}
-
-.user-details {
-  display: flex;
-  flex-direction: column;
-}
-
-.user-name {
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.user-role-text {
-  font-size: 0.8rem;
-  opacity: 0.9;
-}
-
-.dropdown-menu button.dropdown-close-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  font-size: 1.1rem;
+  background: var(--primary-color);
   color: white;
-  cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 4px;
-  transition: background 0.2s ease;
-}
-
-.dropdown-menu button.dropdown-close-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
 }
 
 .dropdown-menu ul {
@@ -259,138 +142,131 @@
 }
 
 .dropdown-menu li {
-  padding: 0.75rem 1rem;
+  padding: 0.8rem 0.5rem;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.6rem;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border-bottom: 1px solid #f8f9fa;
+  border-radius: var(--border-radius);
+  transition: background var(--transition-speed);
 }
 
 .dropdown-menu li:hover {
-  background-color: #f8f9fa;
-  padding-left: 1.25rem;
+  background: var(--secondary-color);
 }
 
-.dropdown-menu li:last-child {
-  border-bottom: none;
+.dropdown-menu .logout {
+  color: var(--danger-color);
 }
 
-.dropdown-menu li.logout {
-  color: #dc3545;
-  border-top: 1px solid #e9ecef;
+/* ================= NOTIFICATIONS ================= */
+.dropdown-notifications {
+  padding: 0.5rem;
+  border-bottom: 1px solid #ddd;
 }
 
-.dropdown-menu li.logout:hover {
-  background-color: rgba(220, 53, 69, 0.1);
+.notifications-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
 }
 
-.dropdown-menu .icon {
-  font-size: 1rem;
-  width: 16px;
+.notification-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0;
 }
 
-/* Responsive Design */
+.notification-item.info {
+  color: var(--info-color);
+}
+
+.notification-item.warning {
+  color: var(--warning-color);
+}
+
+.notification-item.danger {
+  color: var(--danger-color);
+}
+
+/* ================= MODALS ================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.modal {
+  background: white;
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  width: 90%;
+  max-width: 400px;
+  animation: fadeIn var(--transition-speed) ease-in-out;
+}
+
+.color-options {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.color-options button {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+/* ================= ANIMATIONS ================= */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
   .dashboard-header {
-    padding: 0.75rem 1rem;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .welcome-section {
-    order: 1;
-    flex: 1;
-  }
-
-  .welcome-message h1 {
-    font-size: 1.3rem;
-  }
-
-  .quick-stats {
     flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .notifications-section {
-    order: 3;
-    width: 100%;
-    justify-content: center;
-    margin-top: 0.5rem;
-  }
-
-  .notifications-preview {
-    flex-direction: row;
-    gap: 0.5rem;
-    overflow-x: auto;
-  }
-
-  .notification-item {
-    min-width: 200px;
-    flex-shrink: 0;
-  }
-
-  .header-right {
-    order: 2;
+    align-items: flex-start;
     gap: 1rem;
   }
 
-  .role-badge {
-    padding: 0.25rem 0.75rem;
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
   }
 
   .dropdown-menu {
-    min-width: 250px;
-    right: -20px;
+    right: auto;
+    left: 0;
+    width: 100%;
+    max-width: 300px;
   }
 }
 
 @media (max-width: 480px) {
-  .dashboard-header {
-    padding: 0.5rem;
-  }
-
   .welcome-message h1 {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
   }
 
-  .stat-item {
-    font-size: 0.8rem;
-    padding: 0.2rem 0.5rem;
+  .role-badge .role-indicator {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.85rem;
   }
 
-  .notifications-section {
-    display: none; /* Hide notifications on very small screens */
-  }
-
-  .dropdown-menu {
-    min-width: calc(100vw - 40px);
-    right: -10px;
-  }
-}
-
-.dropdown-menu li.logout {
-  color: #c0392b;
-}
-
-.icon {
-  font-size: 1rem;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .dashboard-header {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 1rem;
-  }
-
-  .header-right {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+  .avatar-circle {
+    width: 32px;
+    height: 32px;
   }
 }

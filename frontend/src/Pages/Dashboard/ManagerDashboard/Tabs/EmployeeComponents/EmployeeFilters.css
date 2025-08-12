@@ -10,10 +10,11 @@
 .header-controls {
   display: flex;
   gap: 1rem;
+  width: 100%;
   align-items: center;
   flex-wrap: wrap;
   padding: 1rem;
-  background: linear-gradient(135deg, rgba(72, 174, 204, 0.1), rgba(167, 186, 172, 0.1));
+  background: rgba(72, 174, 204, 0.05);
   border-radius: 8px;
   border: 1px solid var(--color4);
 }
@@ -97,7 +98,7 @@
 }
 
 .add-btn {
-  background: linear-gradient(135deg, var(--color2), var(--color3));
+  background: var(--color2);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -110,7 +111,7 @@
 }
 
 .add-btn:hover {
-  background: linear-gradient(135deg, var(--color3), var(--color2));
+  background: var(--color3);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

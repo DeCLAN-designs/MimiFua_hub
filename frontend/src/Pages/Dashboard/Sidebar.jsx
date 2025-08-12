@@ -10,6 +10,7 @@ const EMPLOYEE_NAV = [
   { key: "restock", label: "📦 Restock Inventory" },
   { key: "summary", label: "📃 Summary" },
   { key: "leave", label: "📝 Leave" },
+  { key: "personal-activity", label: "👤 My Activity" },
 ];
 
 const MANAGER_NAV = [

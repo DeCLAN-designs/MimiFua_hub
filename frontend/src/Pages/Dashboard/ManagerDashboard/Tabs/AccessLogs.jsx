@@ -22,16 +22,74 @@ const AccessLogs = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
 
+  // Format date and time in Kenya Time (EAT, UTC+3)
+  const formatDateTime = (timestamp) => {
+    if (!timestamp) return 'N/A';
+    return new Date(timestamp).toLocaleString('en-KE', { 
+      timeZone: 'Africa/Nairobi',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+  };
+
+  // Format time only in Kenya Time (EAT, UTC+3)
+  const formatTimeOnly = (timestamp) => {
+    if (!timestamp) return 'N/A';
+    return new Date(timestamp).toLocaleTimeString('en-KE', { 
+      timeZone: 'Africa/Nairobi',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  // Format duration in hours and minutes
+  const formatDuration = (minutes) => {
+    if (!minutes && minutes !== 0) return 'N/A';
+    const hours = Math.floor(minutes / 60);
+    const mins = Math.floor(minutes % 60);
+    if (hours > 0) {
+      return `${hours}h ${mins}m`;
+    }
+    return `${mins}m`;
+  };
+
   useEffect(() => {
     fetchAccessLogs();
     fetchActiveUsers();
     
-    // Auto-refresh every 30 seconds
-    const interval = setInterval(() => {
+    // Smart polling: shorter intervals for real-time updates
+    const activeUsersInterval = setInterval(() => {
       fetchActiveUsers();
-    }, 60000);
+    }, 10000); // Every 10 seconds for active users
+    
+    const accessLogsInterval = setInterval(() => {
+      fetchAccessLogs();
+    }, 15000); // Every 15 seconds for access logs
 
-    return () => clearInterval(interval);
+    // Page visibility handling for efficient polling
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Page is hidden, clear intervals
+        clearInterval(activeUsersInterval);
+        clearInterval(accessLogsInterval);
+      } else {
+        // Page is visible, restart intervals and fetch immediately
+        fetchAccessLogs();
+        fetchActiveUsers();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      clearInterval(activeUsersInterval);
+      clearInterval(accessLogsInterval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [filter]);
 
   const fetchAccessLogs = async () => {
@@ -83,17 +141,8 @@ const AccessLogs = () => {
     setRefreshing(false);
   };
 
-  const formatTime = (timestamp) => {
-    if (!timestamp) return 'N/A';
-    return new Date(timestamp).toLocaleString();
-  };
-
-  const formatDuration = (minutes) => {
-    if (!minutes || minutes === 0) return 'N/A';
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
-  };
+  // formatTime replaced with formatDateTime for consistency
+  const formatTime = formatDateTime;
 
   const getStatusBadge = (status, currentStatus) => {
     const statusClass = currentStatus || status;
