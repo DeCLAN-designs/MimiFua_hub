@@ -204,6 +204,7 @@ const SignUp = () => {
             <select id="role" value={form.role} onChange={handleChange("role")}>
               <option value="employee">Employee</option>
               <option value="manager">Manager</option>
+              <option value="admin">Admin</option>
             </select>
           </div>
 

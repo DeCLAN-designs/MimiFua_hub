@@ -1,0 +1,255 @@
+/* ===== Global Color Palette ===== */
+:root {
+  --color-primary: #48AECC;   /* Accent Blue */
+  --color-success: #8FCF68;   /* Success Green */
+  --color-dark-green: #00370F; /* Deep Green */
+  --color-neutral: #A7BAAC;   /* Soft Neutral */
+  --color-dark-navy: #2c3e50; /* Dark Navy */
+  --color-danger: #dc3545;    /* Red for warnings */
+  --color-warning: #ffc107;   /* Yellow for warnings */
+  --color-bg: #ffffff;        /* White background */
+  --color-border: #dee2e6;    /* Border color */
+}
+
+/* ===== Main Layout ===== */
+.settings-section.user-management-settings {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  color: var(--color-dark-navy);
+}
+
+.section-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-primary);
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.section-header p {
+  font-size: 0.9rem;
+  color: var(--color-neutral);
+}
+
+/* ===== Subsections ===== */
+.subsection h4 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1rem;
+  margin: 20px 0 10px;
+  color: var(--color-dark-navy);
+  border-left: 4px solid var(--color-primary);
+  padding-left: 8px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+small {
+  color: var(--color-neutral);
+}
+
+/* ===== Checkbox Styling ===== */
+.checkbox-group {
+  margin-bottom: 12px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  position: relative;
+}
+
+.checkbox-label input {
+  display: none;
+}
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--color-primary);
+  border-radius: 4px;
+  position: relative;
+}
+
+.checkbox-label input:checked + .checkmark {
+  background-color: var(--color-primary);
+}
+
+.checkbox-label input:checked + .checkmark::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 0px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--color-bg);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-content strong {
+  color: var(--color-dark-navy);
+}
+
+.checkbox-content small {
+  color: var(--color-neutral);
+}
+
+/* ===== Range Input ===== */
+.range-input input[type="range"] {
+  width: 100%;
+  appearance: none;
+  background: transparent;
+}
+
+.range-input input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--color-neutral);
+}
+
+/* ===== Role Hierarchy ===== */
+.role-hierarchy {
+  display: grid;
+  gap: 12px;
+}
+
+.role-level {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+
+.role-level.admin {
+  border-left: 4px solid var(--color-primary);
+}
+
+.role-level.manager {
+  border-left: 4px solid var(--color-success);
+}
+
+.role-level.employee {
+  border-left: 4px solid var(--color-dark-green);
+}
+
+.role-icon {
+  font-size: 1.5rem;
+}
+
+.role-info h5 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--color-dark-navy);
+}
+
+/* ===== Statistics ===== */
+.user-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.stat-icon {
+  font-size: 1.4rem;
+}
+
+.stat-number {
+  font-weight: bold;
+  color: var(--color-dark-navy);
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--color-neutral);
+}
+
+/* ===== Registration Flow ===== */
+.flow-diagram {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.flow-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  padding: 8px;
+  border-radius: 6px;
+  min-width: 120px;
+}
+
+.step-number {
+  background: var(--color-primary);
+  color: var(--color-bg);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flow-arrow {
+  font-size: 1.2rem;
+  color: var(--color-neutral);
+}
+
+/* ===== Quick Actions ===== */
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn.btn-secondary {
+  background: var(--color-primary);
+  color: var(--color-bg);
+}
+
+.btn.btn-secondary:hover {
+  background: var(--color-dark-green);
+}

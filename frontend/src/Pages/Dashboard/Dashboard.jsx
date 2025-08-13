@@ -4,23 +4,27 @@ import Sidebar from "./Sidebar";
 import DashboardHeader from "./DashboardHeader";
 import "./Dashboard.css";
 
+// Admin Views
+import AdminDashboard from "./AdminDashboard/AdminDashboard";
+import Users from "./AdminDashboard/Tabs/Users/Users";
+import AccessLogs from "./AdminDashboard/Tabs/AccessLogs/AccessLogs";
+import Analytics from "./AdminDashboard/Tabs/Analytics/Analytics";
+import Settings from "./AdminDashboard/Tabs/Settings/Settings";
+
 // Manager Views
 import ManagerDashboard from "./ManagerDashboard/ManagerDashboard";
 import Employees from "./ManagerDashboard/Tabs/Employees";
 import Sales from "./ManagerDashboard/Tabs/Sales";
 import Inventory from "./ManagerDashboard/Tabs/Inventory";
-import Leave from "./ManagerDashboard/Tabs/Leave"
+import Leave from "./ManagerDashboard/Tabs/Leave";
 
 // Employee Views
 import EmployeeDashboard from "./EmployeeDashboard/EmployeeDashboard";
 import MySales from "./EmployeeDashboard/Tabs/Sales";
 import RestockInventory from "./EmployeeDashboard/Tabs/RestockInventory";
 import Summary from "./EmployeeDashboard/Tabs/Summary";
-import LeaveRequest from "./EmployeeDashboard/Tabs/LeaveRequest"
-import PersonalActivity from "./EmployeeDashboard/Tabs/PersonalActivity"
-
-
-
+import LeaveRequest from "./EmployeeDashboard/Tabs/LeaveRequest";
+import PersonalActivity from "./EmployeeDashboard/Tabs/PersonalActivity";
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -80,6 +84,32 @@ const Dashboard = () => {
           return <PersonalActivity />;
         default:
           return <EmployeeDashboard />;
+      }
+    }
+
+    if (role === "admin") {
+      switch (activeView) {
+        case "dashboard":
+          return <AdminDashboard />;
+        case "users":
+          return <Users />;
+        case "access-logs":
+          return <AccessLogs />;
+        case "analytics":
+          return <Analytics />;
+        case "settings":
+          return <Settings />;
+        // Admin can also access all manager views
+        case "employees":
+          return <Employees />;
+        case "sales":
+          return <Sales />;
+        case "inventory":
+          return <Inventory />;
+        case "leave":
+          return <Leave />;
+        default:
+          return <AdminDashboard />;
       }
     }
 

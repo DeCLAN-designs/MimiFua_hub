@@ -49,14 +49,31 @@ const requireRole = (role) => (req, res, next) => {
   next();
 };
 
+/**
+ * Middleware to ensure user is an admin
+ */
+const isAdmin = (req, res, next) => {
+  if (!req.user) {
+    return unauthorized(res, 'Authentication required');
+  }
+  
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Admin access required' });
+  }
+  
+  next();
+};
+
 // Predefined role middlewares for convenience
 const requireManager = requireRole("manager");
 const requireEmployee = requireRole("employee");
 
 module.exports = {
   authenticateToken,
+  verifyToken: authenticateToken, // Alias for backward compatibility
   verify,
+  requireRole,
+  isAdmin,
   requireManager,
   requireEmployee,
-  requireRole, // export for future roles like admin, HR, etc.
 };

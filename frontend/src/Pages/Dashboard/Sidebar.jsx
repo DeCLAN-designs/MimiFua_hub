@@ -21,11 +21,26 @@ const MANAGER_NAV = [
   { key: "leave", label: "📜 Leave" },
 ];
 
+const ADMIN_NAV = [
+  { key: "dashboard", label: "📊 Dashboard" },
+  { key: "users", label: "👥 User Management" },
+  { key: "access-logs", label: "📝 Access Logs" },
+  { key: "analytics", label: "📊 Analytics" },
+  { key: "settings", label: "⚙️ Settings" },
+  // Admin can access manager views too
+  { key: "employees", label: "👨‍💼 Employees (Manager)" },
+  { key: "sales", label: "💰 Sales (Manager)" },
+  { key: "inventory", label: "📦 Inventory (Manager)" },
+  { key: "leave", label: "📜 Leave (Manager)" },
+];
+
 const Sidebar = ({ user, onLogout, onNavigate, activeView }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = useMemo(() => {
-    return user?.role === "manager" ? MANAGER_NAV : EMPLOYEE_NAV;
+    if (user?.role === "admin") return ADMIN_NAV;
+    if (user?.role === "manager") return MANAGER_NAV;
+    return EMPLOYEE_NAV;
   }, [user?.role]);
 
   const handleNavigate = (key) => {

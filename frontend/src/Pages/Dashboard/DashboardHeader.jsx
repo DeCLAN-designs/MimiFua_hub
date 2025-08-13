@@ -69,21 +69,8 @@ const DashboardHeader = ({ name, role, onLogout }) => {
         await performLogout(navigate);
         return;
       }
-
-      const dashboardUrl =
-        role === "manager"
-          ? `http://localhost:5000/api/dashboard/manager?userId=${userId}`
-          : `http://localhost:5000/api/dashboard?userId=${userId}`;
-
-      const response = await fetch(dashboardUrl, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setDashboardStats(data);
-        generateNotifications(data);
-      }
+      
+      setDashboardStats(stats);
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
     }
@@ -185,13 +172,26 @@ const DashboardHeader = ({ name, role, onLogout }) => {
         <div className="welcome-section">
           <div className="welcome-message">
             <h1>
-              {role === "manager"
+              {role === "admin"
+                ? "👑 Admin Dashboard"
+                : role === "manager"
                 ? "👨‍💼 Manager Dashboard"
                 : "👨‍💻 Employee Dashboard"}
             </h1>
             <p>Welcome back, {name}!</p>
+            <div className="current-time">
+              <FiClock className="time-icon" />
+              <span>
+                {currentTime.toLocaleDateString("en-US", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </span>
+            </div>
           </div>
-          {role === "employee" && (
+          {role && (
             <div className="quick-stats">
               <div className="stat-item">
                 <FiClock className="stat-icon" />
@@ -202,6 +202,11 @@ const DashboardHeader = ({ name, role, onLogout }) => {
                   })}
                 </span>
               </div>
+              {role === "admin" && (
+                <div className="stat-item admin-indicator">
+                  <span className="admin-badge">System Administrator</span>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -209,7 +214,7 @@ const DashboardHeader = ({ name, role, onLogout }) => {
         <div className="header-right">
           <div className="role-badge">
             <span className={`role-indicator ${role}`}>
-              {role === "manager" ? "👑 Manager" : "👤 Employee"}
+              {role === "admin" ? "👑 Admin" : role === "manager" ? "👔 Manager" : "👤 Employee"}
             </span>
           </div>
 
@@ -234,6 +239,8 @@ const DashboardHeader = ({ name, role, onLogout }) => {
                     </div>
                     <div className="user-details">
                       <span className="user-name">{name}</span>
+                      <span className="user-role">{role?.charAt(0).toUpperCase() + role?.slice(1)}</span>
+                      <span className="user-status">Online</span>
                     </div>
                   </div>
                 </div>
@@ -270,9 +277,9 @@ const DashboardHeader = ({ name, role, onLogout }) => {
                   <li onClick={handleSettings}>
                     <FiSettings className="icon" /> Settings
                   </li>
-                  {role === "manager" && (
+                  {(role === "manager" || role === "admin") && (
                     <li onClick={handleTeamManagement}>
-                      <FiUsers className="icon" /> Team Management
+                      <FiUsers className="icon" /> {role === "admin" ? "User Management" : "Team Management"}
                     </li>
                   )}
                   <li onClick={handleAccessibility}>

@@ -24,7 +24,8 @@ const employeeDashboardRoutes = require("./routes/dashboard");
 const employeeRoutes = require("./routes/employees.routes");
 const accessLogsRoutes = require("./routes/accessLogs");
 
-
+// === Admin Dashboard ===
+const adminRoutes = require("./routes/admin");
 
 const app = express();
 
@@ -51,10 +52,11 @@ app.use("/api/leaves", leaveRoutes);
 app.use("/api/dashboard", employeeDashboardRoutes);
 
 // Manager Dashboard Routes
-
 app.use("/api/employees", employeeRoutes);
 app.use("/api/access-logs", accessLogsRoutes);
 
+// Admin Dashboard Routes
+app.use("/api/admin", adminRoutes);
 
 // === Protected Routes ===
 // Routes under this layer require a valid JWT (req.user is available)

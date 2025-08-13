@@ -1,7 +1,7 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const db = require('../config/db');
-const { authenticateToken } = require('../middleware/auth');
+const db = require("../config/db");
+const { authenticateToken } = require("../middleware/auth");
 
 // 📊 GET /api/access-logs - Get access logs for managers
 router.get('/', authenticateToken, async (req, res) => {

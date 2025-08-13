@@ -1,0 +1,102 @@
+:root {
+  --primary-color: #48AECC;
+  --secondary-color: #8FCF68;
+  --dark-color: #2c3e50;
+  --light-color: #f8f9fa;
+  --border-color: #e9ecef;
+  --error-color: #ff6b6b;
+}
+
+.range-input {
+  width: 100%;
+  position: relative;
+}
+
+.range-input input[type="range"] {
+  appearance: none; /* Standard */
+  -webkit-appearance: none; /* Vendor prefix */
+  width: 100%;
+  height: 6px;
+  background: var(--border-color);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* WebKit track */
+.range-input input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 6px;
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+/* WebKit thumb */
+.range-input input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-top: -7px; /* Align thumb with track */
+  border: none;
+}
+
+/* Firefox track */
+.range-input input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 6px;
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+/* Firefox thumb */
+.range-input input[type="range"]::-moz-range-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Edge/IE track */
+.range-input input[type="range"]::-ms-track {
+  width: 100%;
+  height: 6px;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+/* Edge/IE thumb */
+.range-input input[type="range"]::-ms-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Active/hover states */
+.range-input input[type="range"]:hover::-webkit-slider-thumb {
+  background: var(--secondary-color);
+}
+
+.range-input input[type="range"]:hover::-moz-range-thumb {
+  background: var(--secondary-color);
+}
+
+.range-input input[type="range"]:hover::-ms-thumb {
+  background: var(--secondary-color);
+}

@@ -1,0 +1,242 @@
+/* ====== COLOR VARIABLES ====== */
+:root {
+  --color1: #48AECC; /* Primary (Blue) */
+  --color2: #8FCF68; /* Accent (Green) */
+  --color3: #00370F; /* Dark Green */
+  --color4: #A7BAAC; /* Light Neutral */
+  --color5: #2c3e50; /* Dark Blue-Grey */
+  --white: #ffffff;
+}
+
+/* ====== GLOBAL RESET ====== */
+.users-loading,
+.users-error,
+.user-management {
+  font-family: 'Segoe UI', sans-serif;
+  color: var(--color5);
+}
+
+button {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  filter: brightness(1.1);
+}
+
+/* ====== SPINNER ====== */
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ====== ADMIN CARD ====== */
+.admin-card {
+  background: var(--white);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn {
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
+  border: none;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background: var(--color1);
+  color: var(--white);
+}
+
+.btn-secondary {
+  background: var(--color4);
+  color: var(--color5);
+}
+
+.btn-danger {
+  background: #e74c3c;
+  color: var(--white);
+}
+
+.btn-sm {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.85rem;
+}
+
+/* ====== TABS ====== */
+.user-tabs {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  padding: 0.4rem 0.8rem;
+  background: var(--color4);
+  border-radius: 5px;
+  border: none;
+  font-weight: 500;
+}
+
+.tab-btn.active {
+  background: var(--color2);
+  color: var(--white);
+  animation: tabHighlight 0.3s ease;
+}
+
+@keyframes tabHighlight {
+  from { transform: scale(0.95); opacity: 0.7; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ====== SEARCH BAR ====== */
+.search-bar {
+  margin: 1rem 0;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 2px solid var(--color4);
+  border-radius: 5px;
+  outline: none;
+}
+
+.search-bar input:focus {
+  border-color: var(--color1);
+}
+
+/* ====== TABLE ====== */
+.table-container {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  background: var(--color5);
+  color: var(--white);
+  padding: 0.6rem;
+  text-align: left;
+}
+
+.admin-table td {
+  padding: 0.6rem;
+  border-bottom: 1px solid var(--color4);
+}
+
+.role-badge {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  text-transform: capitalize;
+}
+
+.role-badge.manager {
+  background: var(--color1);
+  color: var(--white);
+}
+
+.role-badge.employee {
+  background: var(--color2);
+  color: var(--color3);
+}
+
+.status-select {
+  padding: 0.3rem;
+  border-radius: 4px;
+}
+
+/* ====== MODAL ====== */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  background: var(--white);
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 500px;
+  width: 90%;
+  animation: slideUp 0.3s ease forwards;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  .card-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .user-tabs {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 0.4rem;
+  }
+
+  .modal {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn,
+  .tab-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .admin-card {
+    padding: 0.8rem;
+  }
+}
