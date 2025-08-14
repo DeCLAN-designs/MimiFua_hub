@@ -105,3 +105,31 @@ exports.deleteEmployee = async (req, res) => {
       .json({ error: "Internal Server Error", detail: err.message });
   }
 };
+
+exports.updateEmployeeStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!status || !['active', 'inactive', 'suspended'].includes(status)) {
+      return res.status(400).json({ 
+        error: "Invalid status. Must be one of: 'active', 'inactive', 'suspended'" 
+      });
+    }
+
+    const updated = await employeeService.updateEmployeeStatus(id, status);
+    if (!updated) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+
+    return res.status(200).json({ 
+      message: `Employee status updated to ${status}`,
+      employee: updated
+    });
+  } catch (err) {
+    console.error("Error updating employee status:", err);
+    return res
+      .status(500)
+      .json({ error: "Internal Server Error", detail: err.message });
+  }
+};

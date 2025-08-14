@@ -138,7 +138,44 @@ body {
   text-align: center;
 }
 
-/* Fallback messages */
+/* No Sales Message */
+.no-sales-message {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color4);
+  margin-top: 1rem;
+}
+
+.no-sales-message .no-sales-icon {
+  font-size: 3rem;
+  margin: 0 0 1rem;
+  opacity: 0.7;
+}
+
+.no-sales-message h3 {
+  color: var(--color3);
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+}
+
+.no-sales-message p {
+  color: var(--color4);
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.loading-message {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color3);
+  font-style: italic;
+}
+
+/* Fallback messages - keeping for backward compatibility */
 .no-sales-global,
 .no-sales-entry {
   color: var(--color4);

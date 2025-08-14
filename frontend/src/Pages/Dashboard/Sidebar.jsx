@@ -1,6 +1,7 @@
 // src/Pages/Dashboard/Sidebar.jsx
 import React, { useState, useMemo } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import "./Sidebar.css";
 
@@ -36,6 +37,7 @@ const ADMIN_NAV = [
 
 const Sidebar = ({ user, onLogout, onNavigate, activeView }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const navItems = useMemo(() => {
     if (user?.role === "admin") return ADMIN_NAV;
@@ -43,8 +45,19 @@ const Sidebar = ({ user, onLogout, onNavigate, activeView }) => {
     return EMPLOYEE_NAV;
   }, [user?.role]);
 
+  const getRouteForView = (key, role) => {
+    if (role === "admin") {
+      return key === "dashboard" ? "/admindashboard" : `/admindashboard/${key}`;
+    } else if (role === "manager") {
+      return key === "dashboard" ? "/managerdashboard" : `/managerdashboard/${key}`;
+    } else {
+      return key === "dashboard" ? "/employeedashboard" : `/employeedashboard/${key}`;
+    }
+  };
+
   const handleNavigate = (key) => {
-    onNavigate(key);
+    const route = getRouteForView(key, user?.role);
+    navigate(route);
     setIsOpen(false); // Close sidebar on mobile
   };
 

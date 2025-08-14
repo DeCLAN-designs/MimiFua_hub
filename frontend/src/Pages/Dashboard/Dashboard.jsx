@@ -1,5 +1,6 @@
 // Pages/Dashboard/Dashboard.jsx
 import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import DashboardHeader from "./DashboardHeader";
 import "./Dashboard.css";
@@ -26,9 +27,11 @@ import Summary from "./EmployeeDashboard/Tabs/Summary";
 import LeaveRequest from "./EmployeeDashboard/Tabs/LeaveRequest";
 import PersonalActivity from "./EmployeeDashboard/Tabs/PersonalActivity";
 
-const Dashboard = () => {
+const Dashboard = ({ view }) => {
   const [user, setUser] = useState(null);
-  const [activeView, setActiveView] = useState("dashboard");
+  const [activeView, setActiveView] = useState(view || "dashboard");
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -36,8 +39,22 @@ const Dashboard = () => {
       window.location.href = "/login";
     } else {
       setUser(storedUser);
+      
+      // Redirect legacy /dashboard route to role-specific dashboard
+      if (location.pathname === "/dashboard") {
+        const roleBasedRoute = storedUser.role === "admin" ? "/admindashboard" :
+                              storedUser.role === "manager" ? "/managerdashboard" :
+                              "/employeedashboard";
+        navigate(roleBasedRoute, { replace: true });
+      }
     }
-  }, []);
+  }, [navigate, location.pathname]);
+
+  useEffect(() => {
+    if (view) {
+      setActiveView(view);
+    }
+  }, [view]);
 
   const handleLogout = () => {
     localStorage.removeItem("user");

@@ -27,6 +27,9 @@ const accessLogsRoutes = require("./routes/accessLogs");
 // === Admin Dashboard ===
 const adminRoutes = require("./routes/admin");
 
+// Server Time
+const serverTimeRoutes = require("./routes/serverTime");
+
 const app = express();
 
 // === Global Middleware ===
@@ -43,6 +46,17 @@ app.get("/api/health", (req, res) => {
 
 // === Public Routes ===
 app.use("/api", authRoutes); // /api/login, /api/register, etc.
+app.use("/api", serverTimeRoutes); // /api/server-time
+
+// Import auth routes
+const authLogoutRoutes = require('./routes/auth');
+
+// Apply token blacklist check to all authenticated routes
+const { checkTokenBlacklist } = require('./utils/authUtils');
+app.use(checkTokenBlacklist);
+
+// Auth routes
+app.use('/api/auth', authLogoutRoutes); // /api/auth/logout
 
 // Employee Dashboard Routes
 

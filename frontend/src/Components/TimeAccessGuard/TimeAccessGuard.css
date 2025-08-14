@@ -1,0 +1,124 @@
+.access-denied-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  text-align: center;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.access-denied-content {
+  background: white;
+  padding: 2.5rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  max-width: 500px;
+  width: 90%;
+  border-top: 5px solid #d32f2f;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.access-denied-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #e74c3c, #e67e22);
+}
+
+.access-denied-content h2 {
+  color: #2c3e50;
+  margin: 0 0 1.2rem 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 0.8rem;
+}
+
+.access-denied-content h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: #3498db;
+  border-radius: 3px;
+}
+
+.access-denied-content p {
+  color: #5d6778;
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+  font-size: 1.1rem;
+}
+
+.time-left {
+  display: inline-block;
+  background: #f8f9fa;
+  padding: 0.8rem 1.5rem;
+  border-radius: 30px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 1.5rem 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.time-left:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.back-to-login-btn {
+  background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+  color: white;
+  border: none;
+  padding: 0.9rem 2rem;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.back-to-login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+  background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+  box-shadow: 0 4px 8px rgba(25, 118, 210, 0.4);
+}
+
+.back-to-login-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(25, 118, 210, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .access-denied-content {
+    padding: 1.5rem;
+    width: 95%;
+  }
+  
+  .access-denied-content h2 {
+    font-size: 1.5rem;
+  }
+  
+  .access-denied-content p {
+    font-size: 1rem;
+  }
+}

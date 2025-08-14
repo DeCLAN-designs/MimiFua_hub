@@ -16,5 +16,14 @@ router.post("/", validateEmployee, employeesController.createEmployee);
 router.get("/", employeesController.getAllEmployees);
 router.put("/:id", validateEmployee, employeesController.updateEmployee);
 router.delete("/:id", employeesController.deleteEmployee);
+router.patch(
+  "/:id/status",
+  [
+    body("status")
+      .isIn(["active", "inactive", "suspended"])
+      .withMessage("Status must be one of: active, inactive, suspended"),
+  ],
+  employeesController.updateEmployeeStatus
+);
 
 module.exports = router;

@@ -39,8 +39,9 @@ const Sales = () => {
       console.error("Sales fetch error:", err);
       setStatus((s) => ({
         ...s,
-        error: "❌ Failed to fetch sales. Try again.",
+        error: "",
       }));
+      setSales([]); // Clear sales to show 'No entries found'
     } finally {
       setStatus((s) => ({ ...s, loading: false }));
     }
@@ -167,10 +168,14 @@ const Sales = () => {
       ) : (
         <>
           <h2 className="sales-title">💰 My Sales</h2>
-          {sales.length === 0 ? (
-            <p className="no-sales-global">
-              🚫 You have not recorded any sales yet.
-            </p>
+          {status.loading ? (
+            <p className="loading-message">Loading your sales data...</p>
+          ) : sales.length === 0 ? (
+            <div className="no-sales-message">
+              <p className="no-sales-icon">📊</p>
+              <h3>No Sales Recorded Yet</h3>
+              <p>Get started by recording your first sale using the "Add Sale" tab above.</p>
+            </div>
           ) : (
             Object.entries(groupedSales).map(([label, records]) => (
               <div key={label} className="sales-section">

@@ -114,3 +114,10 @@ INSERT IGNORE INTO system_settings (`key`, `value`, description) VALUES
 ('lockout_time', '15', 'Lockout time in minutes after maximum failed attempts'),
 ('enable_registration', 'true', 'Whether new user registration is enabled'),
 ('enable_email_verification', 'true', 'Whether email verification is required for new users');
+
+CREATE TABLE IF NOT EXISTS token_blacklist (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  token VARCHAR(512) NOT NULL UNIQUE,
+  expires_at DATETIME NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -73,3 +73,30 @@ exports.deleteEmployee = async (id) => {
   const [result] = await db.query(`DELETE FROM users WHERE id = ?`, [id]);
   return result.affectedRows > 0;
 };
+
+exports.updateEmployeeStatus = async (id, status) => {
+  // First check if user exists
+  const [user] = await db.query(
+    `SELECT id, first_name, last_name, email, status FROM users WHERE id = ?`,
+    [id]
+  );
+  
+  if (user.length === 0) return null;
+
+  // Update the status
+  const [result] = await db.query(
+    `UPDATE users SET status = ?, updated_at = NOW() WHERE id = ?`,
+    [status, id]
+  );
+
+  if (result.affectedRows === 0) return null;
+
+  // Return the updated user data
+  return {
+    id: user[0].id,
+    first_name: user[0].first_name,
+    last_name: user[0].last_name,
+    email: user[0].email,
+    status: status
+  };
+};
