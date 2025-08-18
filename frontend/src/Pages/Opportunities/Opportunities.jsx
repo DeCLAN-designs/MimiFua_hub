@@ -1,4 +1,5 @@
 import React from "react";
+import PageLayout from "../PageLayout/PageLayout";
 import "./Opportunities.css";
 
 const opportunities = [
@@ -50,25 +51,40 @@ const opportunities = [
 
 const Opportunities = () => {
   return (
-    <section className="opportunities-page">
-      <div className="opportunities-header">
-        <h1 className="opportunities-title">Opportunities</h1>
-        <p className="opportunities-subtitle">
-          Join us in revolutionizing urban convenience services
-        </p>
-      </div>
-
+    <PageLayout
+      title="Opportunities"
+      subtitle="Join us in revolutionizing urban convenience services"
+    >
       <div className="opportunities-grid">
-        {opportunities.map((opp) => (
-          <div key={opp.id} className="opportunity-card">
+        {opportunities.map((opp, index) => (
+          <div
+            key={opp.id}
+            className="opportunity-card"
+            style={{
+              "--index": index,
+              "--delay": `${index * 0.1}s`,
+            }}
+          >
             <div className="opportunity-icon-container">
-              <span className="opportunity-icon">{opp.icon}</span>
+              <span
+                className="opportunity-icon"
+                role="img"
+                aria-label={opp.type.toLowerCase()}
+              >
+                {opp.icon}
+              </span>
             </div>
             <div className="opportunity-content">
               <span className="opportunity-type">{opp.type}</span>
               <h2 className="opportunity-title">{opp.title}</h2>
               <p className="opportunity-description">{opp.description}</p>
-              <button className="opportunity-button">Learn More</button>
+              <button
+                className="opportunity-button"
+                aria-label={`Learn more about ${opp.title}`}
+              >
+                Learn More
+                <span aria-hidden="true">→</span>
+              </button>
             </div>
           </div>
         ))}
@@ -80,11 +96,21 @@ const Opportunities = () => {
           We're always interested in connecting with talented individuals and
           potential partners
         </p>
-        <button className="application-button">
+        <button
+          className="application-button"
+          aria-label="Submit general application"
+          onClick={() => {
+            // TODO: Implement application form modal or navigation
+            console.log("General application clicked");
+          }}
+        >
           Submit General Application
+          <span className="button-arrow" aria-hidden="true">
+            →
+          </span>
         </button>
       </div>
-    </section>
+    </PageLayout>
   );
 };
 

@@ -1,7 +1,9 @@
 import React from "react";
+import PageLayout from "../PageLayout/PageLayout";
 import "./AboutUs.css";
-import visionImg from "../../assets/Images/visionImg.png";
-import missionImg from "../../assets/Images/missionImg.jpg";
+// Image URLs for vision and mission sections
+const visionImageUrl = "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1200&auto=format&fit=crop";
+const missionImageUrl = "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&auto=format&fit=crop";
 
 const AboutUs = () => {
   // Emojis for core values
@@ -15,11 +17,14 @@ const AboutUs = () => {
   };
 
   return (
-    <div className="about-page">
+    <PageLayout 
+      title="About MiMi Fua"
+      subtitle="Transforming urban convenience with innovative multi-service solutions"
+    >
       {/* Why Us Section */}
       <section className="why-us-section">
-        <h1>Why Choose MiMi Fua?</h1>
-        <p>
+        <h2>Why Choose MiMi Fua?</h2>
+        <p className="intro-text">
           We combine affordability, convenience, and innovation to deliver
           high-quality services across our laundromat café and multi-service
           business hub. With an unwavering commitment to cleanliness, comfort,
@@ -29,7 +34,7 @@ const AboutUs = () => {
 
       {/* Core Values with Emojis */}
       <section className="core-values-section">
-        <h2>Our Core Values</h2>
+        <h2 className="core-values-title">Our Core Values</h2>
 
         <div className="values-container">
           {/* Integrity Value */}
@@ -143,14 +148,24 @@ const AboutUs = () => {
           </p>
         </div>
         <div className="vision-image">
-          <img src={visionImg} alt="Our Vision" />
+          <img 
+            src={visionImageUrl} 
+            alt="Modern urban vision concept" 
+            loading="lazy"
+            className="vision-image-content"
+          />
         </div>
       </section>
 
       {/* Mission Section */}
       <section className="mission-section">
         <div className="mission-image">
-          <img src={missionImg} alt="Our Mission" />
+          <img 
+            src={missionImageUrl} 
+            alt="Team collaboration and mission" 
+            loading="lazy"
+            className="mission-image-content"
+          />
         </div>
         <div className="mission-text">
           <h2>Our Mission</h2>
@@ -161,7 +176,7 @@ const AboutUs = () => {
           </p>
         </div>
       </section>
-    </div>
+    </PageLayout>
   );
 };
 

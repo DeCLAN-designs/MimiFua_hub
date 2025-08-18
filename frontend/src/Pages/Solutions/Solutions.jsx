@@ -1,9 +1,10 @@
-// components/Solutions.jsx
 import React, { Suspense } from "react";
+import PageLayout from "../PageLayout/PageLayout";
 import "./Solutions.css";
+import SolutionCard from "./SolutionCard/"
 
 // Lazy load the SolutionCard component
-const SolutionCard = React.lazy(() => import("./SolutionCard"));
+// const SolutionCard = React.lazy(() => import("../../Pages/Solutions/SolutionCard/SolutionCard"));
 
 const services = [
   {
@@ -71,28 +72,24 @@ const services = [
 
 const Solutions = () => {
   return (
-    <section className="solutions-page">
-      <div className="solutions-header">
-        <h1 className="solutions-title">Our Solutions</h1>
-        <p className="solutions-subtitle">
-          Discover our comprehensive range of services designed to make your
-          life easier
-        </p>
-      </div>
-
+    <PageLayout 
+      title="Our Solutions"
+      subtitle="Discover our comprehensive range of services designed to make your life easier"
+    >
       <div className="solutions-grid">
-        <Suspense fallback={<p>Loading solutions...</p>}>
+        <Suspense fallback={<div className="loading">Loading solutions...</div>}>
           {services.map((service, index) => (
-            <SolutionCard
-              key={index}
-              icon={service.icon}
-              title={service.title}
-              description={service.description}
-            />
+            <div key={index} style={{ '--i': index }}>
+              <SolutionCard
+                icon={service.icon}
+                title={service.title}
+                description={service.description}
+              />
+            </div>
           ))}
         </Suspense>
       </div>
-    </section>
+    </PageLayout>
   );
 };
 

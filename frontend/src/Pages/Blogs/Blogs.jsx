@@ -1,4 +1,5 @@
 import React from "react";
+import PageLayout from "../PageLayout/PageLayout";
 import "./Blogs.css";
 
 const blogs = [
@@ -39,20 +40,20 @@ const blogs = [
 
 const Blogs = () => {
   return (
-    <section className="blogs-page">
-      <div className="blogs-header">
-        <h1 className="blogs-title">Our Blog</h1>
-        <p className="blogs-subtitle">
-          Insights, trends, and stories from the world of multi-service business
-          hubs
-        </p>
-      </div>
-
+    <PageLayout 
+      title="Our Blog"
+      subtitle="Insights, trends, and stories from the world of multi-service business hubs"
+    >
       <div className="blogs-grid">
-        {blogs.map((blog) => (
-          <article key={blog.id} className="blog-card">
+        {blogs.map((blog, index) => (
+          <article key={blog.id} className="blog-card" style={{ '--i': index }}>
             <div className="blog-image-container">
-              <img src={blog.image} alt={blog.title} className="blog-image" />
+              <img 
+                src={blog.image} 
+                alt={blog.title} 
+                className="blog-image" 
+                loading="lazy"
+              />
               <span className="blog-category">{blog.category}</span>
             </div>
             <div className="blog-content">
@@ -72,11 +73,18 @@ const Blogs = () => {
         <h2>Stay Updated</h2>
         <p>Subscribe to our newsletter for the latest blog posts and updates</p>
         <form className="newsletter-form">
-          <input type="email" placeholder="Your email address" required />
-          <button type="submit">Subscribe</button>
+          <input 
+            type="email" 
+            placeholder="Your email address" 
+            required 
+            aria-label="Email address for newsletter subscription"
+          />
+          <button type="submit" className="button button-primary">
+            Subscribe
+          </button>
         </form>
       </div>
-    </section>
+    </PageLayout>
   );
 };
 

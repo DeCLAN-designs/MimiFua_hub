@@ -1,0 +1,73 @@
+.page-layout {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4.9rem 1.5rem 4rem;
+  min-height: calc(100vh - 250px); /* Adjust based on your header/footer height */
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.dark .page-header {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  color: #f8f9fa;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.dark .page-title {
+  color: #f8f9fa;
+}
+
+.page-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.dark .page-subtitle {
+  color: #adb5bd;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .page-layout {
+    padding: 1rem 1rem 3rem;
+  }
+  
+  .page-header {
+    margin-bottom: 2rem;
+    padding: 1.5rem 1rem;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+  }
+  
+  .page-subtitle {
+    font-size: 1rem;
+  }
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.page-content {
+  animation: fadeIn 0.5s ease-out forwards;
+}
