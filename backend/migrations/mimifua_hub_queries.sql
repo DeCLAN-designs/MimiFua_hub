@@ -12,24 +12,34 @@ CREATE TABLE users (
   UNIQUE KEY unique_phone (phone)
 );
 
-CREATE TABLE  sales (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  item VARCHAR(255) NOT NULL,
-  amount DECIMAL(10, 2) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS sales (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    item VARCHAR(255) NOT NULL,                -- Item name/description
+    quantity DECIMAL(10, 2) NOT NULL,          -- Supports fractional (e.g., 1.5 kg, 0.75 L)
+    unit_id INT NOT NULL,                      -- FK to units(id)
+    amount DECIMAL(10, 2) NOT NULL,            -- Total sale amount in currency
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (unit_id) REFERENCES units(id) ON DELETE RESTRICT
 );
 
+
 CREATE TABLE IF NOT EXISTS restocks (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  item VARCHAR(255) NOT NULL,
-  quantity INT NOT NULL,
-  status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) 
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    item VARCHAR(255) NOT NULL,                     -- Item being restocked
+    quantity DECIMAL(10, 2) NOT NULL,               -- Allows fractional restocks (e.g., 12.5 L)
+    unit_id INT NOT NULL,                           -- References units(id)
+    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (unit_id) REFERENCES units(id) ON DELETE RESTRICT
 );
+
 
 CREATE TABLE leaves (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -121,3 +131,12 @@ CREATE TABLE IF NOT EXISTS token_blacklist (
   expires_at DATETIME NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS units (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,        -- e.g., 'liters', 'kilograms'
+    symbol VARCHAR(10) NOT NULL,             -- e.g., 'L', 'kg', 'box'
+    description VARCHAR(255) DEFAULT NULL,   -- Optional: explain usage context
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

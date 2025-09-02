@@ -7,15 +7,22 @@ import "./Sales.css";
 const Sales = () => {
   const [view, setView] = useState("form");
   const [user, setUser] = useState(null);
-  const [sale, setSale] = useState({ item: "", amount: "" });
+  const [sale, setSale] = useState({
+    item: "",
+    quantity: "",
+    unit_id: "",
+    amount: "",
+  });
   const [sales, setSales] = useState([]);
   const [groupedSales, setGroupedSales] = useState({});
+  const [units, setUnits] = useState([]);
   const [status, setStatus] = useState({
     loading: false,
     error: "",
     success: "",
   });
 
+  // === Bootstrapping ===
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("user"));
     if (!stored || stored.role !== "employee") {
@@ -23,9 +30,22 @@ const Sales = () => {
       return;
     }
     setUser(stored);
+    fetchUnits();
     fetchSales(stored.id);
   }, []);
 
+  // === Fetch Units ===
+  const fetchUnits = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/units");
+      setUnits(res.data || []); // ✅ backend returns array, not { units }
+    } catch (err) {
+      console.error("Units fetch error:", err);
+      setUnits([]);
+    }
+  };
+
+  // === Fetch Sales ===
   const fetchSales = useCallback(async (userId) => {
     setStatus((s) => ({ ...s, loading: true }));
     try {
@@ -37,19 +57,17 @@ const Sales = () => {
       groupSalesByTime(backendSales);
     } catch (err) {
       console.error("Sales fetch error:", err);
-      setStatus((s) => ({
-        ...s,
-        error: "",
-      }));
-      setSales([]); // Clear sales to show 'No entries found'
+      setSales([]);
+      setStatus((s) => ({ ...s, error: "❌ Failed to fetch sales" }));
     } finally {
       setStatus((s) => ({ ...s, loading: false }));
     }
   }, []);
 
+  // === Group Sales by Time Buckets ===
   const groupSalesByTime = (sales) => {
     const now = new Date();
-    const todayStr = now.toISOString().split("T")[0];
+    const todayStr = moment(now).format("YYYY-MM-DD");
     const yesterdayStr = moment(now).subtract(1, "day").format("YYYY-MM-DD");
     const startOfWeek = moment().startOf("week");
 
@@ -57,18 +75,17 @@ const Sales = () => {
       "📅 Today": [],
       "📆 Yesterday": [],
       "📊 This Week": [],
-      "📦 Older": [],
     };
 
     sales.forEach((s) => {
-      const saleDate = moment(s.date);
+      const saleDate = moment(s.created_at);
       const formatted = saleDate.format("YYYY-MM-DD");
 
       if (formatted === todayStr) {
         grouped["📅 Today"].push(s);
       } else if (formatted === yesterdayStr) {
         grouped["📆 Yesterday"].push(s);
-      } else if (saleDate.isAfter(startOfWeek)) {
+      } else if (saleDate.isSameOrAfter(startOfWeek)) {
         grouped["📊 This Week"].push(s);
       } else {
         const label = saleDate.format("MMMM YYYY");
@@ -80,22 +97,25 @@ const Sales = () => {
     setGroupedSales(grouped);
   };
 
+  // === Submit Sale ===
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const trimmedItem = sale.item.trim();
-    const amount = parseFloat(sale.amount);
-    if (!trimmedItem || isNaN(amount) || amount <= 0) {
+    const { item, quantity, unit_id, amount } = sale;
+
+    if (!item.trim() || !quantity || !unit_id || !amount) {
       setStatus({
         loading: false,
-        error: "❌ Invalid item or amount.",
+        error: "❌ Please fill in all fields correctly.",
         success: "",
       });
       return;
     }
 
     const newSale = {
-      item: trimmedItem,
-      amount,
+      item: item.trim(),
+      quantity: parseFloat(quantity),
+      unit_id: parseInt(unit_id, 10),
+      amount: parseFloat(amount),
       user_id: user.id,
     };
 
@@ -108,7 +128,8 @@ const Sales = () => {
       const updatedSales = [recorded, ...sales];
       setSales(updatedSales);
       groupSalesByTime(updatedSales);
-      setSale({ item: "", amount: "" });
+
+      setSale({ item: "", quantity: "", unit_id: "", amount: "" });
       setStatus({ loading: false, error: "", success: "✅ Sale recorded." });
     } catch (err) {
       console.error("Submit error:", err);
@@ -120,6 +141,13 @@ const Sales = () => {
     }
   };
 
+  // === Resolve Unit Name/Symbol ===
+  const getUnitDisplay = (unitId) => {
+    const u = units.find((x) => x.id === unitId);
+    return u ? `${u.name} (${u.symbol})` : "—";
+  };
+
+  // === Render ===
   return (
     <div className="sales-container">
       <div className="sales-tabs">
@@ -150,6 +178,27 @@ const Sales = () => {
             />
             <input
               type="number"
+              step="0.01"
+              placeholder="Quantity"
+              value={sale.quantity}
+              onChange={(e) => setSale({ ...sale, quantity: e.target.value })}
+              required
+            />
+            <select
+              value={sale.unit_id}
+              onChange={(e) => setSale({ ...sale, unit_id: e.target.value })}
+              required
+            >
+              <option value="">-- Select Unit --</option>
+              {units.map((u) => (
+                <option key={u.id} value={u.id}>
+                  {u.name} ({u.symbol})
+                </option>
+              ))}
+            </select>
+            <input
+              type="number"
+              step="0.01"
               placeholder="Amount (KES)"
               value={sale.amount}
               onChange={(e) => setSale({ ...sale, amount: e.target.value })}
@@ -174,7 +223,10 @@ const Sales = () => {
             <div className="no-sales-message">
               <p className="no-sales-icon">📊</p>
               <h3>No Sales Recorded Yet</h3>
-              <p>Get started by recording your first sale using the "Add Sale" tab above.</p>
+              <p>
+                Get started by recording your first sale using the "Add Sale"
+                tab above.
+              </p>
             </div>
           ) : (
             Object.entries(groupedSales).map(([label, records]) => (
@@ -188,14 +240,18 @@ const Sales = () => {
                       <tr>
                         <th>Date</th>
                         <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Unit</th>
                         <th>Amount (KES)</th>
                       </tr>
                     </thead>
                     <tbody>
                       {records.map((s, i) => (
                         <tr key={i}>
-                          <td>{moment(s.date).format("YYYY-MM-DD")}</td>
+                          <td>{moment(s.created_at).format("YYYY-MM-DD")}</td>
                           <td>{s.item}</td>
+                          <td>{s.quantity}</td>
+                          <td>{getUnitDisplay(s.unit_id)}</td>
                           <td>{s.amount}</td>
                         </tr>
                       ))}

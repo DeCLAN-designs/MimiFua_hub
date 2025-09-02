@@ -5,6 +5,7 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const helmet = require("helmet");
+const db = require("./config/db");
 
 // Middleware
 const {
@@ -13,6 +14,7 @@ const {
 
 // Routes
 const authRoutes = require("./routes/auth.routes");
+const unitRoutes = require("./routes/units");
 
 // === Employee Dashboard ===
 const salesRoutes = require("./routes/sales");
@@ -47,6 +49,7 @@ app.get("/api/health", (req, res) => {
 // === Public Routes ===
 app.use("/api", authRoutes); // /api/login, /api/register, etc.
 app.use("/api", serverTimeRoutes); // /api/server-time
+app.use("/api/units", unitRoutes); // /api/units
 
 // Import auth routes
 const authLogoutRoutes = require('./routes/auth');
