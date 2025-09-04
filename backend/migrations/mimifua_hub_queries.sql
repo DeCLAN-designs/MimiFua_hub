@@ -27,18 +27,20 @@ CREATE TABLE IF NOT EXISTS sales (
 
 
 CREATE TABLE IF NOT EXISTS restocks (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    item VARCHAR(255) NOT NULL,                     -- Item being restocked
-    quantity DECIMAL(10, 2) NOT NULL,               -- Allows fractional restocks (e.g., 12.5 L)
-    unit_id INT NOT NULL,                           -- References units(id)
-    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (unit_id) REFERENCES units(id) ON DELETE RESTRICT
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,                        -- who performed the restock
+  item VARCHAR(255) NOT NULL,                  -- item name (e.g., "Sugar")
+  quantity DECIMAL(10,2) NOT NULL,             -- quantity value (supports fractional values)
+  unit_id INT NOT NULL,                        -- links to units table
+  status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  
+  -- Foreign Keys
+  CONSTRAINT fk_restocks_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_restocks_unit FOREIGN KEY (unit_id) REFERENCES units(id) ON DELETE RESTRICT
 );
+
 
 
 CREATE TABLE leaves (

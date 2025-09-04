@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   SalesHeader,
   ViewModeButtons,
   SalesFilters,
   SalesSummary,
   SalesTable,
-  SalesReports
-} from './SalesComponents';
-import './Sales.css';
+  SalesReports,
+} from "./SalesComponents";
+import "./Sales.css";
 
 const Sales = () => {
   // State management
@@ -32,18 +32,18 @@ const Sales = () => {
     try {
       setLoading(true);
       setError(null);
-      
-      const token = localStorage.getItem('token');
+
+      const token = localStorage.getItem("token");
       if (!token) {
-        setError('No authentication token found. Please log in.');
+        setError("No authentication token found. Please log in.");
         return;
       }
 
-      const response = await fetch('http://localhost:5000/api/sales/all', {
+      const response = await fetch("http://localhost:5000/api/sales/all", {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       });
 
       if (!response.ok) {
@@ -51,25 +51,29 @@ const Sales = () => {
       }
 
       const data = await response.json();
-      setSales(data.sales || []);
-      
+      setSales(data);
+
       // Extract unique employees
-      const uniqueEmployees = data.sales?.reduce((acc, sale) => {
+      const uniqueEmployees = data.reduce((acc, sale) => {
         const employeeKey = `${sale.first_name}_${sale.last_name}`;
-        if (!acc.some(emp => `${emp.first_name}_${emp.last_name}` === employeeKey)) {
+        if (
+          !acc.some(
+            (emp) => `${emp.first_name}_${emp.last_name}` === employeeKey
+          )
+        ) {
           acc.push({
             first_name: sale.first_name,
             last_name: sale.last_name,
-            email: sale.email
+            email: sale.email,
           });
         }
         return acc;
-      }, []) || [];
-      
+      }, []);
+
       setEmployees(uniqueEmployees);
     } catch (err) {
-      console.error('Error fetching sales data:', err);
-      setError('Failed to fetch sales data. Please try again.');
+      console.error("Error fetching sales data:", err);
+      setError("Failed to fetch sales data. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -80,20 +84,24 @@ const Sales = () => {
     let filtered = sales;
 
     if (selectedEmployee) {
-      filtered = filtered.filter(sale => 
-        `${sale.first_name} ${sale.last_name}` === selectedEmployee
+      filtered = filtered.filter(
+        (sale) => `${sale.first_name} ${sale.last_name}` === selectedEmployee
       );
     }
 
     if (startDate) {
-      filtered = filtered.filter(sale => 
-        new Date(sale.date) >= new Date(startDate)
+      filtered = filtered.filter(
+        (sale) => new Date(sale.created_at) >= new Date(startDate)
       );
     }
 
     if (endDate) {
-      filtered = filtered.filter(sale => 
-        new Date(sale.date) <= new Date(endDate)
+      // Set end date to end of day
+      const endOfDay = new Date(endDate);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      filtered = filtered.filter(
+        (sale) => new Date(sale.created_at) <= endOfDay
       );
     }
 
@@ -120,27 +128,37 @@ const Sales = () => {
   // Calculate advanced sales metrics
   const calculateSalesMetrics = () => {
     const currentSales = filteredSales;
-    const totalRevenue = currentSales.reduce((sum, sale) => sum + parseFloat(sale.amount), 0);
-    const averageSale = currentSales.length > 0 ? totalRevenue / currentSales.length : 0;
+    const totalRevenue = currentSales.reduce(
+      (sum, sale) => sum + parseFloat(sale.amount),
+      0
+    );
+    const averageSale =
+      currentSales.length > 0 ? totalRevenue / currentSales.length : 0;
 
     // Calculate growth rate (comparing to previous 30 days)
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    
-    const previousSales = sales.filter(sale => {
-      const saleDate = new Date(sale.date);
+
+    const previousSales = sales.filter((sale) => {
+      const saleDate = new Date(sale.created_at);
       const sixtyDaysAgo = new Date();
       sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
       return saleDate >= sixtyDaysAgo && saleDate < thirtyDaysAgo;
     });
 
-    const previousRevenue = previousSales.reduce((sum, sale) => sum + parseFloat(sale.amount), 0);
-    const growthRate = previousRevenue > 0 ? ((totalRevenue - previousRevenue) / previousRevenue) * 100 : 0;
+    const previousRevenue = previousSales.reduce(
+      (sum, sale) => sum + parseFloat(sale.amount),
+      0
+    );
+    const growthRate =
+      previousRevenue > 0
+        ? ((totalRevenue - previousRevenue) / previousRevenue) * 100
+        : 0;
 
     setSalesMetrics({
       totalRevenue,
       averageSale,
-      growthRate
+      growthRate,
     });
 
     // Calculate top items
@@ -161,17 +179,21 @@ const Sales = () => {
     for (let i = 6; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);
-      const dateStr = date.toISOString().split('T')[0];
-      
-      const daysSales = currentSales.filter(sale => 
-        sale.date.split('T')[0] === dateStr
+      const dateStr = date.toISOString().split("T")[0];
+
+      const daysSales = currentSales.filter(
+        (sale) =>
+          new Date(sale.created_at).toISOString().split("T")[0] === dateStr
       );
-      
-      const dayAmount = daysSales.reduce((sum, sale) => sum + parseFloat(sale.amount), 0);
-      
+
+      const dayAmount = daysSales.reduce(
+        (sum, sale) => sum + parseFloat(sale.amount),
+        0
+      );
+
       last7Days.push({
-        date: date.toLocaleDateString('en-US', { weekday: 'short' }),
-        amount: dayAmount
+        date: date.toLocaleDateString("en-US", { weekday: "short" }),
+        amount: dayAmount,
       });
     }
 
@@ -180,21 +202,23 @@ const Sales = () => {
 
   // Utility functions
   const formatAmount = (amount) => {
-    return new Intl.NumberFormat('en-KE', {
-      style: 'currency',
-      currency: 'KES',
+    return new Intl.NumberFormat("en-KE", {
+      style: "currency",
+      currency: "KES",
       minimumFractionDigits: 0,
       maximumFractionDigits: 2,
-    }).format(amount).replace('KES', 'KSh');
+    })
+      .format(amount)
+      .replace("KES", "KSh");
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -217,20 +241,25 @@ const Sales = () => {
 
     switch (preset) {
       case "today":
-        start = end = today.toISOString().split('T')[0];
+        start = end = today.toISOString().split("T")[0];
         break;
       case "thisWeek":
-        const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
-        start = startOfWeek.toISOString().split('T')[0];
-        end = new Date().toISOString().split('T')[0];
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - today.getDay());
+        start = startOfWeek.toISOString().split("T")[0];
+        end = today.toISOString().split("T")[0];
         break;
       case "thisMonth":
-        start = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
-        end = new Date().toISOString().split('T')[0];
+        start = new Date(today.getFullYear(), today.getMonth(), 1)
+          .toISOString()
+          .split("T")[0];
+        end = today.toISOString().split("T")[0];
         break;
       case "last30Days":
-        start = new Date(today.setDate(today.getDate() - 30)).toISOString().split('T')[0];
-        end = new Date().toISOString().split('T')[0];
+        const thirtyDaysAgo = new Date(today);
+        thirtyDaysAgo.setDate(today.getDate() - 30);
+        start = thirtyDaysAgo.toISOString().split("T")[0];
+        end = today.toISOString().split("T")[0];
         break;
       default:
         return;
@@ -262,8 +291,10 @@ const Sales = () => {
       Employee: `${sale.first_name} ${sale.last_name}`,
       Email: sale.email,
       Item: sale.item,
+      Quantity: sale.quantity,
+      Unit: sale.unit_name || "N/A",
       Amount: sale.amount,
-      Date: formatDate(sale.date),
+      Date: formatDate(sale.created_at),
     }));
 
     const csvHeaders = Object.keys(csvData[0] || {});
@@ -281,7 +312,10 @@ const Sales = () => {
     if (link.download !== undefined) {
       const url = URL.createObjectURL(blob);
       link.setAttribute("href", url);
-      link.setAttribute("download", `sales_report_${new Date().toISOString().split('T')[0]}.csv`);
+      link.setAttribute(
+        "download",
+        `sales_report_${new Date().toISOString().split("T")[0]}.csv`
+      );
       link.style.visibility = "hidden";
       document.body.appendChild(link);
       link.click();
@@ -290,10 +324,10 @@ const Sales = () => {
   };
 
   const exportToPDF = () => {
-    const printWindow = window.open('', '_blank');
+    const printWindow = window.open("", "_blank");
     const salesData = filteredSales;
     const reportDate = new Date().toLocaleDateString();
-    
+
     const htmlContent = `
       <!DOCTYPE html>
       <html>
@@ -329,11 +363,23 @@ const Sales = () => {
               <div class="summary-label">Total Sales</div>
             </div>
             <div class="summary-item">
-              <div class="summary-value">${formatAmount(salesData.reduce((sum, sale) => sum + parseFloat(sale.amount), 0))}</div>
+              <div class="summary-value">${formatAmount(
+                salesData.reduce(
+                  (sum, sale) => sum + parseFloat(sale.amount),
+                  0
+                )
+              )}</div>
               <div class="summary-label">Total Revenue</div>
             </div>
             <div class="summary-item">
-              <div class="summary-value">${formatAmount(salesData.length > 0 ? salesData.reduce((sum, sale) => sum + parseFloat(sale.amount), 0) / salesData.length : 0)}</div>
+              <div class="summary-value">${formatAmount(
+                salesData.length > 0
+                  ? salesData.reduce(
+                      (sum, sale) => sum + parseFloat(sale.amount),
+                      0
+                    ) / salesData.length
+                  : 0
+              )}</div>
               <div class="summary-label">Average Sale</div>
             </div>
           </div>
@@ -345,21 +391,29 @@ const Sales = () => {
                 <th>Employee</th>
                 <th>Email</th>
                 <th>Item</th>
+                <th>Quantity</th>
+                <th>Unit</th>
                 <th>Amount</th>
                 <th>Date</th>
               </tr>
             </thead>
             <tbody>
-              ${salesData.map(sale => `
+              ${salesData
+                .map(
+                  (sale) => `
                 <tr>
                   <td>${sale.id}</td>
                   <td>${sale.first_name} ${sale.last_name}</td>
                   <td>${sale.email}</td>
                   <td>${sale.item}</td>
+                  <td>${sale.quantity || "N/A"}</td>
+                  <td>${sale.unit_name || "N/A"}</td>
                   <td class="amount">${formatAmount(sale.amount)}</td>
-                  <td>${formatDate(sale.date)}</td>
+                  <td>${formatDate(sale.created_at)}</td>
                 </tr>
-              `).join('')}
+              `
+                )
+                .join("")}
             </tbody>
           </table>
           
@@ -369,11 +423,11 @@ const Sales = () => {
         </body>
       </html>
     `;
-    
+
     printWindow.document.write(htmlContent);
     printWindow.document.close();
     printWindow.focus();
-    
+
     setTimeout(() => {
       printWindow.print();
       printWindow.close();
@@ -383,23 +437,28 @@ const Sales = () => {
   // Get employee sales summary for reports view
   const getEmployeeSalesReport = () => {
     const report = employees
-      .map(employee => {
-        const employeeSales = filteredSales.filter(sale => 
-          `${sale.first_name} ${sale.last_name}` === `${employee.first_name} ${employee.last_name}`
+      .map((employee) => {
+        const employeeSales = filteredSales.filter(
+          (sale) =>
+            `${sale.first_name} ${sale.last_name}` ===
+            `${employee.first_name} ${employee.last_name}`
         );
-        
-        const totalRevenue = employeeSales.reduce((sum, sale) => sum + parseFloat(sale.amount), 0);
-        
+
+        const totalRevenue = employeeSales.reduce(
+          (sum, sale) => sum + parseFloat(sale.amount),
+          0
+        );
+
         return {
           name: `${employee.first_name} ${employee.last_name}`,
           email: employee.email,
           totalSales: employeeSales.length,
-          totalRevenue: totalRevenue
+          totalRevenue: totalRevenue,
         };
       })
-      .filter(employee => employee.totalSales > 0)
+      .filter((employee) => employee.totalSales > 0)
       .sort((a, b) => b.totalRevenue - a.totalRevenue);
-    
+
     return report;
   };
 
@@ -414,11 +473,8 @@ const Sales = () => {
   return (
     <div className="sales-container">
       <SalesHeader onRefresh={fetchSalesData} loading={loading} />
-      
-      <ViewModeButtons 
-        viewMode={viewMode} 
-        onViewModeChange={setViewMode} 
-      />
+
+      <ViewModeButtons viewMode={viewMode} onViewModeChange={setViewMode} />
 
       <SalesFilters
         employees={employees}

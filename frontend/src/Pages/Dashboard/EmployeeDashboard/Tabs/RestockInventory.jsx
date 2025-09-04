@@ -5,6 +5,8 @@ import "./RestockInventory.css";
 const RestockInventory = () => {
   const [restockItem, setRestockItem] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [unitId, setUnitId] = useState("");
+  const [units, setUnits] = useState([]);
   const [grouped, setGrouped] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -13,10 +15,24 @@ const RestockInventory = () => {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
+  // === Fetch Units ===
+  const fetchUnits = useCallback(async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/units");
+      // normalize: always expect array
+      setUnits(Array.isArray(res.data) ? res.data : res.data.units || []);
+    } catch (err) {
+      console.error("Fetch units error:", err);
+      setError("Failed to load measurement units.");
+    }
+  }, []);
+
+  // === Group Restocks by Date ===
   const groupRestocksByDate = useCallback((restocks) => {
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
+
     const startOfWeek = new Date(today);
     startOfWeek.setDate(today.getDate() - today.getDay());
 
@@ -25,6 +41,7 @@ const RestockInventory = () => {
     restocks.forEach((r) => {
       const d = new Date(r.created_at);
       const dateOnly = d.toDateString();
+
       if (dateOnly === today.toDateString()) grouped["Today"].push(r);
       else if (dateOnly === yesterday.toDateString())
         grouped["Yesterday"].push(r);
@@ -35,29 +52,37 @@ const RestockInventory = () => {
     setGrouped(grouped);
   }, []);
 
+  // === Fetch Restocks ===
   const fetchRestocks = useCallback(async () => {
+    if (!user?.id) return;
+
     try {
       const res = await axios.get(
         `http://localhost:5000/api/restocks/${user.id}`
       );
-      groupRestocksByDate(res.data);
+      const restocksArray = Array.isArray(res.data)
+        ? res.data
+        : res.data.restocks || [];
+      groupRestocksByDate(restocksArray);
     } catch (err) {
-      console.error("Fetch error:", err);
+      console.error("Fetch restocks error:", err);
       setError("Failed to load restock requests.");
     }
-  }, [groupRestocksByDate, user.id]);
+  }, [groupRestocksByDate, user?.id]);
 
   useEffect(() => {
-    if (user?.id) fetchRestocks();
-  }, [fetchRestocks, user?.id]);
+    fetchUnits();
+    fetchRestocks();
+  }, [fetchUnits, fetchRestocks]);
 
+  // === Submit Restock ===
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
     setSuccess("");
 
-    if (!restockItem.trim() || !quantity.trim()) {
+    if (!restockItem.trim() || !quantity.trim() || !unitId) {
       setError("All fields are required.");
       setLoading(false);
       return;
@@ -66,7 +91,8 @@ const RestockInventory = () => {
     try {
       const res = await axios.post("http://localhost:5000/api/restocks", {
         item: restockItem.trim(),
-        quantity: parseInt(quantity),
+        quantity: parseFloat(quantity),
+        unit_id: parseInt(unitId),
         user_id: user.id,
       });
 
@@ -74,7 +100,8 @@ const RestockInventory = () => {
         setSuccess("Restock request submitted.");
         setRestockItem("");
         setQuantity("");
-        fetchRestocks();
+        setUnitId("");
+        await fetchRestocks(); // refetch updated list
       } else {
         setError("Submission failed.");
       }
@@ -86,6 +113,7 @@ const RestockInventory = () => {
     }
   };
 
+  // === Section Icons ===
   const sectionIcon = (label) => {
     switch (label) {
       case "Today":
@@ -101,7 +129,16 @@ const RestockInventory = () => {
     }
   };
 
+  // === Render Grouped Restock Rows ===
   const renderGroupedRows = () => {
+    const hasAnyEntries = Object.values(grouped).some(
+      (entries) => entries.length > 0
+    );
+
+    if (!hasAnyEntries) {
+      return <p className="empty-message">❌ No restock requests found yet.</p>;
+    }
+
     return Object.entries(grouped).map(([section, entries]) => (
       <div key={section} className="group-section">
         <h3 className="group-heading">
@@ -123,13 +160,15 @@ const RestockInventory = () => {
                   <tr key={r.id}>
                     <td>{new Date(r.created_at).toLocaleDateString()}</td>
                     <td>{r.item}</td>
-                    <td>{r.quantity}</td>
+                    <td>
+                      {r.quantity} {r.unit_symbol || ""}
+                    </td>
                     <td>{r.status}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="4">No entries.</td>
+                  <td colSpan="4">🚫 No entries in this section.</td>
                 </tr>
               )}
             </tbody>
@@ -171,6 +210,14 @@ const RestockInventory = () => {
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
           />
+          <select value={unitId} onChange={(e) => setUnitId(e.target.value)}>
+            <option value="">-- Select Unit --</option>
+            {units.map((u) => (
+              <option key={u.id} value={u.id}>
+                {u.name} ({u.symbol})
+              </option>
+            ))}
+          </select>
           <button type="submit" disabled={loading}>
             {loading ? "Submitting..." : "Submit Request"}
           </button>

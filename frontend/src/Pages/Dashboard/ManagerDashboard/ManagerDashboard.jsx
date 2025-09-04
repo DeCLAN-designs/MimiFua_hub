@@ -115,8 +115,7 @@ const ManagerDashboard = () => {
     return (
       <div className="dashboard-container">
         <div className="dashboard-loading">
-          <div className="spinner"></div>
-          <p>Loading dashboard data...</p>
+          <span className="loader"></span>
         </div>
       </div>
     );

@@ -228,11 +228,11 @@ const Employees = () => {
 
           {loading && (
             <div className="loading-message">
-              ⏳ Loading employees...
+              <span className="loader"></span>
             </div>
           )}
 
-          {viewMode === 'table' ? (
+          {viewMode === "table" ? (
             <EmployeeTable
               employees={paginatedEmployees}
               startIndex={startIndex}

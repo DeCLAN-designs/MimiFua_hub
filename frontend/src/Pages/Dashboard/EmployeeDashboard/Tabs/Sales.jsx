@@ -38,7 +38,7 @@ const Sales = () => {
   const fetchUnits = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/units");
-      setUnits(res.data || []); // ✅ backend returns array, not { units }
+      setUnits(res.data || []);
     } catch (err) {
       console.error("Units fetch error:", err);
       setUnits([]);
@@ -47,12 +47,12 @@ const Sales = () => {
 
   // === Fetch Sales ===
   const fetchSales = useCallback(async (userId) => {
-    setStatus((s) => ({ ...s, loading: true }));
+    setStatus((s) => ({ ...s, loading: true, error: "" }));
     try {
       const res = await axios.get("http://localhost:5000/api/sales", {
         params: { userId },
       });
-      const backendSales = res.data.sales || [];
+      const backendSales = Array.isArray(res.data) ? res.data : [];
       setSales(backendSales);
       groupSalesByTime(backendSales);
     } catch (err) {
@@ -64,30 +64,24 @@ const Sales = () => {
     }
   }, []);
 
-  // === Group Sales by Time Buckets ===
+  // === Group Sales ===
   const groupSalesByTime = (sales) => {
     const now = new Date();
     const todayStr = moment(now).format("YYYY-MM-DD");
     const yesterdayStr = moment(now).subtract(1, "day").format("YYYY-MM-DD");
     const startOfWeek = moment().startOf("week");
 
-    const grouped = {
-      "📅 Today": [],
-      "📆 Yesterday": [],
-      "📊 This Week": [],
-    };
+    const grouped = { "📅 Today": [], "📆 Yesterday": [], "📊 This Week": [] };
 
     sales.forEach((s) => {
       const saleDate = moment(s.created_at);
       const formatted = saleDate.format("YYYY-MM-DD");
 
-      if (formatted === todayStr) {
-        grouped["📅 Today"].push(s);
-      } else if (formatted === yesterdayStr) {
-        grouped["📆 Yesterday"].push(s);
-      } else if (saleDate.isSameOrAfter(startOfWeek)) {
+      if (formatted === todayStr) grouped["📅 Today"].push(s);
+      else if (formatted === yesterdayStr) grouped["📆 Yesterday"].push(s);
+      else if (saleDate.isSameOrAfter(startOfWeek))
         grouped["📊 This Week"].push(s);
-      } else {
+      else {
         const label = saleDate.format("MMMM YYYY");
         if (!grouped[label]) grouped[label] = [];
         grouped[label].push(s);
@@ -102,7 +96,16 @@ const Sales = () => {
     e.preventDefault();
     const { item, quantity, unit_id, amount } = sale;
 
-    if (!item.trim() || !quantity || !unit_id || !amount) {
+    if (!item.trim() || !amount) {
+      setStatus({
+        loading: false,
+        error: "❌ Please fill in item and amount fields.",
+        success: "",
+      });
+      return;
+    }
+
+    if (units.length > 0 && (!quantity || !unit_id)) {
       setStatus({
         loading: false,
         error: "❌ Please fill in all fields correctly.",
@@ -113,17 +116,19 @@ const Sales = () => {
 
     const newSale = {
       item: item.trim(),
-      quantity: parseFloat(quantity),
-      unit_id: parseInt(unit_id, 10),
       amount: parseFloat(amount),
       user_id: user.id,
+      ...(units.length > 0 && {
+        quantity: parseFloat(quantity),
+        unit_id: parseInt(unit_id, 10),
+      }),
     };
 
     setStatus({ loading: true, error: "", success: "" });
 
     try {
       const res = await axios.post("http://localhost:5000/api/sales", newSale);
-      const recorded = res.data.sale;
+      const recorded = res.data; // Backend returns sale object directly
 
       const updatedSales = [recorded, ...sales];
       setSales(updatedSales);
@@ -141,13 +146,13 @@ const Sales = () => {
     }
   };
 
-  // === Resolve Unit Name/Symbol ===
-  const getUnitDisplay = (unitId) => {
-    const u = units.find((x) => x.id === unitId);
-    return u ? `${u.name} (${u.symbol})` : "—";
+  const getUnitDisplay = (unitId, unitName, unitSymbol) => {
+    if (!unitId && !unitName && !unitSymbol) return "—";
+    return unitName && unitSymbol
+      ? `${unitName} (${unitSymbol})`
+      : unitName || unitSymbol || "—";
   };
 
-  // === Render ===
   return (
     <div className="sales-container">
       <div className="sales-tabs">
@@ -176,26 +181,34 @@ const Sales = () => {
               onChange={(e) => setSale({ ...sale, item: e.target.value })}
               required
             />
-            <input
-              type="number"
-              step="0.01"
-              placeholder="Quantity"
-              value={sale.quantity}
-              onChange={(e) => setSale({ ...sale, quantity: e.target.value })}
-              required
-            />
-            <select
-              value={sale.unit_id}
-              onChange={(e) => setSale({ ...sale, unit_id: e.target.value })}
-              required
-            >
-              <option value="">-- Select Unit --</option>
-              {units.map((u) => (
-                <option key={u.id} value={u.id}>
-                  {u.name} ({u.symbol})
-                </option>
-              ))}
-            </select>
+            {units.length > 0 && (
+              <>
+                <input
+                  type="number"
+                  step="0.01"
+                  placeholder="Quantity"
+                  value={sale.quantity}
+                  onChange={(e) =>
+                    setSale({ ...sale, quantity: e.target.value })
+                  }
+                  required
+                />
+                <select
+                  value={sale.unit_id}
+                  onChange={(e) =>
+                    setSale({ ...sale, unit_id: e.target.value })
+                  }
+                  required
+                >
+                  <option value="">-- Select Unit --</option>
+                  {units.map((u) => (
+                    <option key={u.id} value={u.id}>
+                      {u.name} ({u.symbol})
+                    </option>
+                  ))}
+                </select>
+              </>
+            )}
             <input
               type="number"
               step="0.01"
@@ -208,7 +221,6 @@ const Sales = () => {
               {status.loading ? "Submitting..." : "Submit Sale"}
             </button>
           </form>
-
           {status.error && <p className="error-message">{status.error}</p>}
           {status.success && (
             <p className="success-message">{status.success}</p>
@@ -240,8 +252,12 @@ const Sales = () => {
                       <tr>
                         <th>Date</th>
                         <th>Item</th>
-                        <th>Quantity</th>
-                        <th>Unit</th>
+                        {units.length > 0 && (
+                          <>
+                            <th>Quantity</th>
+                            <th>Unit</th>
+                          </>
+                        )}
                         <th>Amount (KES)</th>
                       </tr>
                     </thead>
@@ -250,8 +266,18 @@ const Sales = () => {
                         <tr key={i}>
                           <td>{moment(s.created_at).format("YYYY-MM-DD")}</td>
                           <td>{s.item}</td>
-                          <td>{s.quantity}</td>
-                          <td>{getUnitDisplay(s.unit_id)}</td>
+                          {units.length > 0 && (
+                            <>
+                              <td>{s.quantity || "—"}</td>
+                              <td>
+                                {getUnitDisplay(
+                                  s.unit_id,
+                                  s.unit_name,
+                                  s.unit_symbol
+                                )}
+                              </td>
+                            </>
+                          )}
                           <td>{s.amount}</td>
                         </tr>
                       ))}

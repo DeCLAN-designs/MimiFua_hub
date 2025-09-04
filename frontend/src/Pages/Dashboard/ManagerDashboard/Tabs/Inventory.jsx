@@ -321,7 +321,11 @@ const Inventory = () => {
   };
 
   if (loading && viewMode === "requests") {
-    return <div className="inventory-container">Loading inventory data...</div>;
+    return (
+      <div className="inventory-container">
+        <span className="loader"></span>
+      </div>
+    );
   }
 
   if (error) {

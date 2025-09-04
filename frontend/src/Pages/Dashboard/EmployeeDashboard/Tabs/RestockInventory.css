@@ -1,25 +1,29 @@
 :root {
   --color1: #48AECC; /* Primary */
-  --color2: #8FCF68; /* Accent */
+  --color2: #8FCF68; /* Accent / Success */
   --color3: #00370F; /* Dark Text */
-  --color4: #A7BAAC; /* Muted */
-  --color5: #2c3e50; /* Table Headers */
+  --color4: #A7BAAC; /* Neutral / Muted */
+  --color5: #2c3e50; /* Table Header */
 }
 
 body {
   background-color: #f9f9f9;
-}
-
-.restock-container {
-  padding: 2rem;
+  margin: 0;
   font-family: "Segoe UI", sans-serif;
   color: var(--color3);
 }
 
+/* === Container === */
+.restock-container {
+  padding: 1rem;
+}
+
+/* === Tabs === */
 .restock-tabs {
   display: flex;
   gap: 1rem;
   margin-bottom: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .restock-tabs button {
@@ -30,14 +34,21 @@ body {
   color: var(--color3);
   cursor: pointer;
   font-weight: 600;
-  transition: background-color 0.3s ease-in-out;
+  transition: background-color 0.25s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.restock-tabs button:hover {
+  background-color: var(--color1);
+  color: white;
 }
 
 .restock-tabs button.active-tab {
   background-color: var(--color1);
   color: white;
+  transform: translateY(-2px);
 }
 
+/* === Form === */
 .restock-form {
   display: flex;
   flex-direction: column;
@@ -45,16 +56,25 @@ body {
   background-color: white;
   padding: 1.5rem;
   border-radius: 10px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   border: 1px solid var(--color4);
 }
 
-.restock-form input {
+.restock-form input,
+.restock-form select {
   padding: 0.7rem;
   font-size: 1rem;
   border-radius: 6px;
   border: 1px solid var(--color4);
   background-color: #fff;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.restock-form input:focus,
+.restock-form select:focus {
+  border-color: var(--color1);
+  outline: none;
+  box-shadow: 0 0 4px rgba(72, 174, 204, 0.4);
 }
 
 .restock-form button {
@@ -63,9 +83,14 @@ body {
   font-weight: bold;
   padding: 0.7rem;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.25s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.restock-form button:hover:not(:disabled) {
+  background-color: #76b857;
+  transform: translateY(-2px);
 }
 
 .restock-form button:disabled {
@@ -73,34 +98,51 @@ body {
   cursor: not-allowed;
 }
 
+/* === Headings === */
 .section-heading {
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
   color: var(--color3);
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
+/* === Status Messages === */
 .error-text {
-  color: red;
+  color: #e63946;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
 }
 
 .success-text {
-  color: green;
+  color: #2a9d8f;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
 }
 
+.empty-message {
+  text-align: center;
+  color: var(--color4);
+  font-style: italic;
+  padding: 1rem;
+}
+
+/* === Requests Section === */
 .restock-requests {
   display: flex;
   flex-direction: column;
   gap: 2rem;
 }
 
-/* Group Section Styling */
+/* === Group Section === */
 .group-section {
   background-color: #ffffff;
   border: 1px solid var(--color4);
   border-radius: 10px;
   padding: 1.25rem;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
 }
 
 .group-heading {
@@ -113,7 +155,7 @@ body {
   font-weight: bold;
 }
 
-/* Table Styling */
+/* === Table Styling === */
 .group-table-wrapper {
   overflow-x: auto;
 }
@@ -122,6 +164,8 @@ body {
   width: 100%;
   border-collapse: collapse;
   background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .group-table th {
@@ -129,11 +173,13 @@ body {
   color: white;
   padding: 0.75rem 1rem;
   text-align: left;
+  font-weight: 600;
 }
 
 .group-table td {
   padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--color4);
+  font-size: 0.95rem;
 }
 
 .group-table tr:last-child td {
@@ -144,4 +190,25 @@ body {
   color: var(--color4);
   font-style: italic;
   text-align: center;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .restock-container {
+    padding: 1rem;
+  }
+
+  .restock-tabs {
+    flex-direction: column;
+  }
+
+  .restock-form {
+    padding: 1rem;
+  }
+
+  .group-table th,
+  .group-table td {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
 }

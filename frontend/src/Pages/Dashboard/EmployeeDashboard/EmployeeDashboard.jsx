@@ -8,6 +8,7 @@ const EmployeeDashboard = () => {
   const [recentSales, setRecentSales] = useState([]);
   const [recentRestocks, setRecentRestocks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -17,11 +18,12 @@ const EmployeeDashboard = () => {
         const res = await axios.get(
           `http://localhost:5000/api/dashboard?userId=${user.id}`
         );
-        setSummary(res.data.summary);
-        setRecentSales(res.data.recentSales);
-        setRecentRestocks(res.data.recentRestocks);
-      } catch (error) {
-        console.error("Failed to fetch dashboard data:", error);
+        setSummary(res.data.summary || {});
+        setRecentSales(res.data.recentSales || []);
+        setRecentRestocks(res.data.recentRestocks || []);
+      } catch (err) {
+        console.error("Failed to fetch dashboard data:", err);
+        setError("Unable to load dashboard data. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -30,21 +32,46 @@ const EmployeeDashboard = () => {
     if (user?.id) fetchDashboardData();
   }, [user?.id]);
 
+  const formatCurrency = (amount) =>
+    amount ? `KES ${Number(amount).toLocaleString()}` : "KES 0";
+
+  const formatDate = (value) => {
+    if (!value) return "—";
+    try {
+      // Handles both MySQL date strings ("2025-09-02") and JS Date objects
+      const date = new Date(value);
+      if (isNaN(date.getTime())) return "—";
+      return date.toLocaleDateString("en-GB", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+    } catch {
+      return "—";
+    }
+  };
+
   if (loading) {
-    return <div className="dashboard-loading">Loading dashboard...</div>;
+    return (
+      <div className="dashboard-loading">
+        <span className="loader"></span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div className="dashboard-error">{error}</div>;
   }
 
   return (
     <div className="dashboard-layout">
-      {/* Sidebar would be rendered by parent component */}
-
       <div className="dashboard-content">
-        {/* Summary Cards */}
+        {/* === Summary Cards === */}
         <div className="summary-grid">
           <div className="summary-card">
             <div className="summary-title">Total Revenue</div>
             <div className="summary-value">
-              KES {summary?.totalSalesAmount?.toLocaleString() ?? "0"}
+              {formatCurrency(summary?.totalSalesAmount)}
             </div>
           </div>
 
@@ -61,8 +88,9 @@ const EmployeeDashboard = () => {
           </div>
         </div>
 
-        {/* Tables Section */}
+        {/* === Tables Section === */}
         <div className="tables-grid">
+          {/* Recent Sales */}
           <div className="table-card">
             <h3>Recent Sales</h3>
             <table>
@@ -75,22 +103,23 @@ const EmployeeDashboard = () => {
               </thead>
               <tbody>
                 {recentSales.length > 0 ? (
-                  recentSales.map((sale, idx) => (
-                    <tr key={idx}>
+                  recentSales.map((sale) => (
+                    <tr key={sale.id}>
                       <td>{sale.item}</td>
-                      <td>KES {sale.amount}</td>
-                      <td>{new Date(sale.date).toLocaleDateString()}</td>
+                      <td>{formatCurrency(sale.amount)}</td>
+                      <td>{formatDate(sale.date)}</td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="3">No sales found</td>
+                    <td colSpan="3">🚫 No sales found</td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
 
+          {/* Recent Restocks */}
           <div className="table-card">
             <h3>Recent Restocks</h3>
             <table>
@@ -103,16 +132,18 @@ const EmployeeDashboard = () => {
               </thead>
               <tbody>
                 {recentRestocks.length > 0 ? (
-                  recentRestocks.map((restock, idx) => (
-                    <tr key={idx}>
+                  recentRestocks.map((restock) => (
+                    <tr key={restock.id}>
                       <td>{restock.item}</td>
-                      <td>{restock.quantity}</td>
-                      <td>{new Date(restock.date).toLocaleDateString()}</td>
+                      <td>
+                        {restock.quantity} {restock.unit_symbol ?? ""}
+                      </td>
+                      <td>{formatDate(restock.date)}</td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="3">No restocks found</td>
+                    <td colSpan="3">🚫No restocks found</td>
                   </tr>
                 )}
               </tbody>

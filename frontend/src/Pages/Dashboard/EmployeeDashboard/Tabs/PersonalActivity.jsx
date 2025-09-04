@@ -84,8 +84,7 @@ const PersonalActivity = () => {
     return (
       <div className="personal-activity-container">
         <div className="loading-state">
-          <FiRefreshCw className="loading-spinner" />
-          <p>Loading your activity...</p>
+          <span className="loader"></span>
         </div>
       </div>
     );
